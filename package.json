@@ -1,0 +1,10 @@
+{
+  "name": "backtrace-webui",
+  "main": "./server.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
