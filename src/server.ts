@@ -16,7 +16,9 @@ async function create_html_file_response(filename: string): Promise<Response> {
 }
 
 async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLike> | undefined> {
-    const [ name, ext ] = fullname.split(".");
+    const parts = fullname.split(".");
+    const ext = parts.at(-1);
+    const name = parts.slice(0, -1).join(".");
 
     let path: string | undefined;
 
@@ -37,7 +39,7 @@ async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLik
         default:
             return undefined;
     }
-
+    
     const file = Bun.file(`frontend/${path}/${name}.${ext}`);
 
     if (await file.exists())
@@ -47,7 +49,7 @@ async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLik
 }
 
 function resolve_meta(fullname: string) {
-    const [ , ext ] = fullname.split(".");
+    const ext = fullname.split(".").at(-1);
 
     switch(ext) {
         case "js":
