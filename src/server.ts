@@ -24,7 +24,7 @@ async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLik
 
     switch(ext) {
         case "js":
-            path = "scripts";
+            path = "scripts/js";
             break;
         case "css":
             path = "styles";
@@ -68,7 +68,7 @@ function resolve_meta(fullname: string) {
 }
 
 Bun.serve({
-    port: 8001,
+    port: process.env.PORT,
     routes: {
         // routes
         "/": async () => {

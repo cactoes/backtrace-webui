@@ -1,10 +1,15 @@
 {
-  "name": "backtrace-webui",
-  "main": "./server.ts",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  }
+    "name": "backtrace-webui",
+    "main": "./server.ts",
+    "scripts": {
+        "frontend:build": "cd frontend && tsc",
+        "frontend:watch": "cd frontend && tsc --watch"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/node": "^22.14.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
 }

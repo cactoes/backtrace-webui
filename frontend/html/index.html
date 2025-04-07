@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Document</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link rel="stylesheet" href="/files/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="/meadia/icon.ico">
     <script src="/files/global.js"></script>
     <script src="/files/index.js" defer></script>
 </head>
 <body>
-    <button id="button_basic#test" class="button_basic">text</button>
+    <div class="sidebar">
+        <button class="button"><i class="fa-solid fa-house"></i>Home</button>
+        <button class="button"><i class="fa-solid fa-user"></i>Profile</button>
+        <button class="button"><i class="fa-solid fa-list"></i>Lists</button>
+        <button class="button"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</button>
+        <button class="button"><i class="fa-solid fa-arrow-right-to-bracket"></i>Login</button>
+    </div>
+    <div class="page">
+        <div class="topbar"></div>
+        <div class="content"></div>
+    </div>
 </body>
 </html>
