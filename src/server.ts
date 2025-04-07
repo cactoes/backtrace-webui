@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-import * as webui_controller from "controllers/webui";
+// import * as webui_controller from "controllers/webui";
+import * as account_controller from "controllers/account";
+import { response_builder } from "response_builder";
 
 // function get_keys<T extends object>(obj: T): (keyof T)[] {
 //     return Object.keys(obj) as (keyof T)[];
@@ -68,7 +70,7 @@ function resolve_meta(fullname: string) {
 }
 
 interface user_t {
-    permissions: number[],
+    permissions: number,
     uuid: number,
     username: string,
     password: string,
@@ -103,7 +105,34 @@ Bun.serve({
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            authenticate(authentication_schema.PUBLIC);
+            // authenticate(authentication_schema.PUBLIC);
+
+            return new Response(file, { headers: { ...meta } });
+        },
+
+        "/home": async () => {
+            const file = await resolve_file("index.html");
+            const meta = resolve_meta("index.html");
+
+            // authenticate(authentication_schema.PUBLIC);
+
+            return new Response(file, { headers: { ...meta } });
+        },
+
+        "/profile": async () => {
+            const file = await resolve_file("index.html");
+            const meta = resolve_meta("index.html");
+
+            // authenticate(authentication_schema.PUBLIC);
+
+            return new Response(file, { headers: { ...meta } });
+        },
+
+        "/lists": async () => {
+            const file = await resolve_file("index.html");
+            const meta = resolve_meta("index.html");
+
+            // authenticate(authentication_schema.PUBLIC);
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -119,7 +148,18 @@ Bun.serve({
 
             return new Response(file, { headers: { ...meta } });
         },
-        "/api/*": (req: Bun.BunRequest<"/api/*">) => new Response(JSON.stringify({ message: "endpoint not found", error: true, payload: req.url }), { status: 404, headers: { "Content-Type": "application/json" } }),
+        "/api/account": {
+            POST: async (req: Bun.BunRequest<"/api/account">) => {
+                const body = await req.json() as { token: string };
+                
+                return new response_builder()
+                    .set_message("token checked")
+                    .set_payload({ valid: account_controller.check_token(body.token) })
+                    .set_status(200)
+                    .build();
+            }
+        },
+        // "/api/*": (req: Bun.BunRequest<"/api/*">) => new Response(JSON.stringify({ message: "endpoint not found", error: true, payload: req.url }), { status: 404, headers: { "Content-Type": "application/json" } }),
         "/*": async () => {
             const file = await resolve_file("404.html");
             const meta = resolve_meta("404.html");
