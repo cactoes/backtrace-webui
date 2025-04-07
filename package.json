@@ -3,7 +3,8 @@
     "main": "./server.ts",
     "scripts": {
         "frontend:build": "cd frontend && tsc",
-        "frontend:watch": "cd frontend && tsc --watch"
+        "frontend:watch": "cd frontend && tsc --watch",
+        "run:dev": "bun ./src/server.ts --watch"
     },
     "devDependencies": {
         "@types/bun": "latest",

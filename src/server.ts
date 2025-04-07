@@ -67,6 +67,34 @@ function resolve_meta(fullname: string) {
     }
 }
 
+interface user_t {
+    permissions: number[],
+    uuid: number,
+    username: string,
+    password: string,
+};
+
+type schema_function_t = (user: user_t) => boolean;
+
+interface schema_t {
+    PUBLIC: schema_function_t;
+    PROTECTED: schema_function_t;
+    PRIVATE: schema_function_t;
+};
+
+const authentication_schema: schema_t = {
+    // anyone can access (no login required)
+    PUBLIC: (_u) => false,
+    // only loged in users can access
+    PROTECTED: (_u) => false,
+    // only a single specific user can access
+    PRIVATE: (_u) => false,
+};
+
+function authenticate(_schema: schema_function_t): boolean {
+    return _schema({} as user_t);
+}
+
 Bun.serve({
     port: process.env.PORT,
     routes: {
@@ -74,6 +102,8 @@ Bun.serve({
         "/": async () => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
+
+            authenticate(authentication_schema.PUBLIC);
 
             return new Response(file, { headers: { ...meta } });
         },
