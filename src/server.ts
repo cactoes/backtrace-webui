@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // import * as webui_controller from "controllers/webui";
 import * as account_controller from "controllers/account";
+import type { promises } from "dns";
 import { response_builder } from "response_builder";
 
 // function get_keys<T extends object>(obj: T): (keyof T)[] {
@@ -69,79 +70,63 @@ function resolve_meta(fullname: string) {
     }
 }
 
-interface user_t {
-    permissions: number,
-    uuid: number,
-    username: string,
-    password: string,
-};
-
-type schema_function_t = (user: user_t) => boolean;
-
-interface schema_t {
-    PUBLIC: schema_function_t;
-    PROTECTED: schema_function_t;
-    PRIVATE: schema_function_t;
-};
-
-const authentication_schema: schema_t = {
-    // anyone can access (no login required)
-    PUBLIC: (_u) => false,
-    // only loged in users can access
-    PROTECTED: (_u) => false,
-    // only a single specific user can access
-    PRIVATE: (_u) => false,
-};
-
-function authenticate(_schema: schema_function_t): boolean {
-    return _schema({} as user_t);
-}
-
 Bun.serve({
     port: process.env.PORT,
     routes: {
         // routes
-        "/": async () => {
+        "/": async (req) => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            // authenticate(authentication_schema.PUBLIC);
+            if (!await account_controller.authenticate.PUBLIC(req.headers.get("token"), 0))
+                return Response.redirect("/404");
 
             return new Response(file, { headers: { ...meta } });
         },
 
-        "/home": async () => {
+        "/home": async (req) => {
             const file = await resolve_file("home.html");
             const meta = resolve_meta("home.html");
 
-            // authenticate(authentication_schema.PUBLIC);
+            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+            //     return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
 
-        "/profile": async () => {
+        "/profile": async (req) => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            // authenticate(authentication_schema.PUBLIC);
+            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+                return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
 
-        "/lists": async () => {
+        "/lists": async (req) => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            // authenticate(authentication_schema.PUBLIC);
+            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+                return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
 
-        "/passwords": async () => {
+        "/passwords": async (req) => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            // authenticate(authentication_schema.PUBLIC);
+            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+                return Response.redirect("/login");
+
+            return new Response(file, { headers: { ...meta } });
+        },
+
+        "/login": async () => {
+            const file = await resolve_file("login.html");
+            const meta = resolve_meta("login.html");
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -169,11 +154,16 @@ Bun.serve({
             }
         },
         // "/api/*": (req: Bun.BunRequest<"/api/*">) => new Response(JSON.stringify({ message: "endpoint not found", error: true, payload: req.url }), { status: 404, headers: { "Content-Type": "application/json" } }),
-        "/*": async () => {
+        
+        "/404": async () => {
             const file = await resolve_file("404.html");
             const meta = resolve_meta("404.html");
 
             return new Response(file, { headers: { ...meta }, status: 404 });
+        },
+
+        "/*": async () => {
+            return Response.redirect("/404");
         }
     },
     async error(error) {

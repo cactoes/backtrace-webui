@@ -1,0 +1,75 @@
+@import url("/files/global.css");
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+
+    width: 300px;
+
+    padding: 1rem;
+}
+
+.form > h2 {
+    color: var(--text);
+    margin-bottom: 24px;
+}
+
+.form > input {
+    outline: none;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    padding: .4rem 1.2rem;
+    margin-bottom: 18px;
+    transition: all .2s ease;
+}
+
+.form > input:focus,
+.form > input:hover {
+    border: 1px solid var(--primary);
+}
+
+.form > button {
+    padding: .4rem 1.2rem;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .2s ease;
+}
+
+.form > button:focus,
+.form > button:hover {
+    border: 1px solid var(--primary);
+}
+
+.form > .label {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form > span {
+    display: flex;
+}
+
+.form > span > p:first-child {
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+/* .form > span > h3 {
+    margin-right: 1rem;
+} */

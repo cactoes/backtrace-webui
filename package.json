@@ -4,7 +4,7 @@
     "scripts": {
         "frontend:build": "cd frontend && tsc",
         "frontend:watch": "cd frontend && tsc --watch",
-        "run:dev": "bun ./src/server.ts --watch"
+        "run:dev": "bun --watch ./src/server.ts"
     },
     "devDependencies": {
         "@types/bun": "latest",
@@ -12,5 +12,8 @@
     },
     "peerDependencies": {
         "typescript": "^5"
+    },
+    "dependencies": {
+        "jose": "^6.0.10"
     }
 }
