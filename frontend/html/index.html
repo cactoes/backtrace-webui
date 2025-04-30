@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Document</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/files/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="icon" type="image/x-icon" href="/meadia/icon.ico">
-    <script src="/files/global.js" defer></script>
-    <script src="/files/index.js" defer></script>
-</head>
-<body>
-    <div class="sidebar">
-        <div class="section1">
-            <div class="image"></div>
-            <div class="details">
-                <h3>Username</h3>
-                <p>2147483648</p>
+    <head>
+        <title>backtrace webui</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=.7">
+        <link rel="stylesheet" href="/files/index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="icon" type="image/x-icon" href="/meadia/icon.ico">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js" integrity="sha512-wC/cunGGDjXSl9OHUH0RuqSyW4YNLlsPwhcLxwWW1CR4OeC2E1xpcdZz2DeQkEmums41laI+eGMw95IJ15SS3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="/files/global.js" defer></script>
+        <script src="/files/index.js" defer></script>
+    </head>
+    <body>
+        <!-- background stars -->
+        <canvas id="stars"></canvas>
+
+        <!-- moon img + content -->
+        <div id="main">
+            <div class="background">
+                <div class="content">
+                    <!-- main title -->
+                    <h1 class="title animated fade_in_up" >
+                        <a href="/">backtrace</a>
+                    </h1>
+                    
+                    <!-- bio -->
+                    <div class="body animated">
+                        <!-- basic info -->
+                        <div class="bio animated fade_in_side delay1">
+                            <b class="sub_text1">cactoes (さぼてん)</b>
+                            <b class="sub_text1">editor & ts/c++ dev</b>
+                        </div>
+    
+                        <!-- socials -->
+                        <div class="socials animated fade_in_side delay15 noselect">
+                            <div class="dash"></div>
+                            <a href="https://www.youtube.com/channel/UCeGFwlujzhSgtToxUlUweXQ">
+                                <b class="text">youtube</b>
+                            </a>
+                            <div class="dash"></div>
+                            <a href="https://www.tiktok.com/@cactoesmen">
+                                <b class="text">tiktok</b>
+                            </a>
+                            <div class="dash"></div>
+                            <a href="https://github.com/cactoes">
+                                <b class="text">github</b>
+                            </a>
+                            <div class="dash"></div>
+                        </div>
+                    </div>
+    
+                    <!-- clock -->
+                    <div class="clock animated fade_in delay2">
+                        <b class="sub_text2" id="clock">00 : 00 : 00</b>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="sidebar" class="section2">
-            <button id="button#sidebar#home" class="button"><i class="fa-solid fa-house"></i>Home</button>
-            <button id="button#sidebar#profile" class="button"><i class="fa-solid fa-user"></i>Profile</button>
-            <button id="button#sidebar#lists" class="button"><i class="fa-solid fa-list"></i>Lists</button>
-            <!-- <button id="button#sidebar#logout" class="button"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</button> -->
-            <!-- <button id="button#sidebar#login" class="button"><i class="fa-solid fa-arrow-right-to-bracket"></i>Login</button> -->
-        </div>
-    </div>
-    <div class="page">
-        <div class="topbar">
-            <div id="navigation" class="navigation noselect">
-                <p>backtrace</p>
-                <div class="slice">/</div>
-                <!-- <p>Lists</p>
-                <div class="slice">/</div>
-                <p>Anime</p> -->
-            </div>
-        </div>
-        <div class="content"></div>
-    </div>
-</body>
+    </body>
 </html>

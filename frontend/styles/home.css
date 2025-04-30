@@ -1,0 +1,44 @@
+@import url("/files/global.css");
+@import url("/files/component.sidebar.css");
+
+.page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.page > .topbar {
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.page > .topbar > .navigation {
+    display: flex;
+    flex-direction: row;
+}
+
+.page > .topbar > .navigation > .slice {
+    font-weight: 600;
+    margin-right: 1rem;
+    color: var(--primary);
+    cursor: default;
+}
+
+.page > .topbar > .navigation > p:not(:last-child) {
+    font-weight: 600;
+    margin-right: 1rem;
+    color: var(--secondary);
+    cursor: pointer;
+}
+
+.page > .topbar > .navigation > p:last-child {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.page > .content {
+    flex: 1;
+}

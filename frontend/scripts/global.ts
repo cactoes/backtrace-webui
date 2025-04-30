@@ -8,6 +8,25 @@ function link_component<K extends keyof HTMLElementEventMap>(target: string, eve
     }
 }
 
+function make_interval(fn: () => void, ms: number): void {
+    fn();
+    setInterval(fn, ms);
+}
+
+function canvas_render_loop(fn: (delta_time: number) => void) {
+    let lastTime = Date.now();
+
+    const render_function = () => {
+        const currentTime = Date.now();
+        const deltaTime = (currentTime - lastTime) / 1000;
+        fn(deltaTime);
+        lastTime = currentTime;
+        window.requestAnimationFrame(render_function);
+    }
+
+    render_function();
+}
+
 function get_jwt() {
     return window.localStorage.getItem("token") || "";
 }

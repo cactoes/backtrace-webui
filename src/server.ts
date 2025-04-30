@@ -111,8 +111,8 @@ Bun.serve({
         },
 
         "/home": async () => {
-            const file = await resolve_file("index.html");
-            const meta = resolve_meta("index.html");
+            const file = await resolve_file("home.html");
+            const meta = resolve_meta("home.html");
 
             // authenticate(authentication_schema.PUBLIC);
 
@@ -129,6 +129,15 @@ Bun.serve({
         },
 
         "/lists": async () => {
+            const file = await resolve_file("index.html");
+            const meta = resolve_meta("index.html");
+
+            // authenticate(authentication_schema.PUBLIC);
+
+            return new Response(file, { headers: { ...meta } });
+        },
+
+        "/passwords": async () => {
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
