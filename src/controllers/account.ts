@@ -1,4 +1,6 @@
+import { sha, SHA256 } from "bun";
 import * as jose from "jose";
+import * as data_controller from "controllers/data";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -21,9 +23,11 @@ export async function get_user_from_token(token: string | null): Promise<user_t 
     try {
         const { payload } = await jose.jwtVerify<{ uuid: number }>(token, JWT_SECRET); payload;
         
-        const users: user_t[] = [];
+        const [users, release] = await data_controller.get_file_with_lock<user_t[]>("users");
 
-        return users.find(v => v.uuid = payload.uuid);
+        release();
+
+        return users.find(v => v.uuid == payload.uuid);
     } catch (_) {
         return undefined;
     }
@@ -87,3 +91,20 @@ export interface user_t {
     username: string,
     password: string,
 };
+
+function sha256(input: string): string {
+    return new SHA256().update(input).digest('hex');
+  }
+
+export async function login_user(username: string, password: string): Promise<string | undefined> {
+    const [users, release] = await data_controller.get_file_with_lock<user_t[]>("users");
+
+    release();
+
+    const user = users.find(v => v.username == username);
+
+    if (!user || user.password != sha256(password))
+        return undefined;
+
+    return await create_token(user);
+}
