@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // import * as webui_controller from "controllers/webui";
 import * as account_controller from "controllers/account";
-import type { promises } from "dns";
 import { response_builder } from "response_builder";
 
 // function get_keys<T extends object>(obj: T): (keyof T)[] {
@@ -78,8 +77,8 @@ Bun.serve({
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            if (!await account_controller.authenticate.PUBLIC(req.headers.get("token"), 0))
-                return Response.redirect("/404");
+            // if (!await account_controller.authenticate.PUBLIC(req.headers.get("token"), 0))
+            //     return Response.redirect("/404");
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -98,8 +97,8 @@ Bun.serve({
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-                return Response.redirect("/login");
+            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+            //     return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -108,8 +107,8 @@ Bun.serve({
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-                return Response.redirect("/login");
+            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+            //     return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -118,8 +117,8 @@ Bun.serve({
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-                return Response.redirect("/login");
+            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
+            //     return Response.redirect("/login");
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -147,9 +146,31 @@ Bun.serve({
                 const body = await req.json() as { token: string };
                 
                 return new response_builder()
-                    .set_message("token checked")
                     .set_payload({ valid: account_controller.check_token(body.token) })
-                    .set_status(200)
+                    .build();
+            }
+        },
+        "/api/account/login": {
+            POST: async (req: Bun.BunRequest<"/api/account/login">) => {
+                type MakeFieldsOptional<T> = {
+                    [K in keyof T]?: T[K] | undefined;
+                };
+
+                async function get_body<T, U extends string = string>(req: Bun.BunRequest<U>): Promise<MakeFieldsOptional<T>> {
+                    return await req.json() as MakeFieldsOptional<T>;
+                }
+
+                const body = await get_body<{ username: string, password: string }>(req);
+
+                const token = await account_controller.login_user(body.username || "", body.password || "");
+
+                if (!token)
+                    return new response_builder(400)
+                        .set_message("error: username or password are invalid")
+                        .build();
+
+                return new response_builder()
+                    .set_payload({ token })
                     .build();
             }
         },
