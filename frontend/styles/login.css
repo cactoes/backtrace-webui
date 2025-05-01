@@ -42,6 +42,10 @@
     border: 1px solid var(--primary);
 }
 
+.form > input.error {
+    border: 1px solid var(--red);
+}
+
 .form > button {
     padding: .4rem 1.2rem;
     background-color: var(--background);
