@@ -150,6 +150,21 @@ Bun.serve({
                     .build();
             }
         },
+        "/api/account/public/me": {
+            GET: async (req: Bun.BunRequest<"/api/account/public/me">) => {
+                const result = await account_controller.get_user_from_token(req.headers.get("Authorization"));
+
+                if (!result)
+                    return new response_builder()
+                        .set_message("error: token was invalid")
+                        .set_status(400)
+                        .build();
+
+                return new response_builder()
+                    .set_payload({ user: { username: result.username, uuid: result.uuid } })
+                    .build();
+            }
+        },
         "/api/account/login": {
             POST: async (req: Bun.BunRequest<"/api/account/login">) => {
                 type MakeFieldsOptional<T> = {
