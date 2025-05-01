@@ -44,7 +44,7 @@ export class response_builder {
      * @brief   builds the http response
      */
     public build(): Response {
-        this.body.error = (this.status >= 200 && this.status < 300);
+        this.body.error = !(this.status >= 200 && this.status < 300);
         return new Response(JSON.stringify(this.body), {
             status: this.status,
             headers: this.headers
