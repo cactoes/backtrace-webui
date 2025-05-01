@@ -31,18 +31,36 @@ function get_jwt() {
     return window.localStorage.getItem("token") || "";
 }
 
-async function api_call() {
-    // const url = `${window.location.origin}`;
-    const url = `${window.location.protocol}//${window.location.host}`;
-    const res = await fetch(`${url}/api/account`, {
-        method: "POST",
+function set_jwt(jwt: string) {
+    window.localStorage.setItem("token", jwt);
+}
+
+function get_element<T extends HTMLElement>(elementid: string) {
+    return (document.getElementById(elementid) as T);
+}
+
+async function make_api_call<T, U extends Object | Array<T>>(type: "GET" | "POST", endpoint: string, data?: U, headers?: { [key: string]: string }): Promise<any> {
+    const base = `${location.protocol}//${location.host}`;
+    const result = await fetch(`${base}/api${endpoint}`, {
+        method: type,
+        cache: "reload",
         headers: {
-            "Content-Type": "application/json"
+            "Accept": "application/json",
+            "Authorization": get_jwt(),
+            ...(type != "GET" && { "Content-Type": "application/json" }),
+            ...headers
         },
-        body: JSON.stringify({ token: get_jwt() })
+        ...(type != "GET" && { body: JSON.stringify(data) })
     });
 
-    console.log(await res.json())
+    return await result.json();
+}
+
+async function sha256(message: string): Promise<string> {
+    const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(message));
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
 }
 
 function update_router() {
