@@ -14,7 +14,7 @@ async function submit_callback() {
     username_input.classList.remove("error");
     password_input.classList.remove("error");
 
-    const result = await make_api_call("POST", "/account/login", { username: username_input.value, password: await sha256(password_input.value) }) as { error: boolean, message: string, payload: { token?: string } };
+    const result = await make_api_call<{ token: string }>("POST", "/account/login", { username: username_input.value, password: await sha256(password_input.value) });
     
     if (result.error) {
         get_element<HTMLInputElement>("input#username").classList.add("error");
@@ -22,7 +22,7 @@ async function submit_callback() {
         return;
     }
 
-    set_jwt(result.payload.token!);
+    set_jwt(result.payload!.token);
 
     window.location.href = "/home";
 }
