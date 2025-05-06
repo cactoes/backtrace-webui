@@ -39,7 +39,7 @@ function get_element<T extends HTMLElement>(elementid: string) {
     return (document.getElementById(elementid) as T);
 }
 
-async function make_api_call<T, U extends Object | Array<T>>(type: "GET" | "POST", endpoint: string, data?: U, headers?: { [key: string]: string }): Promise<any> {
+async function make_api_call<R>(type: "GET" | "POST", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
     const base = `${location.protocol}//${location.host}`;
     const result = await fetch(`${base}/api${endpoint}`, {
         method: type,
@@ -63,6 +63,11 @@ async function sha256(message: string): Promise<string> {
         .join("");
 }
 
+async function check_logged_in(): Promise<boolean> {
+    const result = await make_api_call<{ valid: boolean }>("POST", "/account/check/token", { token: get_jwt() });
+    return result.payload?.valid ?? false;
+}
+
 function update_router() {
     const nav_element = document.getElementById("navigation")!;
 
@@ -77,12 +82,26 @@ function update_router() {
     });
 
     nav_element.removeChild(nav_element.lastChild!);
-} update_router();
+}
 
-document.getElementById("sidebar")!.querySelectorAll("button").forEach(button => {
-    link_component(button.id, {
-        click: () => {
-            window.location.href = `${button.id.split("#").at(-1)}`
-        }
+async function setup_sidebar() {
+    const user_element = get_element<HTMLHeadingElement>("user#username");
+    const uuid_element = get_element<HTMLParagraphElement>("user#uuid");
+    const pfp_element = get_element<HTMLImageElement>("user#pfp");
+
+    const result = await make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
+    user_element.innerText = result.payload!.user.username;
+    uuid_element.innerText = `${result.payload!.user.uuid}`;
+    
+    update_router();
+
+    pfp_element.src = `/files/pfp/${result.payload!.user.uuid}`;
+
+    document.getElementById("sidebar")!.querySelectorAll("button").forEach(button => {
+        link_component(button.id, {
+            click: () => {
+                window.location.href = `${button.id.split("#").at(-1)}`
+            }
+        });
     });
-});
+}

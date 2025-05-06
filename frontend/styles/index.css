@@ -105,9 +105,9 @@ a {
 }
 
 .dash {
-    width: 1px;
+    width: 2px;
     height: 15px;
-    background-color: #ffffff77;
+    background-color: #ffffff56;
 }
 
 a:hover {
