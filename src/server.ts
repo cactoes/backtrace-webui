@@ -94,8 +94,8 @@ Bun.serve({
         },
 
         "/profile": async (req) => {
-            const file = await resolve_file("index.html");
-            const meta = resolve_meta("index.html");
+            const file = await resolve_file("profile.html");
+            const meta = resolve_meta("profile.html");
 
             // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
             //     return Response.redirect("/login");
@@ -114,8 +114,8 @@ Bun.serve({
         },
 
         "/passwords": async (req) => {
-            const file = await resolve_file("index.html");
-            const meta = resolve_meta("index.html");
+            const file = await resolve_file("passwords.html");
+            const meta = resolve_meta("passwords.html");
 
             // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
             //     return Response.redirect("/login");

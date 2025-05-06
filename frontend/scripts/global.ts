@@ -71,7 +71,7 @@ async function check_logged_in(): Promise<boolean> {
 function update_router() {
     const nav_element = document.getElementById("navigation")!;
 
-    location.pathname.split("/").filter(Boolean).forEach(segment => {
+    window.location.pathname.split("/").filter(Boolean).forEach(segment => {
         const p = document.createElement("p");
         p.innerHTML = `${segment.slice(0, 1).toUpperCase()}${segment.slice(1)}`;
         nav_element.appendChild(p);
@@ -82,20 +82,36 @@ function update_router() {
     });
 
     nav_element.removeChild(nav_element.lastChild!);
+
+    (nav_element.firstElementChild as HTMLParagraphElement).addEventListener("click", () => {
+        window.location.href = "/";
+    });
 }
 
 async function setup_sidebar() {
-    const user_element = get_element<HTMLHeadingElement>("user#username");
-    const uuid_element = get_element<HTMLParagraphElement>("user#uuid");
-    const pfp_element = get_element<HTMLImageElement>("user#pfp");
-
     const result = await make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
-    user_element.innerText = result.payload!.user.username;
-    uuid_element.innerText = `${result.payload!.user.uuid}`;
+    const url = window.location.pathname.split("/").filter(Boolean)[0];
+
+    const sidebar = document.querySelector(".sidebar")!;
+    sidebar.innerHTML = `<div class="sidebar">
+            <div class="section1">
+                <div class="image"><img src="/files/pfp/${result.payload!.user.uuid}"></div>
+                <div class="details">
+                    <!-- // TODO @since 01/05/2025 -- 20:49
+                         // add skeleton loaders -->
+                    <h3>${result.payload!.user.username}</h3>
+                    <p>${result.payload!.user.uuid}</p>
+                </div>
+            </div>
+            <div id="sidebar" class="section2">
+                <button id="button#sidebar#home" class="button ${url == "home" ? "active" : ""}"><i class="fa-solid fa-house"></i>Home</button>
+                <button id="button#sidebar#profile" class="button ${url == "profile" ? "active" : ""}"><i class="fa-solid fa-user"></i>Profile</button>
+                <button id="button#sidebar#passwords" class="button ${url == "passwords" ? "active" : ""}"><i class="fa-solid fa-lock"></i>Passwords</button>
+                <button id="button#sidebar#lists" class="button ${url == "lists" ? "active" : ""}"><i class="fa-solid fa-list"></i>Lists</button>
+            </div>
+        </div>`
     
     update_router();
-
-    pfp_element.src = `/files/pfp/${result.payload!.user.uuid}`;
 
     document.getElementById("sidebar")!.querySelectorAll("button").forEach(button => {
         link_component(button.id, {
