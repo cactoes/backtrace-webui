@@ -3,6 +3,24 @@ import * as path from "path";
 
 const mutex_map: { [key: string]: Mutex } = {};
 
+function resolve_path(filename: string, ext: string = "json"): string {
+    const prefix = process.env.IS_PRODUCTION == "true" ? "prod" : "dev";
+    return path.join(__dirname, `../../data/${prefix}/${filename}.${ext}`);
+}
+
+export async function get_pfp(uuid: number): Promise<Bun.BunFile | undefined> {
+    try {
+        const file = Bun.file(resolve_path(`pfp/${uuid}`, "png"));
+
+        if (!(await file.exists()))
+            return undefined;
+
+        return file;
+    } catch (err) {
+        return undefined
+    }
+}
+
 /**
  * @brief               wrapper for reading files of the disk & parsing into json
  * @param filename      name of the file
@@ -11,13 +29,11 @@ const mutex_map: { [key: string]: Mutex } = {};
  *                      ex: .dev.json or .prod.json
  */
 export async function get_file_with_lock<T extends (Object | Array<any>)>(filename: string): Promise<[T, ReleaseFunction]> {
-    const prefix = process.env.IS_PRODUCTION == "true" ? "prod" : "dev";
-
     if (mutex_map[filename] == undefined)
         mutex_map[filename] = new Mutex();
 
     return [
-        await Bun.file(path.join(__dirname, `../../data/${filename}.${prefix}.json`)).json(),
+        await Bun.file(resolve_path(filename)).json(),
         await mutex_map[filename].acquire()
     ];
 }
@@ -31,7 +47,6 @@ export async function get_file_with_lock<T extends (Object | Array<any>)>(filena
  *                              ex: .dev.json or .prod.json
  */
 export async function save_file_and_unlock<T extends (Object | Array<any>)>(filename: string, release_function: ReleaseFunction, data: T): Promise<void> {
-    const prefix = process.env.IS_PRODUCTION == "true" ? "prod" : "dev";
-    await Bun.file(path.join(__dirname, `../../data/${filename}.${prefix}.json`)).write(JSON.stringify(data, null, 4));
+    await Bun.file(resolve_path(filename)).write(JSON.stringify(data, null, 4));
     release_function();
 }
