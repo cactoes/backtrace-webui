@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// import * as webui_controller from "controllers/webui";
 import * as account_controller from "controllers/account";
 import { response_builder } from "response_builder";
+import * as data_controller from "controllers/data";
 
 // function get_keys<T extends object>(obj: T): (keyof T)[] {
 //     return Object.keys(obj) as (keyof T)[];
@@ -104,8 +104,8 @@ Bun.serve({
         },
 
         "/lists": async (req) => {
-            const file = await resolve_file("index.html");
-            const meta = resolve_meta("index.html");
+            const file = await resolve_file("lists.html");
+            const meta = resolve_meta("lists.html");
 
             // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
             //     return Response.redirect("/login");
@@ -130,6 +130,15 @@ Bun.serve({
             return new Response(file, { headers: { ...meta } });
         },
 
+        "/files/pfp/:uuid": async (req: Bun.BunRequest<"/files/pfp/:uuid">) => {
+            const pfp_data = await data_controller.get_pfp(parseInt(req.params.uuid));
+
+            if (!pfp_data)
+                return new response_builder(404).build();
+
+            return new Response(pfp_data);
+        },
+
         // data endpoints
         "/files/:fullname": async (req) => {
             const fullname = req.params.fullname;
@@ -141,12 +150,12 @@ Bun.serve({
 
             return new Response(file, { headers: { ...meta } });
         },
-        "/api/account": {
-            POST: async (req: Bun.BunRequest<"/api/account">) => {
+        "/api/account/check/token": {
+            POST: async (req: Bun.BunRequest<"/api/account/check/token">) => {
                 const body = await req.json() as { token: string };
-                
+
                 return new response_builder()
-                    .set_payload({ valid: account_controller.check_token(body.token) })
+                    .set_payload({ valid: await account_controller.check_token(body.token) })
                     .build();
             }
         },
