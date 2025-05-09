@@ -2,20 +2,13 @@
 import * as account_controller from "controllers/account";
 import { response_builder } from "response_builder";
 import * as data_controller from "controllers/data";
+import * as server_controller from "controllers/server";
 
 // function get_keys<T extends object>(obj: T): (keyof T)[] {
 //     return Object.keys(obj) as (keyof T)[];
 // }
 
 function unused_params(...args: any[]): void { args; }
-
-async function create_html_file_response(filename: string): Promise<Response> {
-    return new Response(await Bun.file(`frontend/${filename}.html`).bytes(), {
-        headers: {
-            "Content-Type": "text/html"
-        }
-    });
-}
 
 async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLike> | undefined> {
     const parts = fullname.split(".");
@@ -69,63 +62,54 @@ function resolve_meta(fullname: string) {
     }
 }
 
+type MakeFieldsOptional<T> = {
+    [K in keyof T]?: T[K] | undefined;
+};
+
+async function get_body<T, U extends string = string>(req: Bun.BunRequest<U>): Promise<MakeFieldsOptional<T>> {
+    return await req.json() as MakeFieldsOptional<T>;
+}
+
+async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "PUT", full_url: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<MakeFieldsOptional<T>> {
+    const result = await fetch(full_url, {
+        method: type,
+        headers: {
+            "Accept": "application/json",
+            ...(type != "GET" && { "Content-Type": "application/json" }),
+            ...headers
+        },
+        ...(type != "GET" && { body: JSON.stringify(data) })
+    });
+
+    return await result.json() as MakeFieldsOptional<T>;
+}
+
 Bun.serve({
     port: process.env.PORT,
     routes: {
         // routes
         "/": async (req) => {
+            unused_params(req);
+
             const file = await resolve_file("index.html");
             const meta = resolve_meta("index.html");
 
-            // if (!await account_controller.authenticate.PUBLIC(req.headers.get("token"), 0))
-            //     return Response.redirect("/404");
-
             return new Response(file, { headers: { ...meta } });
         },
 
-        "/home": async (req) => {
-            const file = await resolve_file("home.html");
-            const meta = resolve_meta("home.html");
+        "/404": async () => {
+            const file = await resolve_file("404.html");
+            const meta = resolve_meta("404.html");
 
-            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-            //     return Response.redirect("/login");
-
-            return new Response(file, { headers: { ...meta } });
+            return new Response(file, { headers: { ...meta }, status: 404 });
         },
 
-        "/profile": async (req) => {
-            const file = await resolve_file("profile.html");
-            const meta = resolve_meta("profile.html");
+        "/:page": async (req: Bun.BunRequest<"/:page">) => {
+            if (!["home", "profile", "lists", "login", "passwords"].includes(req.params.page))
+                return Response.redirect("/404");
 
-            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-            //     return Response.redirect("/login");
-
-            return new Response(file, { headers: { ...meta } });
-        },
-
-        "/lists": async (req) => {
-            const file = await resolve_file("lists.html");
-            const meta = resolve_meta("lists.html");
-
-            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-            //     return Response.redirect("/login");
-
-            return new Response(file, { headers: { ...meta } });
-        },
-
-        "/passwords": async (req) => {
-            const file = await resolve_file("passwords.html");
-            const meta = resolve_meta("passwords.html");
-
-            // if (!await account_controller.authenticate.PROTECTED(req.headers.get("token"), 0))
-            //     return Response.redirect("/login");
-
-            return new Response(file, { headers: { ...meta } });
-        },
-
-        "/login": async () => {
-            const file = await resolve_file("login.html");
-            const meta = resolve_meta("login.html");
+            const file = await resolve_file(`${req.params.page}.html`);
+            const meta = resolve_meta(`${req.params.page}.html`);
 
             return new Response(file, { headers: { ...meta } });
         },
@@ -141,6 +125,8 @@ Bun.serve({
 
         // data endpoints
         "/files/:fullname": async (req) => {
+            unused_params(req);
+
             const fullname = req.params.fullname;
             const file = await resolve_file(fullname);
             const meta = resolve_meta(fullname);
@@ -152,10 +138,10 @@ Bun.serve({
         },
         "/api/account/check/token": {
             POST: async (req: Bun.BunRequest<"/api/account/check/token">) => {
-                const body = await req.json() as { token: string };
+                const body = await get_body<{ token: string }>(req);
 
                 return new response_builder()
-                    .set_payload({ valid: await account_controller.check_token(body.token) })
+                    .set_payload({ valid: await account_controller.check_token(body.token!) })
                     .build();
             }
         },
@@ -176,16 +162,7 @@ Bun.serve({
         },
         "/api/account/login": {
             POST: async (req: Bun.BunRequest<"/api/account/login">) => {
-                type MakeFieldsOptional<T> = {
-                    [K in keyof T]?: T[K] | undefined;
-                };
-
-                async function get_body<T, U extends string = string>(req: Bun.BunRequest<U>): Promise<MakeFieldsOptional<T>> {
-                    return await req.json() as MakeFieldsOptional<T>;
-                }
-
                 const body = await get_body<{ username: string, password: string }>(req);
-
                 const token = await account_controller.login_user(body.username || "", body.password || "");
 
                 if (!token)
@@ -198,16 +175,47 @@ Bun.serve({
                     .build();
             }
         },
-        // "/api/*": (req: Bun.BunRequest<"/api/*">) => new Response(JSON.stringify({ message: "endpoint not found", error: true, payload: req.url }), { status: 404, headers: { "Content-Type": "application/json" } }),
-        
-        "/404": async () => {
-            const file = await resolve_file("404.html");
-            const meta = resolve_meta("404.html");
+        "/api/lists": {
+            GET: async (req: Bun.BunRequest<"/api/lists">) => {
+                const result = await account_controller.get_user_from_token(req.headers.get("Authorization"));
+                if (!result)
+                    return new response_builder()
+                        .set_message("error: token was invalid")
+                        .set_status(400)
+                        .build();
 
-            return new Response(file, { headers: { ...meta }, status: 404 });
+                const server_instace = result.servers.find(server => server.server == "yuno");
+
+                if (!server_instace)
+                    return new response_builder()
+                        .set_message("error: server has not (yet) fully setup this users account, contact administation")
+                        .set_status(500)
+                        .build();
+
+                const server_details = (await server_controller.get_server_details(server_instace.server))!;
+
+                const data = await make_remote_request<{ message: string, success: boolean, data: any }>("POST", `${server_details.server}/instance/get`, {
+                    instance: server_instace.id,
+                    keys: {
+                        anime: [ "_id", "name", "current", "state" ],
+                        manga: [ "_id", "name", "current", "state" ]
+                    }
+                });
+
+                return new response_builder(data.success == true ? 200 : 400)
+                    .set_payload(data)
+                    .build();
+            }
+        },
+        "/api/*": (req: Bun.BunRequest<"/api/*">) => {
+            return new response_builder(400)
+                .set_message("endpoint not found or invalid method")
+                .set_payload({ method: req.method, url: req.url })
+                .build();
         },
 
-        "/*": async () => {
+        "/*": async (req: Bun.BunRequest<"/*">) => {
+            console.error(`[fallback]: url \"${req.method} ${req.url}\" not found or method was incorrect (redirecting 404).`);
             return Response.redirect("/404");
         }
     },

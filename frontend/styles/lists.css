@@ -1,3 +1,192 @@
 @import url("/files/global.css");
 @import url("/files/component.sidebar.css");
 @import url("/files/component.base.css");
+
+.filter_wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 1.5rem 2rem;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown > .dropdown_selector {
+    padding: .5rem 1.5rem;
+    cursor: pointer;
+    transition: all .2s ease;
+
+    background-color: var(--background);
+    font-weight: 600;
+
+    border: 1px solid var(--primary);
+
+    width: 120px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.dropdown > .dropdown_selector:hover {
+    background-color: var(--secondary);
+}
+
+.dropdown > .dropdown_selector > i {
+    margin-left: .5rem;
+}
+
+.dropdown > .options {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--background);
+    border: 1px solid var(--primary);
+    overflow: auto;
+    z-index: 1;
+    width: 120px;
+    align-items: center;
+}
+
+.dropdown > .options.show {
+    display: flex;
+}
+
+.dropdown > .options > a {
+    padding: .5rem 2rem;
+    text-decoration: none;
+    transition: all .2s ease;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.dropdown > .options > a:hover {
+    background-color: var(--secondary);
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.finished {
+    --color: hsl(236, 50%, 60%);
+}
+
+.watching {
+    --color: hsl(128, 50%, 60%);
+}
+
+.planned {
+    --color: hsl(0, 0%, 60%);
+}
+
+.dropped {
+    --color: hsl(0, 50%, 60%);
+}
+
+.clear {
+    --color: var(--primary)
+}
+
+.filters > p {
+    padding: .2rem .7rem;
+    border: 1px solid var(--color);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: .5rem;
+    color: var(--text);
+    transition: all .2s ease;
+}
+
+.filters > p > i {
+    margin-left: 5px;
+    transition: all .2s ease;
+}
+
+.filters > p:hover > i {
+    color: var(--background);
+}
+
+.filters > p:hover,
+.filters > p.active {
+    background-color: var(--color);
+    color: var(--background);
+}
+
+#list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem 2rem;
+    margin-top: 0;
+
+    /* border: 1px solid var(--primary); */
+    overflow: hidden;
+
+    width: calc(100% - 4rem);
+    height: calc(100% - 3rem);
+    cursor: default;
+}
+
+#list > .heading {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: .5rem 2rem;
+    background-color: var(--secondary);
+}
+
+#list > .heading > p:not(:last-child) {
+    width: 33%;
+}
+
+#list > .list_content {
+    overflow-y: scroll;
+    /* 80% is random */
+    max-height: 80%;
+}
+
+#list > .list_content > .item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-bottom: 1px solid var(--secondary);
+    padding: .5rem 2rem;
+}
+
+#list > .list_content > .item > p:not(:last-child) {
+    width: 33%;
+    overflow: hidden;
+    color: var(--color);
+}
+
+#list > .controls {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1.5rem 0rem;
+}
+
+#list > .controls > #current {
+    border-bottom: 1px solid var(--primary);
+}
+
+#list > .controls > div {
+    margin: 0 .5rem;
+    padding: .3rem 0rem;
+    cursor: pointer;
+}
+
+#list > .controls > div#next > i {
+    margin-left: 5px;
+}
+
+#list > .controls > div#prev > i {
+    margin-right: 5px;
+}

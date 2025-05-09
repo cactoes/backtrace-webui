@@ -19,7 +19,43 @@
                     <div class="slice">/</div>
                 </div>
             </div>
-            <div class="content"></div>
+            <div class="content">
+                <div class="filter_wrapper">
+                    <div class="dropdown" id="type">
+                        <button id="button#dropdown" class="dropdown_selector"><span>Anime</span><i class="fa-solid fa-angle-down"></i></button>
+                        <div id="div#options" class="options">
+                            <a>Anime</a>
+                            <a>Manga</a>
+                        </div>
+                    </div>
+                    <div class="filters noselect">
+                        <p class="finished filter">Finished</p>
+                        <p class="filter watching">Watching</p>
+                        <p class="filter planned">Planned</p>
+                        <p class="filter dropped">Dropped</p>
+                        <p class="filter clear">clear<i class="fa-solid fa-xmark"></i></p>
+                    </div>
+                </div>
+                <div id="list">
+                    <div class="heading">
+                        <p class="name">Name</p>
+                        <p class="status">Status</p>
+                        <p class="note">Note</p>
+                        <p class="edit"></p>
+                    </div>
+                    <div class="list_content" id="div#list">
+                    </div>
+                    <div class="controls">
+                        <div id="prev"><i class="fa-solid fa-angle-left"></i>previous</div>
+                        <div id="start">1</div>
+                        <div id="start_split">...</div>
+                        <div id="current">10</div>
+                        <div id="end_split">...</div>
+                        <div id="end">99</div>
+                        <div id="next">next<i class="fa-solid fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

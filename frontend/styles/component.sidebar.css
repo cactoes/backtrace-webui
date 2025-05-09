@@ -27,15 +27,16 @@
     background-color: var(--background);
     color: var(--text);
     width: 100%;
-    border-radius: .5rem;
     padding: .5rem 2rem;
     padding-left: 1rem;
     margin-bottom: 4px;
+    transition: all .2s ease;
+    border-right: 1px solid var(--background);
 }
 
 .sidebar > .section2 > .button:hover {
     background-color: var(--secondary);
-    transition: background-color .2s ease;
+    border-right: 1px solid var(--primary);
 }
 
 .sidebar > .section2 > .button > i {
@@ -44,7 +45,7 @@
 }
 
 .sidebar > .section2 > .button.active {
-    background-color: var(--secondary);
+    border-right: 1px solid var(--primary);
 }
 
 .sidebar > .section1 {
