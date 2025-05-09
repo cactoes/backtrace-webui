@@ -86,10 +86,11 @@ export const authenticate: schema_t = {
 };
 
 export interface user_t {
-    permissions: number,
-    uuid: number,
-    username: string,
-    password: string,
+    permissions: number;
+    uuid: number;
+    username: string;
+    password: string;
+    servers: { server: string, id: string }[]
 };
 
 function sha256(input: string): string {

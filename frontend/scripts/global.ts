@@ -39,7 +39,7 @@ function get_element<T extends HTMLElement>(elementid: string) {
     return (document.getElementById(elementid) as T);
 }
 
-async function make_api_call<R>(type: "GET" | "POST", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
+async function make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
     const base = `${location.protocol}//${location.host}`;
     const result = await fetch(`${base}/api${endpoint}`, {
         method: type,
@@ -78,6 +78,7 @@ function update_router() {
 
         const slice = document.createElement("div");
         slice.className = "slice";
+        slice.innerText = "/";
         nav_element.appendChild(slice);
     });
 
