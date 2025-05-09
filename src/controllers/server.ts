@@ -1,6 +1,6 @@
 import * as data_controller from "controllers/data";
 
-interface server_t {
+export interface server_t {
     server: string;
 };
 
