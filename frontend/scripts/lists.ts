@@ -44,6 +44,11 @@ function resolve_status(status: instance_object_t["state"]): [string, string] {
     ][status] as any;
 }
 
+function resolve_filter(filter: string) {
+    return [ "finished", "watching", "planned", "dropped"].indexOf(filter);
+}
+
+
 function create_list_item(obj: instance_object_t) {
     const div = document.createElement("div");
     div.className = "item";
@@ -78,17 +83,60 @@ function create_list_item(obj: instance_object_t) {
     //         </div>`;
 }
 
-function update_list() {}
+// i == page count
+let page_index = 1;
+let page_max_index = 1;
+
+function update_list(list: instance_object_t[], filters: string[]) {
+    const mapped_filters: number[] = filters.map(resolve_filter);
+
+    if (mapped_filters.length == 0)
+        mapped_filters.push(0, 1, 2, 3);
+
+    const filterd_list = list.filter(item => mapped_filters.includes(item.state));
+
+    const e_controls_start = get_element<HTMLDivElement>("start");
+    const e_controls_start_split = get_element<HTMLDivElement>("start_split");
+    const e_controls_current = get_element<HTMLDivElement>("current");
+    const e_controls_end_split = get_element<HTMLDivElement>("end_split");
+    const e_controls_end = get_element<HTMLDivElement>("end");
+
+    page_max_index = Math.ceil(filterd_list.length / 16);
+
+    if (page_index > page_max_index)
+        page_index = page_max_index;
+
+    e_controls_current.innerHTML = `${page_index}`;
+    e_controls_end.innerHTML = `${page_max_index}`;
+
+    if (page_index > 1) {
+        e_controls_start.classList.remove("hidden");
+        e_controls_start_split.classList.remove("hidden");
+    } else {
+        e_controls_start.classList.add("hidden");
+        e_controls_start_split.classList.add("hidden");
+    }
+
+    if (page_index >= page_max_index) {
+        e_controls_end.classList.add("hidden");
+        e_controls_end_split.classList.add("hidden");
+    } else {
+        e_controls_end.classList.remove("hidden");
+        e_controls_end_split.classList.remove("hidden");
+    }
+
+    const target = get_element("div#list");
+    target.innerHTML = "";
+    for (const item of filterd_list.slice(16 * (page_index - 1), 16 * page_index))
+        target.appendChild(create_list_item(item));
+}
 
 async function main() {
     const lists = await make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
-    // i == page count
-    const i = 1;
 
-    const target = get_element("div#list");
-    for (const item of lists.payload!.data.anime.slice(0, 16 * i)) {
-        target.appendChild(create_list_item(item));
-    }
+    let current_list = lists.payload!.data.anime;
+    let filters: string[] = [];
+    update_list(current_list, filters);
 
     const e_options = get_element<HTMLDivElement>("div#options");
     e_options.querySelectorAll("a").forEach(element => {
@@ -96,8 +144,59 @@ async function main() {
             const e = get_element<HTMLButtonElement>("button#dropdown");
             e.click();
             e.querySelector("span")!.innerText = (ev.target as HTMLAnchorElement).innerText;
-            update_list();
+            
+            if (e.textContent == "Anime") {
+                current_list = lists.payload!.data.anime;
+            } else if (e.textContent == "Manga") {
+                current_list = lists.payload!.data.manga;
+            }
+
+            update_list(current_list, filters);
         });
+    });
+    
+    const e_filters = get_element<HTMLDivElement>("div#filters");
+    e_filters.querySelectorAll("p").forEach(element => {
+        element.addEventListener("click", (ev) => {
+            const target = (ev.target as HTMLElement).classList[1];
+            if (target == "clear" || target == "fa-xmark") {
+                filters = [];
+                e_filters.querySelectorAll("p").forEach(el => el.classList.remove("active"));
+            } else if (filters.includes(target)) {
+                filters = filters.filter(f => f != target);
+                (ev.target as HTMLElement).classList.remove("active");
+            } else {
+                filters.push(target);
+                (ev.target as HTMLElement).classList.add("active");
+            }
+
+            update_list(current_list, filters);
+        });
+    });
+
+    const e_controls_next = get_element<HTMLDivElement>("next");
+    e_controls_next.addEventListener("click", () => {
+        if (page_index < page_max_index)
+            page_index++;
+        update_list(current_list, filters);
+    });
+
+    const e_controls_prev = get_element<HTMLDivElement>("prev");
+    e_controls_prev.addEventListener("click", () => {
+        if (page_index - 1 > 0)
+            page_index--;
+        update_list(current_list, filters);
+    });
+    
+    const e_controls_start = get_element<HTMLDivElement>("start");
+    e_controls_start.addEventListener("click", () => {
+        page_index = 1;
+        update_list(current_list, filters);
+    });
+    const e_controls_end = get_element<HTMLDivElement>("end");
+    e_controls_end.addEventListener("click", () => {
+        page_index = page_max_index;
+        update_list(current_list, filters);
     });
 }
 

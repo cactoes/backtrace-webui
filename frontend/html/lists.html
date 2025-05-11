@@ -28,8 +28,8 @@
                             <a>Manga</a>
                         </div>
                     </div>
-                    <div class="filters noselect">
-                        <p class="finished filter">Finished</p>
+                    <div id="div#filters" class="filters noselect">
+                        <p class="filter finished">Finished</p>
                         <p class="filter watching">Watching</p>
                         <p class="filter planned">Planned</p>
                         <p class="filter dropped">Dropped</p>
@@ -45,10 +45,10 @@
                     </div>
                     <div class="list_content" id="div#list">
                     </div>
-                    <div class="controls">
+                    <div class="controls noselect">
                         <div id="prev"><i class="fa-solid fa-angle-left"></i>previous</div>
-                        <div id="start">1</div>
-                        <div id="start_split">...</div>
+                        <div class="hidden" id="start">1</div>
+                        <div class="hidden" id="start_split">...</div>
                         <div id="current">10</div>
                         <div id="end_split">...</div>
                         <div id="end">99</div>

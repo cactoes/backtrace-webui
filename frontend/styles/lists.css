@@ -159,6 +159,15 @@
     padding: .5rem 2rem;
 }
 
+#list > .list_content > .item > p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#list > .list_content > .item > p:hover {
+    white-space: wrap;
+}
+
 #list > .list_content > .item > p:not(:last-child) {
     width: 33%;
     overflow: hidden;
@@ -189,4 +198,13 @@
 
 #list > .controls > div#prev > i {
     margin-right: 5px;
+}
+
+#list > .controls > #start_split,
+#list > .controls > #end_split {
+    cursor: default;
+}
+
+#list > .controls > div.hidden {
+    display: none;
 }
