@@ -25,6 +25,7 @@ export class BunRouter {
 
     private make_callback<T extends string>(callback: (req: Bun.BunRequest<T | string>) => Promise<response_builder<any> | Response>) {
         return async (req: any) => {
+            console.log(`[log]: ${req.method.padEnd(4)} \"${req.url}\"`);
             const result = await callback(req);
             return result instanceof Response ?  result : result.build();
         }
