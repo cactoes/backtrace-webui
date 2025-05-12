@@ -223,3 +223,5 @@ Bun.serve({
         return new Response(`unexcpected server error: ${error.message}`, { status: 500 });
     }
 });
+
+console.log(`http://localhost:${process.env.PORT}`);

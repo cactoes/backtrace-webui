@@ -25,16 +25,6 @@ function switch_class(target: HTMLElement, classes: [ string, string ]) {
         : (target.classList.remove(classes[1]), target.classList.add(classes[0]))
 }
 
-link_component("button#dropdown", {
-    click: () => {
-        const e = get_element<HTMLButtonElement>("button#dropdown");
-        switch_class(e.querySelector("i")!, ["fa-angle-up", "fa-angle-down"])
-
-        const e_options = get_element<HTMLDivElement>("div#options");
-        toggle_class(e_options, "show");
-    }
-})
-
 function resolve_status(status: instance_object_t["state"]): [string, string] {
     return [
         ["Finished", "finished"],
@@ -47,7 +37,6 @@ function resolve_status(status: instance_object_t["state"]): [string, string] {
 function resolve_filter(filter: string) {
     return [ "finished", "watching", "planned", "dropped"].indexOf(filter);
 }
-
 
 function create_list_item(obj: instance_object_t) {
     const div = document.createElement("div");
@@ -70,7 +59,12 @@ function create_list_item(obj: instance_object_t) {
 
     const edit = document.createElement("p");
     edit.className = "edit";
-    edit.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+    const i = document.createElement("i");
+    i.className = "fa-solid fa-ellipsis-vertical";
+    i.onclick = () => {
+        console.log("edit:", obj);
+    }
+    edit.appendChild(i);
     div.appendChild(edit);
 
     return div;
@@ -83,7 +77,6 @@ function create_list_item(obj: instance_object_t) {
     //         </div>`;
 }
 
-// i == page count
 let page_index = 1;
 let page_max_index = 1;
 
@@ -138,8 +131,7 @@ async function main() {
     let filters: string[] = [];
     update_list(current_list, filters);
 
-    const e_options = get_element<HTMLDivElement>("div#options");
-    e_options.querySelectorAll("a").forEach(element => {
+    get_element<HTMLDivElement>("div#options").querySelectorAll("a").forEach(element => {
         element.addEventListener("click", (ev) => {
             const e = get_element<HTMLButtonElement>("button#dropdown");
             e.click();
@@ -174,29 +166,43 @@ async function main() {
         });
     });
 
-    const e_controls_next = get_element<HTMLDivElement>("next");
-    e_controls_next.addEventListener("click", () => {
-        if (page_index < page_max_index)
-            page_index++;
-        update_list(current_list, filters);
+    const button_dropdown = link_component("button#dropdown", {
+        click: () => {
+            switch_class(button_dropdown.querySelector("i")!, ["fa-angle-up", "fa-angle-down"])
+    
+            const e_options = get_element<HTMLDivElement>("div#options");
+            toggle_class(e_options, "show");
+        }
     });
 
-    const e_controls_prev = get_element<HTMLDivElement>("prev");
-    e_controls_prev.addEventListener("click", () => {
-        if (page_index - 1 > 0)
-            page_index--;
-        update_list(current_list, filters);
+    link_component("next", {
+        click: () => {
+            if (page_index < page_max_index)
+                page_index++;
+            update_list(current_list, filters);
+        }
     });
-    
-    const e_controls_start = get_element<HTMLDivElement>("start");
-    e_controls_start.addEventListener("click", () => {
-        page_index = 1;
-        update_list(current_list, filters);
+
+    link_component("prev", {
+        click: () => {
+            if (page_index - 1 > 0)
+                page_index--;
+            update_list(current_list, filters);
+        }
     });
-    const e_controls_end = get_element<HTMLDivElement>("end");
-    e_controls_end.addEventListener("click", () => {
-        page_index = page_max_index;
-        update_list(current_list, filters);
+
+    link_component("start", {
+        click: () => {
+            page_index = 1;
+            update_list(current_list, filters);
+        }
+    });
+
+    link_component("end", {
+        click: () => {
+            page_index = page_max_index;
+            update_list(current_list, filters);
+        }
     });
 }
 
