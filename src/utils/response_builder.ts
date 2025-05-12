@@ -1,8 +1,13 @@
+//==========================================
+/// @file       response_builder.ts
+/// @brief      builder for making a http response
+//==========================================
+
 /**
  * @brief       helper class for building http responses
  * @remarks     subject to change a lot based on demand
  */
-export class response_builder {
+export class response_builder<T extends Object | Array<any>> {
     private body = { "message": "", "error": false, payload: {} };
     private headers: { [key:string]: string } = {
         "Content-Type": "application/json",
@@ -18,7 +23,7 @@ export class response_builder {
     /**
      * @brief   sets the payload field
      */
-    public set_payload(data: (Object | Array<any>)): response_builder {
+    public set_payload(data: T): response_builder<T> {
         this.body.payload = data;
         return this;
     }
@@ -26,7 +31,7 @@ export class response_builder {
     /**
      * @brief   sets the message field
      */
-    public set_message(message: string): response_builder {
+    public set_message(message: string): response_builder<T> {
         this.body.message = message;
         return this;
     }
@@ -35,7 +40,7 @@ export class response_builder {
      * @brief       sets the http status code (same as in constructor)
      * @remarks     if the status code is not 2xx error is set to true
      */
-    public set_status(code: number): response_builder {
+    public set_status(code: number): response_builder<T> {
         this.status = code;
         return this;
     }

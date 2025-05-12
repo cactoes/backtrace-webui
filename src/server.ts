@@ -1,16 +1,87 @@
-#!/usr/bin/env node
-import * as account_controller from "controllers/account";
-import { response_builder } from "response_builder";
-import * as data_controller from "controllers/data";
-import * as server_controller from "controllers/server";
+//==========================================
+/// @file       router.ts
+/// @brief      bun router helper functions
+//==========================================
 
-// function get_keys<T extends object>(obj: T): (keyof T)[] {
-//     return Object.keys(obj) as (keyof T)[];
-// }
+import type { response_builder } from "./utils/utils";
 
-function unused_params(...args: any[]): void { args; }
+export class BunRouter {
+    public routes: { [key: string]: { [m: string ]: (req: Bun.BunRequest<any>) => Promise<Response> } }[] = [];
 
-async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLike> | undefined> {
+    private add_method(url: string, method: "GET" | "POST" | "PUT" | "PATCH", callback: any) {
+        const existing = this.routes.find(r => Object.keys(r)[0]! == url);
+
+        if (existing) {
+            existing[url]![method] = async (req: any) => (await callback(req)).build()
+            return;
+        }
+
+        this.routes.push({
+            [url]: {
+                [method]: async (req: any) => await callback(req)
+            }
+        });
+    }
+
+    private make_callback<T extends string>(callback: (req: Bun.BunRequest<T | string>) => Promise<response_builder<any> | Response>) {
+        return async (req: any) => {
+            const result = await callback(req);
+            return result instanceof Response ?  result : result.build();
+        }
+    }
+
+    public get<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
+        this.add_method(url, "GET", this.make_callback(callback));
+    }
+    public post<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
+        this.add_method(url, "POST", this.make_callback(callback));
+    }
+    public put<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
+        this.add_method(url, "PUT", this.make_callback(callback));
+    }
+    public patch<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
+        this.add_method(url, "PATCH", this.make_callback(callback));
+    }
+};
+
+export class BunServer {
+    public routes: any = {};
+
+    constructor(public port: string | undefined) {}
+
+    public add_router(url: string, router: BunRouter) {
+        if (url == "") {
+            Object.assign(this.routes, ...router.routes);
+            return;
+        }
+
+        const routes = router.routes.map(obj => {
+            const key = Object.keys(obj)[0]!;
+            return { [`${url}${key}`]: obj[key] };
+        });
+
+        Object.assign(this.routes, ...routes);
+    }
+
+    public start(callback?: () => void | undefined) {
+        Bun.serve({
+            port: this.port,
+            routes: { ...this.routes },
+            async error(error) {
+                return new Response(`unexcpected server error: ${error.message}`, { status: 500 });
+            }
+        });
+
+        if (callback)
+            callback();
+    }
+};
+
+export async function get_body<T, U extends string = string>(req: Bun.BunRequest<U>): Promise<MakeFieldsOptional<T>> {
+    return await req.json() as MakeFieldsOptional<T>;
+}
+
+export async function resolve_web_file(fullname: string): Promise<[Uint8Array, { "Content-Type": string; }] | undefined> {
     const parts = fullname.split(".");
     const ext = parts.at(-1);
     const name = parts.slice(0, -1).join(".");
@@ -18,210 +89,31 @@ async function resolve_file(fullname: string): Promise<Uint8Array<ArrayBufferLik
     let path: string | undefined;
 
     switch(ext) {
-        case "js":
-            path = "scripts/js";
-            break;
-        case "css":
-            path = "styles";
-            break;
+        case "js":      path = "scripts/js"; break;
+        case "css":     path = "styles"; break;
         case "png":
-        case "jpg":
-            path = "media";
-            break;
-        case "html":
-            path = "html";
-            break;
-        default:
-            return undefined;
+        case "jpg":     path = "media"; break;
+        case "html":    path = "html"; break;
+        default:        return undefined;
     }
     
     const file = Bun.file(`frontend/${path}/${name}.${ext}`);
 
-    if (await file.exists())
-        return await file.bytes();
+    if (!(await file.exists()))
+        return undefined;
+    
+    const file_data = await file.bytes();
 
-    return undefined;
-}
-
-function resolve_meta(fullname: string) {
-    const ext = fullname.split(".").at(-1);
+    let file_meta = { "Content-Type": "text/html" };
 
     switch(ext) {
-        case "js":
-            return { "Content-Type": "text/javascript" };
-        case "css":
-            return { "Content-Type": "text/css" };
-        case "html":
-            return { "Content-Type": "text/html" };
-        case "png":
-            return { "Content-Type": "image/png" };
-        case "jpg":
-            return { "Content-Type": "image/jpeg" };
-        default:
-            return undefined;
+        case "js":      file_meta = { "Content-Type": "text/javascript" }; break;
+        case "css":     file_meta = { "Content-Type": "text/css" }; break;
+        case "html":    file_meta = { "Content-Type": "text/html" }; break;
+        case "png":     file_meta = { "Content-Type": "image/png" }; break;
+        case "jpg":     file_meta = { "Content-Type": "image/jpeg" }; break;
+        default:        return undefined;
     }
+
+    return [ file_data, file_meta ];
 }
-
-type MakeFieldsOptional<T> = {
-    [K in keyof T]?: T[K] | undefined;
-};
-
-async function get_body<T, U extends string = string>(req: Bun.BunRequest<U>): Promise<MakeFieldsOptional<T>> {
-    return await req.json() as MakeFieldsOptional<T>;
-}
-
-async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "PUT", full_url: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<MakeFieldsOptional<T>> {
-    const result = await fetch(full_url, {
-        method: type,
-        headers: {
-            "Accept": "application/json",
-            ...(type != "GET" && { "Content-Type": "application/json" }),
-            ...headers
-        },
-        ...(type != "GET" && { body: JSON.stringify(data) })
-    });
-
-    return await result.json() as MakeFieldsOptional<T>;
-}
-
-Bun.serve({
-    port: process.env.PORT,
-    routes: {
-        // routes
-        "/": async (req) => {
-            unused_params(req);
-
-            const file = await resolve_file("index.html");
-            const meta = resolve_meta("index.html");
-
-            return new Response(file, { headers: { ...meta } });
-        },
-
-        "/404": async () => {
-            const file = await resolve_file("404.html");
-            const meta = resolve_meta("404.html");
-
-            return new Response(file, { headers: { ...meta }, status: 404 });
-        },
-
-        "/:page": async (req: Bun.BunRequest<"/:page">) => {
-            if (!["home", "profile", "lists", "login", "passwords"].includes(req.params.page))
-                return Response.redirect("/404");
-
-            const file = await resolve_file(`${req.params.page}.html`);
-            const meta = resolve_meta(`${req.params.page}.html`);
-
-            return new Response(file, { headers: { ...meta } });
-        },
-
-        "/files/pfp/:uuid": async (req: Bun.BunRequest<"/files/pfp/:uuid">) => {
-            const pfp_data = await data_controller.get_pfp(parseInt(req.params.uuid));
-
-            if (!pfp_data)
-                return new response_builder(404).build();
-
-            return new Response(pfp_data);
-        },
-
-        // data endpoints
-        "/files/:fullname": async (req) => {
-            unused_params(req);
-
-            const fullname = req.params.fullname;
-            const file = await resolve_file(fullname);
-            const meta = resolve_meta(fullname);
-
-            if (!file || !meta)
-                return new Response("file not found or filetype not supported", { status: 404 });
-
-            return new Response(file, { headers: { ...meta } });
-        },
-        "/api/account/check/token": {
-            POST: async (req: Bun.BunRequest<"/api/account/check/token">) => {
-                const body = await get_body<{ token: string }>(req);
-
-                return new response_builder()
-                    .set_payload({ valid: await account_controller.check_token(body.token!) })
-                    .build();
-            }
-        },
-        "/api/account/public/me": {
-            GET: async (req: Bun.BunRequest<"/api/account/public/me">) => {
-                const result = await account_controller.get_user_from_token(req.headers.get("Authorization"));
-
-                if (!result)
-                    return new response_builder()
-                        .set_message("error: token was invalid")
-                        .set_status(400)
-                        .build();
-
-                return new response_builder()
-                    .set_payload({ user: { username: result.username, uuid: result.uuid } })
-                    .build();
-            }
-        },
-        "/api/account/login": {
-            POST: async (req: Bun.BunRequest<"/api/account/login">) => {
-                const body = await get_body<{ username: string, password: string }>(req);
-                const token = await account_controller.login_user(body.username || "", body.password || "");
-
-                if (!token)
-                    return new response_builder(400)
-                        .set_message("error: username or password are invalid")
-                        .build();
-
-                return new response_builder()
-                    .set_payload({ token })
-                    .build();
-            }
-        },
-        "/api/lists": {
-            GET: async (req: Bun.BunRequest<"/api/lists">) => {
-                const result = await account_controller.get_user_from_token(req.headers.get("Authorization"));
-                if (!result)
-                    return new response_builder()
-                        .set_message("error: token was invalid")
-                        .set_status(400)
-                        .build();
-
-                const server_instace = result.servers.find(server => server.server == "yuno");
-
-                if (!server_instace)
-                    return new response_builder()
-                        .set_message("error: server has not (yet) fully setup this users account, contact administation")
-                        .set_status(500)
-                        .build();
-
-                const server_details = (await server_controller.get_server_details(server_instace.server))!;
-
-                const data = await make_remote_request<{ message: string, success: boolean, data: any }>("POST", `${server_details.server}/instance/get`, {
-                    instance: server_instace.id,
-                    keys: {
-                        anime: [ "_id", "name", "current", "state" ],
-                        manga: [ "_id", "name", "current", "state" ]
-                    }
-                });
-
-                return new response_builder(data.success == true ? 200 : 400)
-                    .set_payload(data)
-                    .build();
-            }
-        },
-        "/api/*": (req: Bun.BunRequest<"/api/*">) => {
-            return new response_builder(400)
-                .set_message("endpoint not found or invalid method")
-                .set_payload({ method: req.method, url: req.url })
-                .build();
-        },
-
-        "/*": async (req: Bun.BunRequest<"/*">) => {
-            console.error(`[fallback]: url \"${req.method} ${req.url}\" not found or method was incorrect (redirecting 404).`);
-            return Response.redirect("/404");
-        }
-    },
-    async error(error) {
-        return new Response(`unexcpected server error: ${error.message}`, { status: 500 });
-    }
-});
-
-console.log(`http://localhost:${process.env.PORT}`);

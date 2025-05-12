@@ -1,4 +1,9 @@
-import { Mutex, type ReleaseFunction } from "mutex";
+//==========================================
+/// @file       data.ts
+/// @brief      file manager, thread safe
+//==========================================
+
+import { Mutex } from "../utils/utils";
 import * as path from "path";
 
 const mutex_map: { [key: string]: Mutex } = {};

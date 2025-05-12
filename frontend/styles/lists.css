@@ -73,6 +73,21 @@
 }
 
 .finished {
+    --color: hsl(236, 40%, 70%);
+}
+
+.watching {
+    --color: hsl(128, 40%, 70%);
+}
+
+.planned {
+    --color: hsl(0, 0%, 70%);
+}
+
+.dropped {
+    --color: hsl(0, 40%, 70%);
+}
+/* .finished {
     --color: hsl(236, 50%, 60%);
 }
 
@@ -86,7 +101,7 @@
 
 .dropped {
     --color: hsl(0, 50%, 60%);
-}
+} */
 
 .clear {
     --color: var(--primary)

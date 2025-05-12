@@ -1,10 +1,10 @@
 {
     "name": "backtrace-webui",
-    "main": "./server.ts",
+    "main": "./index.ts",
     "scripts": {
         "frontend:build": "cd frontend && tsc",
         "frontend:watch": "cd frontend && tsc --watch",
-        "run:dev": "bun --watch ./src/server.ts"
+        "run:dev": "bun --watch ./src/index.ts"
     },
     "devDependencies": {
         "@types/bun": "latest",

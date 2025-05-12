@@ -1,4 +1,8 @@
-// https://dev.to/0916dhkim/simple-typescript-mutex-implementation-5544
+//==========================================
+/// @file       mutex.ts
+/// @brief      mutex implementation from:
+///             https://dev.to/0916dhkim/simple-typescript-mutex-implementation-5544
+//==========================================
 
 /**
  * A lock for synchronizing async operations.
@@ -86,5 +90,3 @@ export class Mutex {
         };
     }
 }
-
-export type ReleaseFunction = () => void;
