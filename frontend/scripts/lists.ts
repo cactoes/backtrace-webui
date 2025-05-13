@@ -1,9 +1,9 @@
-check_logged_in().then(r => {
+util.check_logged_in().then(r => {
     if (!r)
         window.location.href = "/login";
 });
 
-/* await */setup_sidebar();
+/* await */component.sidebar.setup();
 
 interface instance_object_t {
     _id: string,
@@ -88,11 +88,11 @@ function update_list(list: instance_object_t[], filters: string[]) {
 
     const filterd_list = list.filter(item => mapped_filters.includes(item.state));
 
-    const e_controls_start = get_element<HTMLDivElement>("start");
-    const e_controls_start_split = get_element<HTMLDivElement>("start_split");
-    const e_controls_current = get_element<HTMLDivElement>("current");
-    const e_controls_end_split = get_element<HTMLDivElement>("end_split");
-    const e_controls_end = get_element<HTMLDivElement>("end");
+    const e_controls_start = element.get<HTMLDivElement>("start");
+    const e_controls_start_split = element.get<HTMLDivElement>("start_split");
+    const e_controls_current = element.get<HTMLDivElement>("current");
+    const e_controls_end_split = element.get<HTMLDivElement>("end_split");
+    const e_controls_end = element.get<HTMLDivElement>("end");
 
     page_max_index = Math.ceil(filterd_list.length / 16);
 
@@ -118,22 +118,22 @@ function update_list(list: instance_object_t[], filters: string[]) {
         e_controls_end_split.classList.remove("hidden");
     }
 
-    const target = get_element("div#list");
+    const target = element.get("div#list");
     target.innerHTML = "";
     for (const item of filterd_list.slice(16 * (page_index - 1), 16 * page_index))
         target.appendChild(create_list_item(item));
 }
 
 async function main() {
-    const lists = await make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
+    const lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
 
     let current_list = lists.payload!.data.anime;
     let filters: string[] = [];
     update_list(current_list, filters);
 
-    get_element<HTMLDivElement>("div#options").querySelectorAll("a").forEach(element => {
-        element.addEventListener("click", (ev) => {
-            const e = get_element<HTMLButtonElement>("button#dropdown");
+    element.get<HTMLDivElement>("div#options").querySelectorAll("a").forEach(el => {
+        el.addEventListener("click", (ev) => {
+            const e = element.get<HTMLButtonElement>("button#dropdown");
             e.click();
             e.querySelector("span")!.innerText = (ev.target as HTMLAnchorElement).innerText;
             
@@ -147,9 +147,9 @@ async function main() {
         });
     });
     
-    const e_filters = get_element<HTMLDivElement>("div#filters");
-    e_filters.querySelectorAll("p").forEach(element => {
-        element.addEventListener("click", (ev) => {
+    const e_filters = element.get<HTMLDivElement>("div#filters");
+    e_filters.querySelectorAll("p").forEach(el => {
+        el.addEventListener("click", (ev) => {
             const target = (ev.target as HTMLElement).classList[1];
             if (target == "clear" || target == "fa-xmark") {
                 filters = [];
@@ -166,16 +166,16 @@ async function main() {
         });
     });
 
-    const button_dropdown = link_component("button#dropdown", {
+    const button_dropdown = element.link("button#dropdown", {
         click: () => {
             switch_class(button_dropdown.querySelector("i")!, ["fa-angle-up", "fa-angle-down"])
     
-            const e_options = get_element<HTMLDivElement>("div#options");
+            const e_options = element.get<HTMLDivElement>("div#options");
             toggle_class(e_options, "show");
         }
     });
 
-    link_component("next", {
+    element.link("next", {
         click: () => {
             if (page_index < page_max_index)
                 page_index++;
@@ -183,7 +183,7 @@ async function main() {
         }
     });
 
-    link_component("prev", {
+    element.link("prev", {
         click: () => {
             if (page_index - 1 > 0)
                 page_index--;
@@ -191,14 +191,14 @@ async function main() {
         }
     });
 
-    link_component("start", {
+    element.link("start", {
         click: () => {
             page_index = 1;
             update_list(current_list, filters);
         }
     });
 
-    link_component("end", {
+    element.link("end", {
         click: () => {
             page_index = page_max_index;
             update_list(current_list, filters);

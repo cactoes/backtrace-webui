@@ -2,7 +2,7 @@
     "name": "backtrace-webui",
     "main": "./index.ts",
     "scripts": {
-        "frontend:build": "cd frontend && tsc",
+        "frontend:build": "cd frontend && tsc && bun run ..\\\\minifier.ts",
         "frontend:watch": "cd frontend && tsc --watch",
         "run:dev": "bun --watch ./src/index.ts"
     },

@@ -6,7 +6,7 @@ VanillaTilt.init(document.querySelector(".background"), {
     perspective: 2000
 });
 
-make_interval(() => {
+util.make_interval(() => {
     const fmt_time = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
 
     const now = new Date();
@@ -90,4 +90,4 @@ function render(delta_time: number) {
     context.fill();
 }
 
-canvas_render_loop(render);
+util.start_canvas_render_loop(render);
