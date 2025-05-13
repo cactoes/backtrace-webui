@@ -1,6 +1,6 @@
 //==========================================
 /// @file       data.ts
-/// @brief      file manager, thread safe
+/// @brief      file manager (thread safe)
 //==========================================
 
 import { Mutex } from "../utils/utils";
