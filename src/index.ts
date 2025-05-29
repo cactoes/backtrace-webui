@@ -17,7 +17,9 @@ function main(argc: number, argv: string[]): number {
     server.add_router("/api", api_controller.router);
     server.add_router("/files", file_controller.router);
 
-    server.start();
+    server.start(() => {
+        console.log("server started");
+    });
 
     return 0;
 }
