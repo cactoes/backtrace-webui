@@ -89,7 +89,7 @@ export async function login_user(username: string, password: string): Promise<st
 
     const user = users.find(v => v.username == username);
 
-    if (!user || user.password != sha256(password))
+    if (!user || user.password != sha256(password + "salt"))
         return undefined;
 
     return await JWTManager.get_instance().create_token(user);

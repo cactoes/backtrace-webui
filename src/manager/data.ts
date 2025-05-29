@@ -13,6 +13,13 @@ function resolve_path(filename: string, ext: string = "json"): string {
     return path.join(__dirname, `../../data/${prefix}/${filename}.${ext}`);
 }
 
+export function get_certs(): { cert: Bun.BunFile, key: Bun.BunFile } {
+    return {
+        cert: Bun.file(resolve_path("cert/cert", "pem")),
+        key: Bun.file(resolve_path("cert/key", "pem")),
+    };
+}
+
 export async function get_pfp(uuid: number): Promise<Bun.BunFile | undefined> {
     try {
         const file = Bun.file(resolve_path(`pfp/${uuid}`, "png"));

@@ -3,6 +3,7 @@
 /// @brief      bun router helper functions
 //==========================================
 
+import { data_manager } from "manager/manager";
 import type { response_builder } from "./utils/utils";
 
 export class BunRouter {
@@ -51,7 +52,7 @@ export class BunRouter {
 export class BunServer {
     public routes: any = {};
 
-    constructor(public port: string | undefined) {}
+    constructor(public port: string | undefined, private use_certs: boolean = false) {}
 
     public add_router(url: string, router: BunRouter) {
         if (url == "") {
@@ -74,6 +75,9 @@ export class BunServer {
             async error(error) {
                 console.log(`unexcpected server error: ${error.message}`);
                 return new Response(`unexcpected server error: ${error.message}`, { status: 500 });
+            },
+            tls: {
+                ...(this.use_certs && {...data_manager.get_certs()})
             }
         });
 
