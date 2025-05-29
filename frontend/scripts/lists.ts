@@ -176,7 +176,6 @@ async function main() {
             let list = lists[list_selector];
 
             if (d_element.getAttribute("data-id") == "unkown") {
-                console.log(resolve_filter(d_state_text.toLowerCase()));
                 const result = await util.make_api_call<{ data: { id: string } }>("POST", `/lists/${list_selector}/create`, {
                     name: d_name.trim(),
                     current: d_note.trim(),
