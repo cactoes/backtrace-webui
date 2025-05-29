@@ -24,7 +24,7 @@ class generic_controller {
     }
 
     public static async page(req: Bun.BunRequest<"/:page">): Promise<Response> {
-        if (!["home", "profile", "lists", "login", "passwords"].includes(req.params.page))
+        if (!["home", "account", "lists", "login", "passwords", "services"].includes(req.params.page))
             return Response.redirect("/404");
 
         const [ file, meta ] = (await resolve_web_file(`${req.params.page}.html`))!;

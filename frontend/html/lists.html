@@ -9,52 +9,66 @@
         <link rel="icon" type="image/x-icon" href="/files/icon.ico">
         <script src="/files/global.js" defer></script>
         <script src="/files/lists.js" defer></script>
+        <script src="/files/fuzzy_search.js" defer></script>
     </head>
     <body>
-        <div class="sidebar"></div>
-        <div class="page">
-            <div class="topbar">
-                <div id="navigation" class="navigation noselect">
-                    <p>backtrace</p>
-                    <div class="slice">/</div>
+        <div id="dialogue" class="dialogue" data-id="">
+            <div class="settings">
+                <div id="d#close" class="close"><i class="fa-solid fa-xmark"></i></div>
+                <span><p>backtrace</p></span>
+                <h2>Edit</h2>
+                <p>Name</p>
+                <input type="text" id="d#name">
+                <p>Note</p>
+                <input type="text" id="d#note">
+                <p>State</p>
+                <!-- <input type="text" id="d#state"> -->
+                <div class="dropdown">
+                    <span id="d#state"></span>
+                    <div class="content">
+                        <p id="dc#finished" class="finished">Finished</p>
+                        <p id="dc#watching" class="watching">Watching</p>
+                        <p id="dc#planned" class="planned">Planned</p>
+                        <p id="dc#dropped" class="dropped">Dropped</p>
+                    </div>
+                </div>
+                <button id="d#save">Save</button>
+                <button class="delete" id="d#delete">Delete</button>
+            </div>
+            <div class="background"></div>
+        </div>
+        <div id="ver"></div>
+        <div class="topbar">
+            <div class="route">
+                <a href="/home">BACKTRACE</a>
+                <p>/</p>
+                <p>LISTS</p>
+            </div>
+            <div class="profile">
+                <img id="i#pfp">
+            </div>
+        </div>
+        <div class="content">
+            <div class="filters noselect">
+                <div class="selector">
+                    <a id="fs#anime" href="#anime">Anime</a>
+                    <a id="fs#manga" href="#manga">Manga</a>
+                </div>
+                <div class="type noselect">
+                    <p id="ft#finished" class="finished">Finished</p>
+                    <p id="ft#watching" class="watching">Watching</p>
+                    <p id="ft#planned" class="planned">Planned</p>
+                    <p id="ft#dropped" class="dropped">Dropped</p>
+                </div>
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="f#search" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="sailor moon">
+                </div>
+                <div class="add">
+                    <button id="f#add"><i class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
-            <div class="content">
-                <div class="filter_wrapper">
-                    <div class="dropdown" id="type">
-                        <button id="button#dropdown" class="dropdown_selector"><span>Anime</span><i class="fa-solid fa-angle-down"></i></button>
-                        <div id="div#options" class="options">
-                            <a>Anime</a>
-                            <a>Manga</a>
-                        </div>
-                    </div>
-                    <div id="div#filters" class="filters noselect">
-                        <p class="filter finished">Finished</p>
-                        <p class="filter watching">Watching</p>
-                        <p class="filter planned">Planned</p>
-                        <p class="filter dropped">Dropped</p>
-                        <p class="filter clear">clear<i class="fa-solid fa-xmark"></i></p>
-                    </div>
-                </div>
-                <div id="list">
-                    <div class="heading">
-                        <p class="name">Name</p>
-                        <p class="status">Status</p>
-                        <p class="note">Note</p>
-                        <p class="edit"></p>
-                    </div>
-                    <div class="list_content" id="div#list">
-                    </div>
-                    <div class="controls noselect">
-                        <div id="prev"><i class="fa-solid fa-angle-left"></i>previous</div>
-                        <div class="hidden" id="start">1</div>
-                        <div class="hidden" id="start_split">...</div>
-                        <div id="current">10</div>
-                        <div id="end_split">...</div>
-                        <div id="end">99</div>
-                        <div id="next">next<i class="fa-solid fa-angle-right"></i></div>
-                    </div>
-                </div>
+            <div id="list" class="list">
             </div>
         </div>
     </body>

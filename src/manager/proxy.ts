@@ -26,6 +26,7 @@ export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "P
             },
             ...(type != "GET" && { body: JSON.stringify(data) })
         });
+
         return await result.json() as MakeFieldsOptional<T>;
     } catch (_) {
         return undefined;

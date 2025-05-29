@@ -1,3 +1,57 @@
 @import url("/files/global.css");
-@import url("/files/component.sidebar.css");
-@import url("/files/component.base.css");
+@import url("/files/component.topbar.css");
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.content > .item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: var(--background);
+    transition: .2s background-color ease;
+    cursor: pointer;
+}
+
+.content > .item:hover {
+    background-color: var(--secondary-dark);
+}
+
+.content > .item:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+.content > .item > .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content > .item > .header > p {
+    margin-left: 8px;
+    color: var(--text-secondary);
+}
+
+.content > .item > .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.content > .item > .info > .stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.content > .item > .info > .stat > h2 {
+    font-weight: 600;
+}
+
+.content > .item > .info > .stat > p {
+    color: var(--text-secondary);
+    font-size: 13px;
+}

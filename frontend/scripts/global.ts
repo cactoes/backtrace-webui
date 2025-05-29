@@ -9,6 +9,19 @@ const element = {
             target_element.addEventListener(event, events[event]);
     
         return target_element;
+    },
+    toggle_class(target: HTMLElement, _class: string) {
+        target.classList.contains(_class)
+        ? target.classList.remove(_class)
+        : target.classList.add(_class)
+    },
+    switch_class(target: HTMLElement, classes: [ string, string ]) {
+        target.classList.contains(classes[0])
+            ? (target.classList.remove(classes[0]), target.classList.add(classes[1]))
+            : (target.classList.remove(classes[1]), target.classList.add(classes[0]))
+    },
+    query_loop<T extends HTMLElement>(query: string, func: (element: T) => void) {
+        document.querySelectorAll(query).forEach(e => func(e as T));
     }
 };
 
@@ -32,7 +45,7 @@ const util = {
             .map(b => b.toString(16).padStart(2, "0"))
             .join("");
     },
-    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
+    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
         const base = `${location.protocol}//${location.host}`;
         const result = await fetch(`${base}/api${endpoint}`, {
             method: type,
@@ -64,6 +77,10 @@ const util = {
     async check_logged_in(): Promise<boolean> {
         const result = await util.make_api_call<{ valid: boolean }>("POST", "/account/check/token", { token: jwt.get() });
         return result.payload?.valid ?? false;
+    },
+    async set_version(): Promise<void> {
+        const result = await util.make_api_call<{ ui: string, api: string, proxy: { yuno: string } }>("GET", "/version");
+        element.get<HTMLDivElement>("ver").innerText = result.payload!.ui;
     }
 };
 
@@ -124,5 +141,20 @@ const component = {
                 });
             });
         }
+    },
+    async set_pfp() {
+        const result = await util.make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
+        element.get<HTMLImageElement>("i#pfp").src = `/files/pfp/${result.payload!.user.uuid}`;
+        element.link("i#pfp", {
+            click: () => {
+                router.to("/account");
+            }
+        });
+    }
+};
+
+const router = {
+    to(loc: string) {
+        window.location.href = loc;
     }
 };

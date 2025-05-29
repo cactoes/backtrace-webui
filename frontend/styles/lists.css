@@ -1,229 +1,300 @@
 @import url("/files/global.css");
-@import url("/files/component.sidebar.css");
-@import url("/files/component.base.css");
+@import url("/files/component.topbar.css");
 
-.filter_wrapper {
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.content > .filters {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+}
+
+.content > .filters > .selector {
     display: flex;
     flex-direction: row;
-    padding: 1.5rem 2rem;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown > .dropdown_selector {
-    padding: .5rem 1.5rem;
-    cursor: pointer;
-    transition: all .2s ease;
-
+    justify-content: space-between;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
     background-color: var(--background);
-    font-weight: 600;
-
-    border: 1px solid var(--primary);
-
-    width: 120px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
-.dropdown > .dropdown_selector:hover {
-    background-color: var(--secondary);
-}
-
-.dropdown > .dropdown_selector > i {
-    margin-left: .5rem;
-}
-
-.dropdown > .options {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    background-color: var(--background);
-    border: 1px solid var(--primary);
-    overflow: auto;
-    z-index: 1;
-    width: 120px;
-    align-items: center;
-}
-
-.dropdown > .options.show {
-    display: flex;
-}
-
-.dropdown > .options > a {
-    padding: .5rem 2rem;
-    text-decoration: none;
-    transition: all .2s ease;
-    font-size: 14px;
+    transition: .2s background-color ease;
     cursor: pointer;
-    width: 100%;
+    padding: 4px;
+
+    margin-bottom: 8px;
+}
+
+.content > .filters > .selector > a {
+    width: calc(50% - 2px);
     text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    transition: .2s background-color ease;
+    text-decoration: none;
 }
 
-.dropdown > .options > a:hover {
-    background-color: var(--secondary);
+.content > .filters > .selector > a:hover,
+.content > .filters > .selector > a.selected {
+    background-color: var(--secondary-dark);
 }
 
-.filters {
+.finished { --color: hsl(236, 15%, 60%); }
+.watching { --color: hsl(128, 15%, 60%); }
+.planned  { --color: hsl(  0, 00%, 60%); }
+.dropped  { --color: hsl(  0, 15%, 60%); }
+
+.content > .filters > .type {
     display: flex;
-    align-items: center;
-    margin-left: 1rem;
-}
-
-.finished {
-    --color: hsl(236, 40%, 70%);
-}
-
-.watching {
-    --color: hsl(128, 40%, 70%);
-}
-
-.planned {
-    --color: hsl(0, 0%, 70%);
-}
-
-.dropped {
-    --color: hsl(0, 40%, 70%);
-}
-/* .finished {
-    --color: hsl(236, 50%, 60%);
-}
-
-.watching {
-    --color: hsl(128, 50%, 60%);
-}
-
-.planned {
-    --color: hsl(0, 0%, 60%);
-}
-
-.dropped {
-    --color: hsl(0, 50%, 60%);
-} */
-
-.clear {
-    --color: var(--primary)
-}
-
-.filters > p {
-    padding: .2rem .7rem;
-    border: 1px solid var(--color);
-    border-radius: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    transition: .2s background-color ease;
     cursor: pointer;
-    font-size: 14px;
-    margin-right: .5rem;
-    color: var(--text);
-    transition: all .2s ease;
+    padding: 4px;
+
+    margin-bottom: 8px;
 }
 
-.filters > p > i {
-    margin-left: 5px;
-    transition: all .2s ease;
+.content > .filters > .type > p {
+    width: calc(25% - 2px);
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    transition: .2s background-color ease;
+    text-decoration: none;
+    font-size: 13px;
 }
 
-.filters > p:hover > i {
-    color: var(--background);
-}
-
-.filters > p:hover,
-.filters > p.active {
+.content > .filters > .type > p:hover,
+.content > .filters > .type > p.selected {
     background-color: var(--color);
-    color: var(--background);
 }
 
-#list {
-    position: relative;
+.content > .filters > .search {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    padding: 12px 8px;
+    background-color: var(--background);
+    transition: .2s background-color ease;
+}
+
+.content > .filters > .search > i {
+    margin-left: 8px;
+}
+
+.content > .filters > .search > input {
+    width: 100%;
+    background-color: var(--background);
+    margin-left: 16px;
+}
+
+.content > .filters > .search > input:focus {
+    outline: none;
+}
+
+.content > .filters > .add > button {
+    padding: 4px 12px;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .2s ease;
+    margin-top: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.content > .filters > .add > button:focus,
+.content > .filters > .add > button:hover {
+    border: 1px solid var(--primary);
+}
+
+.content > .list > {
     display: flex;
     flex-direction: column;
-    margin: 1.5rem 2rem;
-    margin-top: 0;
-
-    /* border: 1px solid var(--primary); */
-    overflow: hidden;
-
-    width: calc(100% - 4rem);
-    height: calc(100% - 3rem);
-    cursor: default;
 }
 
-#list > .heading {
+.content > .list > .item {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    padding: .5rem 2rem;
-    background-color: var(--secondary);
+    flex-direction: column;
+    border: 1px solid var(--secondary);
+    border-radius: 6px;
+    padding: 8px;
+    background-color: var(--background);
+    transition: .2s background-color ease;
 }
 
-#list > .heading > p:not(:last-child) {
-    width: 33%;
+.content > .list > .item:hover {
+    background-color: var(--secondary-dark);
+    cursor: pointer;
 }
 
-#list > .list_content {
-    overflow-y: scroll;
-    /* 80% is random */
-    max-height: 80%;
+.content > .list > .item:not(:last-child) {
+    margin-bottom: 8px;
 }
 
-#list > .list_content > .item {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    border-bottom: 1px solid var(--secondary);
-    padding: .5rem 2rem;
-}
-
-#list > .list_content > .item > p {
+.content > .list > .item > h3 {
+    /* overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap; */
 }
 
-#list > .list_content > .item > p:hover {
-    white-space: wrap;
-}
-
-#list > .list_content > .item > p:not(:last-child) {
-    width: 33%;
-    overflow: hidden;
+.content > .list > .item > p:first-child {
     color: var(--color);
 }
 
-#list > .list_content > .item i {
-    cursor: pointer;
+.content > .list > .item > p:last-child {
+    color: var(--text-secondary);
 }
 
-#list > .controls {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 1.5rem 0rem;
-}
+.dialogue {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 
-#list > .controls > #current {
-    border-bottom: 1px solid var(--primary);
-}
-
-#list > .controls > div {
-    margin: 0 .5rem;
-    padding: .3rem 0rem;
-    cursor: pointer;
-}
-
-#list > .controls > div#next > i {
-    margin-left: 5px;
-}
-
-#list > .controls > div#prev > i {
-    margin-right: 5px;
-}
-
-#list > .controls > #start_split,
-#list > .controls > #end_split {
-    cursor: default;
-}
-
-#list > .controls > div.hidden {
     display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialogue > .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: .7;
+    background-color: var(--background);
+    z-index: 1;
+}
+
+.dialogue > .settings {
+    position: relative;
+    z-index: 2;
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+
+    width: 300px;
+
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+}
+
+.dialogue > .settings > .close {
+    position: absolute;
+    top: -6px;
+    right: 0;
+
+    margin-right: 24px;
+    margin-top: 24px;
+
+    cursor: pointer;
+}
+
+.dialogue > .settings > h2 {
+    color: var(--text);
+    margin-bottom: 24px;
+}
+
+.dialogue > .settings > span {
+    display: flex;
+}
+
+.dialogue > .settings > span > p:first-child {
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+.dialogue > .settings > p {
+    margin-bottom: 4px;
+}
+
+.dialogue > .settings > input {
+    outline: none;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    padding: 4px 12px;
+    margin-bottom: 18px;
+    transition: all .2s ease;
+
+    margin-bottom: 8px;
+}
+
+.dialogue > .settings > input:hover,
+.dialogue > .settings > input:focus {
+    outline: none;
+    border: 1px solid var(--primary);
+}
+
+.dialogue > .settings > button {
+    padding: 4px 12px;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .2s ease;
+    margin-top: 8px;
+}
+
+.dialogue > .settings > button:focus,
+.dialogue > .settings > button:hover {
+    border: 1px solid var(--primary);
+}
+
+.dialogue > .settings > button.delete:hover {
+    border: 1px solid var(--red);
+    background-color: var(--secondary-dark);
+}
+
+.dialogue > .settings > .dropdown {
+    position: relative;
+    display: inline-block;
+
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    padding: 4px 12px;
+}
+
+.dialogue > .settings > .dropdown > span {
+    color: var(--color);
+}
+
+.dialogue > .settings > .dropdown > .content {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    min-width: calc(300px - 48px);
+    z-index: 1;
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    margin-left: -14px;
+    margin-top: 4px;
+}
+
+.dialogue > .settings > .dropdown > .content > p {
+    cursor: pointer;
+    padding: 4px 12px;
+    color: var(--color);
+    transition: .2s background-color ease;
+}
+
+.dialogue > .settings > .dropdown > .content > p:hover {
+    background-color: var(--secondary-dark);
+}
+
+.dialogue > .settings > .dropdown:hover .content {
+    display: block;
 }

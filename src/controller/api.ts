@@ -65,11 +65,11 @@ class api_controller {
 
         const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: any }>(
             "POST", server_instace.server, "/instance/get", {
-                    instance: server_instace.id,
-                    keys: {
-                        anime: [ "_id", "name", "current", "state" ],
-                        manga: [ "_id", "name", "current", "state" ]
-                    }
+                instance: server_instace.id,
+                keys: {
+                    anime: [ "_id", "name", "current", "state" ],
+                    manga: [ "_id", "name", "current", "state" ]
+                }
             }
         );
 
@@ -81,6 +81,224 @@ class api_controller {
         return new response_builder(data.success == true ? 200 : 400)
             .set_payload(data);
     }
+
+    public static async lists_anime(req: Bun.BunRequest<"/lists/anime">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ _id: string, name: string, current: string, state: 0 | 1 | 2 | 3 }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: any }>(
+            "POST", server_instace.server, "/anime/update", {
+                instance: server_instace.id,
+                id: body._id!,
+                pairs: {
+                    name: body.name!,
+                    current: body.current!,
+                    state: body.state!
+                }
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async lists_anime_delete(req: Bun.BunRequest<"/lists/anime">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ id: string }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean }>(
+            "POST", server_instace.server, "/anime/delete", {
+                instance: server_instace.id,
+                id: body.id!
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async lists_anime_create(req: Bun.BunRequest<"/lists/anime/create">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ name: string, current: string, state: number }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { id: string } }>(
+            "POST", server_instace.server, "/anime/create", {
+                instance: server_instace.id,
+                data: {
+                    name: body.name,
+                    current: body.current,
+                    state: body.state
+                }
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async lists_manga(req: Bun.BunRequest<"/lists/manga">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ _id: string, name: string, current: string, state: 0 | 1 | 2 | 3 }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: any }>(
+            "POST", server_instace.server, "/manga/update", {
+                instance: server_instace.id,
+                id: body._id!,
+                pairs: {
+                    name: body.name!,
+                    current: body.current!,
+                    state: body.state!
+                }
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async lists_manga_delete(req: Bun.BunRequest<"/lists/manga">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ id: string }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: any }>(
+            "POST", server_instace.server, "/manga/delete", {
+                instance: server_instace.id,
+                id: body.id!
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async lists_manga_create(req: Bun.BunRequest<"/lists/manga/create">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const server_instace = result.servers.find(server => server.server == "yuno");
+        if (!server_instace) {
+            return new response_builder(500)
+                .set_message("error: server has not (yet) fully setup this users account, contact administation");
+        }
+
+        const body = await get_body<{ name: string, current: string, state: number }>(req);
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { id: string } }>(
+            "POST", server_instace.server, "/manga/create", {
+                instance: server_instace.id,
+                data: {
+                    name: body.name,
+                    current: body.current,
+                    state: body.state
+                }
+            }
+        );
+
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder(data.success == true ? 200 : 400)
+            .set_payload(data);
+    }
+
+    public static async version(_: Bun.BunRequest<"/version">) {
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
+            "GET", "yuno", "/instance/get");
+
+        return new response_builder()
+            .set_payload({
+                ui: "2.0.0",
+                api: "0.0.1",
+                proxy: {
+                    "yuno": data?.data?.version || "0.0.0"
+                }
+            });
+    }
 };
 
 router.get("/*", api_controller.fallback);
@@ -88,3 +306,10 @@ router.post("/account/check/token", api_controller.account_check_token);
 router.get("/account/public/me", api_controller.account_public_me);
 router.post("/account/login", api_controller.account_login);
 router.get("/lists", api_controller.lists);
+router.post("/lists/anime", api_controller.lists_anime);
+router.post("/lists/anime/create", api_controller.lists_anime_create);
+router.delete("/lists/anime", api_controller.lists_anime_delete);
+router.post("/lists/manga", api_controller.lists_manga);
+router.post("/lists/manga/create", api_controller.lists_manga_create);
+router.delete("/lists/manga", api_controller.lists_manga_delete);
+router.get("/version", api_controller.version);

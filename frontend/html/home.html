@@ -11,15 +11,64 @@
         <script src="/files/home.js" defer></script>
     </head>
     <body>
-        <div class="sidebar"></div>
-        <div class="page">
-            <div class="topbar">
-                <div id="navigation" class="navigation noselect">
-                    <p>backtrace</p>
-                    <div class="slice">/</div>
+        <div id="ver"></div>
+        <div class="topbar">
+            <div class="route">
+                <a href="/home">BACKTRACE</a>
+                <p>/</p>
+                <p>HOME</p>
+            </div>
+            <div class="profile">
+                <img id="i#pfp">
+            </div>
+        </div>
+        <div class="content">
+            <div id="item#account" class="item" link="account">
+                <div class="header">
+                    <i class="fa-solid fa-user"></i>
+                    <p>Account</p>
                 </div>
             </div>
-            <div class="content"></div>
+            <div id="item#lists" class="item" link="lists">
+                <div class="header">
+                    <i class="fa-solid fa-list"></i>
+                    <p>Lists</p>
+                </div>
+                <div class="info">
+                    <div class="stat">
+                        <h2 id="il#anime"></h2>
+                        <p>Anime's</p>
+                    </div>
+                    <div class="stat">
+                        <h2 id="il#manga"></h2>
+                        <p>Manga's</p>
+                    </div>
+                </div>
+            </div>
+            <div id="item#passwords" class="item" link="passwords">
+                <div class="header">
+                    <i class="fa-solid fa-lock"></i>
+                    <p>Passwords</p>
+                </div>
+                <div class="info">
+                    <div class="stat">
+                        <h2>-</h2>
+                        <p>Passwords</p>
+                    </div>
+                </div>
+            </div>
+            <div id="item#services" class="item" link="services">
+                <div class="header">
+                    <i class="fa-solid fa-server"></i>
+                    <p>Services</p>
+                </div>
+                <div class="info">
+                    <div class="stat">
+                        <h2>-</h2>
+                        <p>Services</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

@@ -1,0 +1,46 @@
+@import url("/files/global.css");
+
+.topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.topbar > .route {
+    display: flex;
+    flex-direction: row;
+}
+
+.topbar > .route > p {
+    cursor: default;
+}
+
+.topbar > .route > a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-right: 24px;
+}
+
+.topbar > .route > p:not(:last-child) {
+    margin-right: 24px;
+}
+
+.topbar > .route > p:last-child {
+    font-weight: 600;
+}
+
+.topbar > .profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--secondary);
+    cursor: pointer;
+}
+
+.topbar > .profile > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}

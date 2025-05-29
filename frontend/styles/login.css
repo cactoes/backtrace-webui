@@ -27,6 +27,15 @@
     margin-bottom: 24px;
 }
 
+.form > span {
+    display: flex;
+}
+
+.form > span > p:first-child {
+    color: var(--secondary);
+    font-weight: 600;
+}
+
 .form > input {
     outline: none;
     background-color: var(--background);
@@ -63,15 +72,6 @@
 .form > .label {
     font-weight: 600;
     margin-bottom: 8px;
-}
-
-.form > span {
-    display: flex;
-}
-
-.form > span > p:first-child {
-    color: var(--secondary);
-    font-weight: 600;
 }
 
 /* .form > span > h3 {

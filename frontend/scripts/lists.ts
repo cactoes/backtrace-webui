@@ -1,10 +1,3 @@
-util.check_logged_in().then(r => {
-    if (!r)
-        window.location.href = "/login";
-});
-
-/* await */component.sidebar.setup();
-
 interface instance_object_t {
     _id: string,
     name: string,
@@ -13,17 +6,18 @@ interface instance_object_t {
     state: 0 | 1 | 2 | 3
 };
 
-function toggle_class(target: HTMLElement, _class: string) {
-    target.classList.contains(_class)
-        ? target.classList.remove(_class)
-        : target.classList.add(_class)
+async function edit_dialogue(obj: instance_object_t[]) {
+    // update dialogue
+    // show dialogue
 }
 
-function switch_class(target: HTMLElement, classes: [ string, string ]) {
-    target.classList.contains(classes[0])
-        ? (target.classList.remove(classes[0]), target.classList.add(classes[1]))
-        : (target.classList.remove(classes[1]), target.classList.add(classes[0]))
+let lists: { anime: instance_object_t[]; manga: instance_object_t[]; } = {
+    anime: [],
+    manga: []
 }
+
+let filters: number[] = [];
+let search: string = "";
 
 function resolve_status(status: instance_object_t["state"]): [string, string] {
     return [
@@ -39,171 +33,201 @@ function resolve_filter(filter: string) {
 }
 
 function create_list_item(obj: instance_object_t) {
+    const [status, status_class] = resolve_status(obj.state);
+
     const div = document.createElement("div");
-    div.className = "item";
+    div.className = `item ${status_class}`;
+    div.id = obj._id;
 
-    const name = document.createElement("p");
-    name.className = "name";
-    name.innerText = obj.name;
-    div.appendChild(name);
+    div.onclick = () => {
+        element.get<HTMLDivElement>("dialogue").style.display = "flex";
+        element.get<HTMLDivElement>("dialogue").setAttribute("data-id", obj._id);
+        element.get<HTMLInputElement>("d#name").value = obj.name;
+        element.get<HTMLInputElement>("d#note").value = obj.current;
+        element.get<HTMLInputElement>("d#state").innerText = resolve_status(obj.state)[0];
+        element.get<HTMLInputElement>("d#state").className = resolve_status(obj.state)[1];
 
-    const status = document.createElement("p");
-    status.className = `status ${resolve_status(obj.state)[1]}`;
-    status.innerText = resolve_status(obj.state)[0];
-    div.appendChild(status);
+        window.scrollTo({ top: 0 });
+    };
 
-    const note = document.createElement("p");
-    note.className = "note";
-    note.innerText = obj.current;
-    div.appendChild(note);
+    const p1 = document.createElement("p");
+    p1.innerText = status;
 
-    const edit = document.createElement("p");
-    edit.className = "edit";
-    const i = document.createElement("i");
-    i.className = "fa-solid fa-ellipsis-vertical";
-    i.onclick = () => {
-        console.log("edit:", obj);
-    }
-    edit.appendChild(i);
-    div.appendChild(edit);
+    const h3 = document.createElement("h3");
+    h3.innerText = obj.name;
+
+    const p2 = document.createElement("p");
+    p2.innerText = obj.current;
+
+    div.appendChild(p1);
+    div.appendChild(h3);
+    div.appendChild(p2);
 
     return div;
-
-    // return `<div class="item" id="$${obj._id}">
-    //             <p class="name">${obj.name}</p>
-    //             <p class="status">${obj.state}</p>
-    //             <p class="note">${obj.current}</p>
-    //             <p class="edit"><i class="fa-solid fa-ellipsis-vertical"></i></p>
-    //         </div>`;
 }
 
-let page_index = 1;
-let page_max_index = 1;
+function update_list() {
+    const list_selector = window.location.hash.substring(1) as "anime" | "manga";
+    let list = lists[list_selector];
 
-function update_list(list: instance_object_t[], filters: string[]) {
-    const mapped_filters: number[] = filters.map(resolve_filter);
-
-    if (mapped_filters.length == 0)
-        mapped_filters.push(0, 1, 2, 3);
-
-    const filterd_list = list.filter(item => mapped_filters.includes(item.state));
-
-    const e_controls_start = element.get<HTMLDivElement>("start");
-    const e_controls_start_split = element.get<HTMLDivElement>("start_split");
-    const e_controls_current = element.get<HTMLDivElement>("current");
-    const e_controls_end_split = element.get<HTMLDivElement>("end_split");
-    const e_controls_end = element.get<HTMLDivElement>("end");
-
-    page_max_index = Math.ceil(filterd_list.length / 16);
-
-    if (page_index > page_max_index)
-        page_index = page_max_index;
-
-    e_controls_current.innerHTML = `${page_index}`;
-    e_controls_end.innerHTML = `${page_max_index}`;
-
-    if (page_index > 1) {
-        e_controls_start.classList.remove("hidden");
-        e_controls_start_split.classList.remove("hidden");
-    } else {
-        e_controls_start.classList.add("hidden");
-        e_controls_start_split.classList.add("hidden");
-    }
-
-    if (page_index >= page_max_index) {
-        e_controls_end.classList.add("hidden");
-        e_controls_end_split.classList.add("hidden");
-    } else {
-        e_controls_end.classList.remove("hidden");
-        e_controls_end_split.classList.remove("hidden");
-    }
-
-    const target = element.get("div#list");
+    const target = element.get<HTMLDivElement>("list");
     target.innerHTML = "";
-    for (const item of filterd_list.slice(16 * (page_index - 1), 16 * page_index))
-        target.appendChild(create_list_item(item));
+
+    if (search.length != 0) {
+        const fuzzy = new FuzzySearch(list, ["name"], {
+            caseSensitive: false, sort: true
+        });
+    
+        list = fuzzy.search(search.replace(/\W+/g, ""));
+    }
+
+    for (const item of list) {
+        if (!filters.includes(item.state) && filters.length != 0)
+            continue
+
+        const div = create_list_item(item);
+        target.appendChild(div);
+    }
 }
 
+// @ts-ignore
 async function main() {
-    const lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
+    util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
+    util.set_version();
+    component.set_pfp();
 
-    let current_list = lists.payload!.data.anime;
-    let filters: string[] = [];
-    update_list(current_list, filters);
+    element.query_loop<HTMLParagraphElement>("div.type>p", item_element => {
+        element.link(item_element.id, {
+            click: () => {
+                element.toggle_class(item_element as HTMLElement, "selected");
+                item_element.classList.contains("selected")
+                    ? filters.push(resolve_filter(item_element.classList[0]))
+                    : filters = filters.filter(filter => filter != resolve_filter(item_element.classList[0]));
 
-    element.get<HTMLDivElement>("div#options").querySelectorAll("a").forEach(el => {
-        el.addEventListener("click", (ev) => {
-            const e = element.get<HTMLButtonElement>("button#dropdown");
-            e.click();
-            e.querySelector("span")!.innerText = (ev.target as HTMLAnchorElement).innerText;
+                update_list();
+            }
+        });
+    });
+
+    element.query_loop<HTMLAnchorElement>("div.selector>a", item_element => {
+        element.link(item_element.id, {
+            click: () => {
+                element.query_loop("div.selector>a", _e => _e.classList.remove("selected"));
+                element.toggle_class(item_element as HTMLElement, "selected");
+                window.location.hash = `${item_element.id.slice(2)}`;
+                update_list();
+            }
+        });
+    });
+
+    element.link("f#search", {
+        keydown: () => {
+            search = element.get<HTMLInputElement>("f#search").value;
+            update_list();
+        }
+    });
+
+    element.link("d#close", {
+        click: () => {
+            element.get<HTMLInputElement>("dialogue").style.display = "none";
+        }
+    });
+
+    element.link("f#add", {
+        click: () => {
+            element.get<HTMLDivElement>("dialogue").style.display = "flex";
+            element.get<HTMLDivElement>("dialogue").setAttribute("data-id", "unkown");
+            element.get<HTMLInputElement>("d#name").value = "New Anime";
+            element.get<HTMLInputElement>("d#note").value = "";
+            element.get<HTMLInputElement>("d#state").innerText = resolve_status(2)[0];
+            element.get<HTMLInputElement>("d#state").className = resolve_status(2)[1];
+
+            window.scrollTo({ top: 0 });
+        }
+    });
+
+    element.link("d#delete", {
+        click: async () => {
+            const d_element = element.get<HTMLDivElement>("dialogue");
+
+            const list_selector = window.location.hash.substring(1) as "anime" | "manga";
+            let list = lists[list_selector];
+
+            lists[list_selector] = list.filter(item => item._id != d_element.getAttribute("data-id"));
+
+            await util.make_api_call("DELETE", `/lists/${list_selector}`, { id: d_element.getAttribute("data-id") });
+
+            element.get<HTMLInputElement>("dialogue").style.display = "none";
+
+            update_list();
+        }
+    });
+
+    element.link("d#save", {
+        click: async () => {
+            const d_name = element.get<HTMLInputElement>("d#name").value;
+            const d_note = element.get<HTMLInputElement>("d#note").value;
+            const d_state_text = element.get<HTMLDivElement>("d#state").innerHTML;
+            const d_element = element.get<HTMLDivElement>("dialogue");
+
+            // console.log(d_name, d_note, resolve_filter(d_state_text.toLowerCase()), d_element.getAttribute("data-id"));
             
-            if (e.textContent == "Anime") {
-                current_list = lists.payload!.data.anime;
-            } else if (e.textContent == "Manga") {
-                current_list = lists.payload!.data.manga;
+            const list_selector = window.location.hash.substring(1) as "anime" | "manga";
+            let list = lists[list_selector];
+
+            if (d_element.getAttribute("data-id") == "unkown") {
+                console.log(resolve_filter(d_state_text.toLowerCase()));
+                const result = await util.make_api_call<{ data: { id: string } }>("POST", `/lists/${list_selector}/create`, {
+                    name: d_name.trim(),
+                    current: d_note.trim(),
+                    state: resolve_filter(d_state_text.toLowerCase())
+                });
+
+                list.push({
+                    _id: result.payload!.data.id as string,
+                    name: d_name.trim(),
+                    current: d_note.trim(),
+                    state: resolve_filter(d_state_text.toLowerCase()) as 0 | 1 | 2 | 3
+                });
+
+                element.get<HTMLInputElement>("dialogue").style.display = "none";
+                update_list();
+                return;
             }
 
-            update_list(current_list, filters);
-        });
+            const item = list.find(i => i._id == d_element.getAttribute("data-id"))!;
+            item.current = d_note.trim();
+            item.name = d_name.trim();
+            item.state = resolve_filter(d_state_text.toLowerCase()) as 0 | 1 | 2 | 3;
+
+            await util.make_api_call("POST", `/lists/${list_selector}`, item);
+            element.get<HTMLInputElement>("dialogue").style.display = "none";
+            update_list();
+        }
     });
-    
-    const e_filters = element.get<HTMLDivElement>("div#filters");
-    e_filters.querySelectorAll("p").forEach(el => {
-        el.addEventListener("click", (ev) => {
-            const target = (ev.target as HTMLElement).classList[1];
-            if (target == "clear" || target == "fa-xmark") {
-                filters = [];
-                e_filters.querySelectorAll("p").forEach(el => el.classList.remove("active"));
-            } else if (filters.includes(target)) {
-                filters = filters.filter(f => f != target);
-                (ev.target as HTMLElement).classList.remove("active");
-            } else {
-                filters.push(target);
-                (ev.target as HTMLElement).classList.add("active");
+
+    element.query_loop<HTMLParagraphElement>(".dialogue>.settings>.dropdown>.content>p", (e) => {
+        element.link(e.id, {
+            click: () => {
+                element.get<HTMLInputElement>("d#state").innerHTML = e.innerHTML;
+                element.get<HTMLInputElement>("d#state").className = e.innerHTML.toLowerCase();
             }
-
-            update_list(current_list, filters);
         });
     });
 
-    const button_dropdown = element.link("button#dropdown", {
-        click: () => {
-            switch_class(button_dropdown.querySelector("i")!, ["fa-angle-up", "fa-angle-down"])
-    
-            const e_options = element.get<HTMLDivElement>("div#options");
-            toggle_class(e_options, "show");
-        }
-    });
+    let list_selector = window.location.hash.substring(1);
 
-    element.link("next", {
-        click: () => {
-            if (page_index < page_max_index)
-                page_index++;
-            update_list(current_list, filters);
-        }
-    });
+    if (!["anime", "manga"].includes(list_selector)) {
+        window.location.hash = "#anime";
+        list_selector = "anime";
+    }
 
-    element.link("prev", {
-        click: () => {
-            if (page_index - 1 > 0)
-                page_index--;
-            update_list(current_list, filters);
-        }
-    });
+    element.get<HTMLAnchorElement>(`fs#${list_selector}`).classList.add("selected");
 
-    element.link("start", {
-        click: () => {
-            page_index = 1;
-            update_list(current_list, filters);
-        }
-    });
+    const _lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
+    lists = _lists.payload!.data;
 
-    element.link("end", {
-        click: () => {
-            page_index = page_max_index;
-            update_list(current_list, filters);
-        }
-    });
+    update_list();
 }
 
 window.addEventListener("DOMContentLoaded", main);

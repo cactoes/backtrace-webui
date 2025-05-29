@@ -1,8 +1,10 @@
 :root {
     --text: #f6f6f6;
+    --text-secondary: #686868;
     --background: #161616;
-    --primary: #bcbcbd;
+    --primary: #bcbcbc;
     --secondary: #454545;
+    --secondary-dark: #2b2b2b;
     --accent: #b7bed3;
 
     --red: #d3b7b7;
@@ -31,6 +33,19 @@ body {
     width: 100vw;
     height: 100vh;
     display: flex;
-    flex-direction: row;
-    overflow: hidden;
+    /* flex-direction: row; */
+    /* overflow: hidden; */
+
+    flex-direction: column;
+    padding: 40px;
+    background-image: radial-gradient(#ffffff18 1px, transparent 0);
+    background-size: 3vh 3vh;
+    overflow-x: hidden;
+}
+
+#ver {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 9px;
 }

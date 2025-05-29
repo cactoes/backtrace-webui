@@ -8,11 +8,11 @@ import type { response_builder } from "./utils/utils";
 export class BunRouter {
     public routes: { [key: string]: { [m: string ]: (req: Bun.BunRequest<any>) => Promise<Response> } }[] = [];
 
-    private add_method(url: string, method: "GET" | "POST" | "PUT" | "PATCH", callback: any) {
+    private add_method(url: string, method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", callback: any) {
         const existing = this.routes.find(r => Object.keys(r)[0]! == url);
 
         if (existing) {
-            existing[url]![method] = async (req: any) => (await callback(req)).build()
+            existing[url]![method] = async (req: any) => (await callback(req))
             return;
         }
 
@@ -27,7 +27,7 @@ export class BunRouter {
         return async (req: any) => {
             console.log(`[log]: ${req.method.padEnd(4)} \"${req.url}\"`);
             const result = await callback(req);
-            return result instanceof Response ?  result : result.build();
+            return result instanceof Response ? result : result.build();
         }
     }
 
@@ -42,6 +42,9 @@ export class BunRouter {
     }
     public patch<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
         this.add_method(url, "PATCH", this.make_callback(callback));
+    }
+    public delete<T extends string>(url: T, callback: (req: Bun.BunRequest<T>) => Promise<response_builder<any> | Response>) {
+        this.add_method(url, "DELETE", this.make_callback(callback));
     }
 };
 
@@ -69,6 +72,7 @@ export class BunServer {
             port: this.port,
             routes: { ...this.routes },
             async error(error) {
+                console.log(`unexcpected server error: ${error.message}`);
                 return new Response(`unexcpected server error: ${error.message}`, { status: 500 });
             }
         });
