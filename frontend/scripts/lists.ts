@@ -214,6 +214,12 @@ async function main() {
         });
     });
 
+    element.link("d#dropdown", {
+        click: (e) => {
+            element.toggle_class(element.get("d#dropdown"), "fake_hover");
+        }
+    });
+
     let list_selector = window.location.hash.substring(1);
 
     if (!["anime", "manga"].includes(list_selector)) {

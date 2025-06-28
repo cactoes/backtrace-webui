@@ -32,3 +32,10 @@ export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "P
         return undefined;
     }
 }
+
+export async function probe_remote(server_id: string): Promise<boolean> {
+    const data = await make_remote_request<{ message: string }>("GET", server_id, "/");
+    return data != undefined &&
+        data.message != undefined &&
+        data.message !== "Online";
+}

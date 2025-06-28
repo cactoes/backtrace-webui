@@ -295,6 +295,7 @@
     background-color: var(--secondary-dark);
 }
 
+.dialogue > .settings > .dropdown.fake_hover .content,
 .dialogue > .settings > .dropdown:hover .content {
     display: block;
 }
