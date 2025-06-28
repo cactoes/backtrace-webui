@@ -3,12 +3,19 @@
         "permissions": 1,
         "uuid": 0,
         "username": "cactoes",
-        "password": "7b3d979ca8330a94fa7e9e1b466d8b99e0bcdea1ec90596c0dcc8d7ef6b4300c",
+        "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",
         "servers": [
             {
                 "server": "yuno",
                 "id": "_1000"
             }
         ]
+    },
+    {
+        "permissions": 0,
+        "uuid": 1,
+        "username": "test",
+        "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",
+        "servers": []
     }
 ]
