@@ -11,7 +11,7 @@ function main(argc: number, argv: string[]): number {
 
     account_manager.JWTManager.get_instance().set_secret(process.env.JWT_SECRET!);
 
-    const server = new BunServer(process.env.PORT, true);
+    const server = new BunServer(process.env.PORT, process.env.IS_PRODUCTION === "true");
 
     server.add_router("", generic_controller.router);
     server.add_router("/api", api_controller.router);
@@ -23,6 +23,5 @@ function main(argc: number, argv: string[]): number {
 
     return 0;
 }
-
 
 main(process.argv.length, process.argv);
