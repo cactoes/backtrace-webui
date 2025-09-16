@@ -8,6 +8,8 @@ import { BunRouter, resolve_web_file } from "../server";
 export const router = new BunRouter();
 
 class generic_controller {
+    static allowed_pages = [ "home", "account", "lists", "login", "passwords", "services", "streaming", "register" ]
+
     public static async home(_: Bun.BunRequest<"/">): Promise<Response> {
         const [ file, meta ] = (await resolve_web_file("index.html"))!;
         return new Response(file, { headers: { ...meta } });
@@ -23,8 +25,16 @@ class generic_controller {
         return Response.redirect("/404");
     }
 
-    public static async page(req: Bun.BunRequest<"/:page/*">): Promise<Response> {
-        if (!["home", "account", "lists", "login", "passwords", "services", "streaming"].includes(req.params.page))
+    public static async page(req: Bun.BunRequest<"/:page">): Promise<Response> {
+        if (!generic_controller.allowed_pages.includes(req.params.page))
+            return Response.redirect("/404");
+
+        const [ file, meta ] = (await resolve_web_file(`${req.params.page}.html`))!;
+        return new Response(file, { headers: { ...meta } });
+    }
+
+    public static async page_backup(req: Bun.BunRequest<"/:page/*">): Promise<Response> {
+        if (!generic_controller.allowed_pages.includes(req.params.page))
             return Response.redirect("/404");
 
         const [ file, meta ] = (await resolve_web_file(`${req.params.page}.html`))!;
@@ -33,6 +43,7 @@ class generic_controller {
 };
 
 router.get("/", generic_controller.home);
-router.get("/:page/*", generic_controller.page);
+router.get("/:page", generic_controller.page);
+router.get("/:page/*", generic_controller.page_backup);
 router.get("/404", generic_controller["404"]);
 router.get("/*", generic_controller.fallback);

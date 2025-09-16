@@ -66,6 +66,19 @@ class api_controller {
             .set_payload({ token });
     }
 
+    public static async account_register(req: Bun.BunRequest<"/account/register">) {
+        const body = await get_body<{ username: string, password: string, key: string }>(req);
+        const token = await account_manager.register_user(body.username || "", body.password || "", body.key || "");
+
+        if (!token) {
+            return new response_builder(400)
+                .set_message("error: username, password or key are invalid");
+        }
+
+        return new response_builder()
+            .set_payload({ token });
+    }
+
     public static async lists(req: Bun.BunRequest<"/lists">) {
         const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
         if (!result) {
@@ -319,6 +332,7 @@ class api_controller {
 
 router.get("/*", api_controller.fallback);
 router.get("/services/list", api_controller.services_list);
+router.post("/account/register", api_controller.account_register);
 router.post("/account/check/token", api_controller.account_check_token);
 router.get("/account/public/me", api_controller.account_public_me);
 router.post("/account/login", api_controller.account_login);

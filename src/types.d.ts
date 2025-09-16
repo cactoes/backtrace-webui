@@ -27,6 +27,11 @@ interface user_t {
     servers: { server: string, id: string }[]
 };
 
+interface key_t {
+    key: string
+    used_by: number
+}
+
 //==========================================
 /// @file       manager/proxy.ts
 //==========================================
