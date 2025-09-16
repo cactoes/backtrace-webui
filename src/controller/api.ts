@@ -8,6 +8,7 @@ import { BunRouter, get_body } from "../server";
 import { account_manager, proxy_manager } from "../manager/manager";
 
 export const router = new BunRouter();
+const PFP_MAX_SIZE = 1 * 1024 * 1014; // 1mb
 
 class api_controller {
     public static async fallback(req: Bun.BunRequest<"/*">) {
@@ -30,6 +31,26 @@ class api_controller {
 
         return new response_builder()
             .set_payload(result_servers);
+    }
+
+    public static async account_upload_pfp(req: Bun.BunRequest<"/account/upload/pfp">) {
+        // TODO @since 16/09/2025 -- 21:23
+        const data = await req.formData();
+        const image_file = data.get("image");
+        if (!image_file)
+            return new response_builder();
+
+        if ((image_file as any).size > PFP_MAX_SIZE)
+            return new response_builder();
+
+        const file_ext = ((image_file as any).name ?? "").split(".").at(-1).toLowerCase();
+
+        if (![ "png", "jpg", "jpeg" ].includes(file_ext))
+            return new response_builder(400);
+
+        Bun.write(`username.${file_ext}`, image_file);
+        
+        return new response_builder();
     }
 
     public static async account_check_token(req: Bun.BunRequest<"/account/check/token">) {
@@ -332,6 +353,7 @@ class api_controller {
 
 router.get("/*", api_controller.fallback);
 router.get("/services/list", api_controller.services_list);
+router.post("/account/upload/pfp", api_controller.account_upload_pfp);
 router.post("/account/register", api_controller.account_register);
 router.post("/account/check/token", api_controller.account_check_token);
 router.get("/account/public/me", api_controller.account_public_me);
