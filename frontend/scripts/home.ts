@@ -18,6 +18,14 @@ async function main() {
         element.get<HTMLHeadingElement>("il#anime").innerText = `${_lists.payload!.data.anime.length}`;
         element.get<HTMLHeadingElement>("il#manga").innerText = `${_lists.payload!.data.manga.length}`;
     }
+
+    const _services = await util.make_api_call<[string, boolean][]>("GET", "/services/list");
+    console.log(_services);
+    if (_services.error) {
+        element.get<HTMLHeadingElement>("il#services").innerText = `N/A`;
+    } else {
+        element.get<HTMLHeadingElement>("il#services").innerText = `${_services.payload!.filter((r) => r[1]).length}`;
+    }
 }
 
 window.addEventListener("DOMContentLoaded", main);

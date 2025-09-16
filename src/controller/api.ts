@@ -16,6 +16,22 @@ class api_controller {
             .set_payload({ method: req.method, url: req.url });
     }
 
+    public static async services_list(req: Bun.BunRequest<"/services/list">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const details = await proxy_manager.get_all_server_details();
+        const result_servers: [string, boolean][] = [];
+        for (const server_id of Object.keys(details))
+            result_servers.push([server_id, await proxy_manager.probe_remote(server_id)]);
+
+        return new response_builder()
+            .set_payload(result_servers);
+    }
+
     public static async account_check_token(req: Bun.BunRequest<"/account/check/token">) {
         const body = await get_body<{ token: string }>(req);
 
@@ -29,7 +45,7 @@ class api_controller {
         const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
 
         if (!result) {
-            return new response_builder()
+            return new response_builder(400)
                 .set_message("error: token was invalid");
         }
 
@@ -288,11 +304,11 @@ class api_controller {
 
     public static async version(_: Bun.BunRequest<"/version">) {
         const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
-            "GET", "yuno", "/instance/get");
+            "GET", "yuno", "/");
 
         return new response_builder()
             .set_payload({
-                ui: "2.0.0",
+                ui: "2.1.0",
                 api: "0.0.1",
                 proxy: {
                     "yuno": data?.data?.version || "0.0.0"
@@ -302,6 +318,7 @@ class api_controller {
 };
 
 router.get("/*", api_controller.fallback);
+router.get("/services/list", api_controller.services_list);
 router.post("/account/check/token", api_controller.account_check_token);
 router.get("/account/public/me", api_controller.account_public_me);
 router.post("/account/login", api_controller.account_login);

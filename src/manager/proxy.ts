@@ -5,8 +5,13 @@
 
 import { get_file_with_lock } from "./data";
 
+export async function get_all_server_details() {
+    const [ servers, release ] = await get_file_with_lock<{ [key: string]: server_t }>("servers"); release();
+    return servers;
+}
+
 export async function get_server_details(id: string): Promise<server_t | undefined> {
-    const [servers, release] = await get_file_with_lock("servers"); release();
+    const [ servers, release ] = await get_file_with_lock("servers"); release();
     return (servers as server_list_t)[id];
 }
 
@@ -37,5 +42,5 @@ export async function probe_remote(server_id: string): Promise<boolean> {
     const data = await make_remote_request<{ message: string }>("GET", server_id, "/");
     return data != undefined &&
         data.message != undefined &&
-        data.message !== "Online";
+        data.message === "Online";
 }
