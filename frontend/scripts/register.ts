@@ -21,14 +21,14 @@ async function submit_callback2() {
 
     const result = await util.make_api_call<{ token: string }>("POST", "/account/register", { username: username_input.value, password: await util.sha256(password_input.value), key: key_input.value });
     
-    if (result.error) {
+    if (!result || result.error) {
         element.get<HTMLInputElement>("input#username").classList.add("error");
         element.get<HTMLInputElement>("input#password").classList.add("error");
         element.get<HTMLInputElement>("input#key").classList.add("error");
         return;
     }
 
-    jwt.set(result.payload!.token);
+    jwt.set(result!.payload!.token);
 
     window.location.href = "/home";
 }

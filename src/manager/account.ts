@@ -102,19 +102,27 @@ export async function login_user(username: string, password: string): Promise<st
 
 export async function register_user(username: string, password: string, key: string): Promise<string | undefined> {
     const [ users, release_users ] = await get_file_with_lock<user_t[]>("users");
-    if (users.find(v => v.username == username))
+    if (users.find(v => v.username == username)) {
+        release_users();
         return undefined;
+    }
 
     const [ keys, release_keys ] = await get_file_with_lock<key_t[]>("keys");
 
     const found_key = keys.find(k => k.key == key && k.used_by == -1);
-    if (!found_key)
+    if (!found_key) {
+        release_users();
+        release_keys();
         return undefined;
+    }
     
     const yuno_instance = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { instance: string } }>("GET", "yuno", "/instance/create");
     
-    if (!yuno_instance || !yuno_instance.success)
+    if (!yuno_instance || !yuno_instance.success) {
+        release_users();
+        release_keys();
         return undefined;
+    }
 
     const user = {
         permissions: 0,

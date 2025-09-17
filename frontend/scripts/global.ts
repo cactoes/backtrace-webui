@@ -45,21 +45,25 @@ const util = {
             .map(b => b.toString(16).padStart(2, "0"))
             .join("");
     },
-    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R }> {
-        const base = `${location.protocol}//${location.host}`;
-        const result = await fetch(`${base}/api${endpoint}`, {
-            method: type,
-            cache: "reload",
-            headers: {
-                "Accept": "application/json",
-                "Authorization": jwt.get(),
-                ...(type != "GET" && { "Content-Type": "application/json" }),
-                ...headers
-            },
-            ...(type != "GET" && { body: JSON.stringify(data) })
-        });
-
-        return await result.json();
+    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R } | undefined> {
+        try {
+            const base = `${location.protocol}//${location.host}`;
+            const result = await fetch(`${base}/api${endpoint}`, {
+                method: type,
+                cache: "reload",
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": jwt.get(),
+                    ...(type != "GET" && { "Content-Type": "application/json" }),
+                    ...headers
+                },
+                ...(type != "GET" && { body: JSON.stringify(data) })
+            });
+    
+            return await result.json();
+        } catch (_) {
+            return undefined;            
+        }
     },
     start_canvas_render_loop(fn: (delta_time: number) => void) {
         let lastTime = Date.now();
@@ -76,11 +80,11 @@ const util = {
     },
     async check_logged_in(): Promise<boolean> {
         const result = await util.make_api_call<{ valid: boolean }>("POST", "/account/check/token", { token: jwt.get() });
-        return result.payload?.valid ?? false;
+        return result?.payload?.valid ?? false;
     },
     async set_version(): Promise<void> {
         const result = await util.make_api_call<{ ui: string, api: string, proxy: { yuno: string } }>("GET", "/version");
-        element.get<HTMLDivElement>("ver").innerText = result.payload!.ui;
+        element.get<HTMLDivElement>("ver").innerText = result!.payload!.ui;
     }
 };
 
@@ -115,12 +119,12 @@ const component = {
             const sidebar = document.querySelector(".sidebar")!;
             sidebar.innerHTML = `<div class="sidebar">
                     <div class="section1">
-                        <div class="image"><img src="/files/pfp/${result.payload!.user.uuid}"></div>
+                        <div class="image"><img src="/files/pfp/${result!.payload!.user.uuid}"></div>
                         <div class="details">
                             <!-- // TODO @since 01/05/2025 -- 20:49
                                 // add skeleton loaders -->
-                            <h3>${result.payload!.user.username}</h3>
-                            <p>${result.payload!.user.uuid}</p>
+                            <h3>${result!.payload!.user.username}</h3>
+                            <p>${result!.payload!.user.uuid}</p>
                         </div>
                     </div>
                     <div id="sidebar" class="section2">
@@ -144,7 +148,7 @@ const component = {
     },
     async set_pfp() {
         const result = await util.make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
-        element.get<HTMLImageElement>("i#pfp").src = `/files/pfp/${result.payload!.user.uuid}`;
+        element.get<HTMLImageElement>("i#pfp").src = `/files/pfp/${result!.payload!.user.uuid}`;
         element.link("i#pfp", {
             click: () => {
                 router.to("/account");

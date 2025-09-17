@@ -1,2 +1,59 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
+
+input {
+    display: none;
+}
+
+.content > .title {
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.content > .fileuploader {
+    display: flex;
+    flex-direction: row;
+}
+
+.content > .fileuploader > label.big {
+    border: 1px solid var(--red);
+}
+
+.content > .fileuploader > label {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    transition: .2s all ease;
+    cursor: pointer;
+    padding: 8px 16px;
+    margin-right: 16px;
+}
+
+.content > .fileuploader > label:focus,
+.content > .fileuploader > label:hover {
+    border: 1px solid var(--primary);
+}
+
+.content > .fileuploader > button {
+    padding: 8px 16px;
+    background-color: var(--background);
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .2s ease;
+}
+
+.content > .fileuploader > button:focus,
+.content > .fileuploader > button:hover {
+    border: 1px solid var(--primary);
+}
+
+.content > #file_stats {
+    padding: 4px;
+    margin-left: 4px;
+    color: var(--text-secondary);
+    font-size: 12px;
+}

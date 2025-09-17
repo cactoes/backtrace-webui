@@ -183,7 +183,7 @@ async function main() {
                 });
 
                 list.push({
-                    _id: result.payload!.data.id as string,
+                    _id: result!.payload!.data.id as string,
                     name: d_name.trim(),
                     current: d_note.trim(),
                     state: resolve_filter(d_state_text.toLowerCase()) as 0 | 1 | 2 | 3
@@ -230,7 +230,7 @@ async function main() {
     element.get<HTMLAnchorElement>(`fs#${list_selector}`).classList.add("selected");
 
     const _lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
-    lists = _lists.payload!.data;
+    lists = _lists!.payload!.data;
 
     update_list();
 }
