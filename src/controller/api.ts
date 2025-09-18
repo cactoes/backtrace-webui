@@ -6,9 +6,10 @@
 import { response_builder } from "../utils/utils";
 import { BunRouter, get_body } from "../server";
 import { account_manager, proxy_manager } from "../manager/manager";
+import type { File } from "buffer";
+import { save_pfp } from "manager/data";
 
 export const router = new BunRouter();
-const PFP_MAX_SIZE = 1 * 1024 * 1014; // 1mb
 
 class api_controller {
     public static async fallback(req: Bun.BunRequest<"/*">) {
@@ -34,22 +35,22 @@ class api_controller {
     }
 
     public static async account_upload_pfp(req: Bun.BunRequest<"/account/upload/pfp">) {
-        // TODO @since 16/09/2025 -- 21:23
+        const user = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!user) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
         const data = await req.formData();
-        const image_file = data.get("image");
+        const image_file = data.get("image") as File | null;
         if (!image_file)
-            return new response_builder();
+            return new response_builder(400)
+                .set_message("error: no image given");
 
-        if ((image_file as any).size > PFP_MAX_SIZE)
-            return new response_builder();
+        if (!(await save_pfp(user.uuid, image_file)))
+            return new response_builder(400)
+                .set_message("error: the image was invalid");
 
-        const file_ext = ((image_file as any).name ?? "").split(".").at(-1).toLowerCase();
-
-        if (![ "png", "jpg", "jpeg" ].includes(file_ext))
-            return new response_builder(400);
-
-        Bun.write(`username.${file_ext}`, image_file);
-        
         return new response_builder();
     }
 

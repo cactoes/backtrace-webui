@@ -65,6 +65,9 @@ const util = {
             return undefined;            
         }
     },
+    get_api_url() {
+        return `${location.protocol}//${location.host}/api`;
+    },
     start_canvas_render_loop(fn: (delta_time: number) => void) {
         let lastTime = Date.now();
 

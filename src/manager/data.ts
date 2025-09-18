@@ -3,14 +3,21 @@
 /// @brief      file manager (thread safe)
 //==========================================
 
+import type { File } from "buffer";
 import { Mutex } from "../utils/utils";
 import * as path from "path";
+import { Glob } from "bun";
 
+const PFP_MAX_SIZE = 1 * 1024 * 1014; // 1mb
 const mutex_map: { [key: string]: Mutex } = {};
 
-function resolve_path(filename: string, ext: string = "json"): string {
+function get_data_path() {
     const prefix = process.env.IS_PRODUCTION == "true" ? "prod" : "dev";
-    return path.join(__dirname, `../../data/${prefix}/${filename}.${ext}`);
+    return path.join(__dirname, `../../data/${prefix}`);
+}
+
+function resolve_path(filename: string, ext: string = "json"): string {
+    return path.join(get_data_path(), `${filename}.${ext}`);
 }
 
 export function get_certs(): { cert: Bun.BunFile, key: Bun.BunFile } {
@@ -22,7 +29,19 @@ export function get_certs(): { cert: Bun.BunFile, key: Bun.BunFile } {
 
 export async function get_pfp(uuid: number): Promise<Bun.BunFile | undefined> {
     try {
-        const file = Bun.file(resolve_path(`pfp/${uuid}`, "png"));
+        const glob = new Glob(get_data_path() + `/pfp/${uuid}.*`);
+        const result = glob.scan();
+        let filename: string | undefined = undefined;
+
+        for await (const file of result) {
+            filename = file;
+            break;
+        }
+
+        if (!filename)
+            return undefined;
+
+        const file = Bun.file(filename);
 
         if (!(await file.exists()))
             return undefined;
@@ -30,6 +49,25 @@ export async function get_pfp(uuid: number): Promise<Bun.BunFile | undefined> {
         return file;
     } catch (err) {
         return undefined
+    }
+}
+
+export async function save_pfp(uuid: number, file: File): Promise<boolean> {
+    const ext = file.name.split(".").at(-1);
+    if (!ext)
+        return false;
+
+    if (![ "png", "jpg", "jpeg" ].includes(ext.toLowerCase()))
+        return false;
+
+    if (file.size > PFP_MAX_SIZE)
+        return false;
+
+    try {
+        await Bun.write(resolve_path(`pfp/${uuid}`, ext), file as any);
+        return true;
+    } catch (_) {
+        return false
     }
 }
 

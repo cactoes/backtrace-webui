@@ -1,25 +1,41 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
 
-input {
-    display: none;
-}
-
-.content > .title {
+.content > .container > .title {
     font-weight: 400;
     margin-bottom: 8px;
 }
 
-.content > .fileuploader {
+.content > .container:not(:last-child) {
+    margin-bottom: 26px;
+}
+
+.content > .container > input {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    transition: .2s all ease;
+    padding: 8px 16px;
+    margin-right: 16px;
+}
+
+.content > .container > .fileuploader input {
+    display: none;
+}
+
+.content > .container > .fileuploader {
     display: flex;
     flex-direction: row;
 }
 
-.content > .fileuploader > label.big {
+.content > .container > .fileuploader > label.error {
     border: 1px solid var(--red);
 }
 
-.content > .fileuploader > label {
+.content > .container > .fileuploader > label {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -32,12 +48,12 @@ input {
     margin-right: 16px;
 }
 
-.content > .fileuploader > label:focus,
-.content > .fileuploader > label:hover {
+.content > .container > .fileuploader > label:focus,
+.content > .container > .fileuploader > label:hover {
     border: 1px solid var(--primary);
 }
 
-.content > .fileuploader > button {
+.content > .container > .fileuploader > button {
     padding: 8px 16px;
     background-color: var(--background);
     border: 1px solid var(--secondary);
@@ -46,12 +62,12 @@ input {
     transition: all .2s ease;
 }
 
-.content > .fileuploader > button:focus,
-.content > .fileuploader > button:hover {
+.content > .container > .fileuploader > button:focus,
+.content > .container > .fileuploader > button:hover {
     border: 1px solid var(--primary);
 }
 
-.content > #file_stats {
+.content > .container > #file_stats {
     padding: 4px;
     margin-left: 4px;
     color: var(--text-secondary);
