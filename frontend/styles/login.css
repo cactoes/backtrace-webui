@@ -79,7 +79,7 @@ body {
 
 .form > button:focus,
 .form > button:hover {
-    border: 1px solid var(--primary);
+    background-color: var(--secondary-dark);
 }
 
 .form > .label {

@@ -50,7 +50,7 @@
 
 .content > .container > .fileuploader > label:focus,
 .content > .container > .fileuploader > label:hover {
-    border: 1px solid var(--primary);
+    background-color: var(--secondary-dark);
 }
 
 .content > .container > .fileuploader > button {
@@ -64,7 +64,7 @@
 
 .content > .container > .fileuploader > button:focus,
 .content > .container > .fileuploader > button:hover {
-    border: 1px solid var(--primary);
+    background-color: var(--secondary-dark);
 }
 
 .content > .container > #file_stats {
