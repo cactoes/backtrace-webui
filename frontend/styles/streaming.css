@@ -1,2 +1,49 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
+
+video {
+    width: 100%;
+}
+
+#video_container.hide {
+    display: none;
+}
+
+#show_list {
+    list-style-type: none;
+}
+
+#show_list.hide {
+    display: none;
+}
+
+#show_list > li {
+
+}
+
+#show_list > li > p {
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#show_list > li > ul {
+    list-style-type: none;
+    margin-left: 32px;
+}
+
+#show_list > li > ul > li {
+    display: flex;
+}
+
+#show_list > li > ul > li > span {
+    font-weight: 400;
+    text-decoration: none;
+}
+
+#show_list > li > ul > li > p {
+    margin-left: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}

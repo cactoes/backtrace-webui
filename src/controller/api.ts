@@ -338,17 +338,79 @@ class api_controller {
     }
 
     public static async version(_: Bun.BunRequest<"/version">) {
-        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
+        const data_yuno = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
             "GET", "yuno", "/");
+
+        const data_toga = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
+            "GET", "toga", "/");
 
         return new response_builder()
             .set_payload({
                 ui: "2.1.0",
                 api: "0.0.1",
                 proxy: {
-                    "yuno": data?.data?.version || "0.0.0"
+                    "yuno": data_yuno?.data?.version || "0.0.0",
+                    "toga": data_toga?.data?.version || "0.0.0",
                 }
             });
+    }
+
+    public static async all_shows(req: Bun.BunRequest<"/shows">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { [key: string]: video_meta_entry_t } }>("GET", "toga", "/meta");
+        
+        if (!data) {
+            return new response_builder(500)
+                .set_message("error: remote server not found or unreachable");
+        }
+
+        return new response_builder()
+            .set_payload(data.data!);
+    }
+
+    public static async video(req: Bun.BunRequest<"/video/*">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const target_file_name = (new URL(req.url).pathname.slice("/api/video".length));
+
+        const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/video" + target_file_name);
+        
+        return new Response(data!.body, {
+            status: data!.status,
+            headers: data!.headers
+        });
+    }
+
+    public static async subs(req: Bun.BunRequest<"/subs/*">) {
+        const url = new URL(req.url);
+
+        let token = req.headers.get("Authorization");
+        if (!token)
+            token = url.searchParams.get("t");
+
+        const result = await account_manager.get_user_from_token(token);
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const target_file_name = (url.pathname.slice("/api/subs".length));
+
+        const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/subs" + target_file_name);
+        
+        return new Response(data!.body, {
+            status: data!.status,
+            headers: data!.headers
+        });
     }
 };
 
@@ -367,3 +429,6 @@ router.post("/lists/manga", api_controller.lists_manga);
 router.post("/lists/manga/create", api_controller.lists_manga_create);
 router.delete("/lists/manga", api_controller.lists_manga_delete);
 router.get("/version", api_controller.version);
+router.get("/video/*", api_controller.video);
+router.get("/subs/*", api_controller.subs);
+router.get("/shows", api_controller.all_shows);

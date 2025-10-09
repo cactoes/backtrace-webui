@@ -38,6 +38,29 @@ export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "P
     }
 }
 
+export async function make_remote_request_raw<T>(type: "GET" | "POST" | "PATCH" | "PUT", server_id: string, endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<T | undefined> {
+    const details = await get_server_details(server_id);
+
+    if (!details)
+        return undefined;
+
+    try {
+        const result = await fetch(`${details.server}${endpoint}`, {
+            method: type,
+            headers: {
+                "Accept": "application/json",
+                ...(type != "GET" && { "Content-Type": "application/json" }),
+                ...headers
+            },
+            ...(type != "GET" && { body: JSON.stringify(data) })
+        });
+
+        return result as T;
+    } catch (_) {
+        return undefined;
+    }
+}
+
 export async function probe_remote(server_id: string): Promise<boolean> {
     const data = await make_remote_request<{ message: string }>("GET", server_id, "/");
     return data != undefined &&

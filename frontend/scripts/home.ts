@@ -26,6 +26,19 @@ async function main() {
     } else {
         element.get<HTMLHeadingElement>("il#services").innerText = `${_services.payload!.filter((r) => r[1]).length}`;
     }
+
+    const _shows = await util.make_api_call<{ [key: string]: video_meta_entry_t }>("GET", "/shows");
+    if (!_shows || _shows.error) {
+        element.get<HTMLHeadingElement>("il#shows").innerText = `N/A`;
+        element.get<HTMLHeadingElement>("il#episodes").innerText = `N/A`;
+    } else {
+        element.get<HTMLHeadingElement>("il#shows").innerText = `${Object.keys(_shows.payload!).length}`;
+        let episode_count = 0;
+        for (const show_name of Object.keys(_shows.payload!)) {
+            episode_count += _shows.payload![show_name].episodes.length;
+        }
+        element.get<HTMLHeadingElement>("il#episodes").innerText = `${episode_count}`;
+    }
 }
 
 window.addEventListener("DOMContentLoaded", main);

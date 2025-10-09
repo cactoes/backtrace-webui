@@ -65,6 +65,26 @@ const util = {
             return undefined;            
         }
     },
+    async make_api_call_raw<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<R | undefined> {
+        try {
+            const base = `${location.protocol}//${location.host}`;
+            const result = await fetch(`${base}/api${endpoint}`, {
+                method: type,
+                cache: "reload",
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": jwt.get(),
+                    ...(type != "GET" && { "Content-Type": "application/json" }),
+                    ...headers
+                },
+                ...(type != "GET" && { body: JSON.stringify(data) })
+            });
+    
+            return result as R;
+        } catch (_) {
+            return undefined;            
+        }
+    },
     get_api_url() {
         return `${location.protocol}//${location.host}/api`;
     },

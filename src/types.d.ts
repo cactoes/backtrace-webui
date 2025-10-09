@@ -40,3 +40,13 @@ interface server_t {
 };
 
 type server_list_t = { [key: string]: server_t };
+
+//==========================================
+/// @file       controler/api.ts
+//==========================================
+interface video_meta_entry_t {
+    episodes: {
+        name: string,
+        hash: string
+    }[]
+};
