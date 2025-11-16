@@ -36,7 +36,6 @@ async function load_video(name: string, episode: string, id: string, quality: st
 
     video_element.appendChild(source);
     video_element.appendChild(track);
-    video_element.load();
 }
 
 // @ts-ignore
