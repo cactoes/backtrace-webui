@@ -399,9 +399,13 @@ class api_controller {
             }
         });
 
+        const outHeaders = data!.headers;
+        outHeaders.set("Cache-Control", "private, no-store");
+        outHeaders.set("Pragma", "no-cache");
+
         return new Response(data!.body, {
             status: data!.status,
-            headers: data!.headers
+            headers: outHeaders
         });
     }
 
