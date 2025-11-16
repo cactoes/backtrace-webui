@@ -25,7 +25,7 @@ async function load_video(name: string, episode: string, id: string, quality: st
 
     const source = document.createElement("source");
     source.type = "video/mp4";
-    source.src = `${location.protocol}//${location.host}/api/video/${id}/${quality}`;
+    source.src = `/api/video/${id}/${quality}`;
 
     const track = document.createElement("track");
     track.kind = "subtitles";
