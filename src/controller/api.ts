@@ -384,17 +384,17 @@ class api_controller {
 
         const target_file_name = (new URL(req.url).pathname.slice("/api/video".length));
 
-        // const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/video" + target_file_name);
-
         const details = await get_server_details("toga");
         
         if (!details)
             return new response_builder(400)
                 .set_message("error: -");
     
+        const range = req.headers.get("range");
         const data = await fetch(`${details.server}/video${target_file_name}`, {
             method: "GET",
             headers: {
+                ...(range && { "Range": range }),
                 "Accept": "video/mp4"
             }
         });
