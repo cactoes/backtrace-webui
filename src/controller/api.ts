@@ -9,6 +9,7 @@ import { account_manager, proxy_manager } from "../manager/manager";
 import type { File } from "buffer";
 import { save_pfp } from "manager/data";
 import { get_server_details } from "manager/proxy";
+import { permissions_t } from "manager/account";
 
 export const router = new BunRouter();
 
@@ -64,16 +65,27 @@ class api_controller {
             .set_payload({ valid: await JWTManager.check_token(body.token!) });
     }
 
-    public static async account_public_me(req: Bun.BunRequest<"/account/public/me">) {
+    public static async account_check_permissions(req: Bun.BunRequest<"/account/check/permissions">) {
+        const body = await get_body<{ permissions: number }>(req);
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
-
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
         }
 
         return new response_builder()
-            .set_payload({ user: { username: result.username, uuid: result.uuid } });
+            .set_payload({ has_permissions: account_manager.check_permissions(result.permissions, body.permissions || 0) });
+    }
+
+    public static async account_public_me(req: Bun.BunRequest<"/account/public/me">) {
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
+        if (!result) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        return new response_builder()
+            .set_payload({ user: { username: result.username, uuid: result.uuid, permissions: result.permissions } });
     }
 
     public static async account_login(req: Bun.BunRequest<"/account/login">) {
@@ -110,6 +122,11 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
+
         const server_instace = result.servers.find(server => server.server == "yuno");
         if (!server_instace) {
             return new response_builder(500)
@@ -140,6 +157,11 @@ class api_controller {
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
+        }
+
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
         }
 
         const server_instace = result.servers.find(server => server.server == "yuno");
@@ -178,6 +200,11 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
+
         const server_instace = result.servers.find(server => server.server == "yuno");
         if (!server_instace) {
             return new response_builder(500)
@@ -207,6 +234,11 @@ class api_controller {
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
+        }
+
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
         }
 
         const server_instace = result.servers.find(server => server.server == "yuno");
@@ -242,6 +274,11 @@ class api_controller {
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
+        }
+
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
         }
 
         const server_instace = result.servers.find(server => server.server == "yuno");
@@ -280,6 +317,11 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
+
         const server_instace = result.servers.find(server => server.server == "yuno");
         if (!server_instace) {
             return new response_builder(500)
@@ -309,6 +351,11 @@ class api_controller {
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
+        }
+
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
         }
 
         const server_instace = result.servers.find(server => server.server == "yuno");
@@ -364,6 +411,11 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
+
         const data = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { [key: string]: video_meta_entry_t } }>("GET", "toga", "/meta");
         
         if (!data) {
@@ -380,6 +432,11 @@ class api_controller {
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
+        }
+
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
         }
 
         const target_file_name = (new URL(req.url).pathname.slice("/api/video".length));
@@ -410,20 +467,19 @@ class api_controller {
     }
 
     public static async subs(req: Bun.BunRequest<"/subs/*">) {
-        const url = new URL(req.url);
-
-        let token = req.headers.get("cookie")?.slice("token=".length) || null;
-        if (!token)
-            token = url.searchParams.get("t");
-
-        const result = await account_manager.get_user_from_token(token);
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || null);
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
         }
 
-        const target_file_name = (url.pathname.slice("/api/subs".length));
+        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
 
+        const url = new URL(req.url);
+        const target_file_name = (url.pathname.slice("/api/subs".length));
         const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/subs" + target_file_name);
         
         return new Response(data!.body, {
@@ -438,6 +494,7 @@ router.get("/services/list", api_controller.services_list);
 router.post("/account/upload/pfp", api_controller.account_upload_pfp);
 router.post("/account/register", api_controller.account_register);
 router.post("/account/check/token", api_controller.account_check_token);
+router.post("/account/check/permissions", api_controller.account_check_permissions);
 router.get("/account/public/me", api_controller.account_public_me);
 router.post("/account/login", api_controller.account_login);
 router.get("/lists", api_controller.lists);

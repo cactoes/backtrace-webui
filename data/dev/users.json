@@ -1,6 +1,6 @@
 [
     {
-        "permissions": 1,
+        "permissions": 15,
         "uuid": 0,
         "username": "cactoes",
         "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",
@@ -12,7 +12,7 @@
         ]
     },
     {
-        "permissions": 0,
+        "permissions": 1,
         "uuid": 1,
         "username": "test",
         "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",

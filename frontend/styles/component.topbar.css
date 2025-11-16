@@ -17,6 +17,11 @@
     cursor: default;
 }
 
+.topbar > .route > p > a {
+    text-decoration: none;
+    margin-right: 24px;
+}
+
 .topbar > .route > a {
     color: var(--text-secondary);
     text-decoration: none;

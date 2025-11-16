@@ -8,6 +8,13 @@ import { assert, sha256 } from "../utils/utils";
 import { get_file_with_lock, save_file_and_unlock } from "./data";
 import { proxy_manager } from "./manager";
 
+export enum permissions_t {
+    ANIME_LISTS = 1 << 0,
+    PASSWORD_MANAGER = 1 << 1,
+    STREAMING = 1 << 2,
+    SERVICE_LIST = 1 << 3,
+};
+
 // kinda ahh class
 export class JWTManager {
     private secret: Uint8Array | undefined = undefined;

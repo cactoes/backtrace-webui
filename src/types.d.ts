@@ -15,10 +15,6 @@ type ReleaseFunction = () => void;
 //==========================================
 /// @file       manager/account.ts
 //==========================================
-enum permissions_t {
-    ADMIN = 1 << 0
-};
-
 interface user_t {
     permissions: number;
     uuid: number;

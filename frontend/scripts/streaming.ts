@@ -15,10 +15,6 @@ async function load_video(name: string, episode: string, id: string, quality: st
     const video_element = document.querySelector("#video_container>video") as HTMLVideoElement;
     video_element.replaceChildren();
 
-    // const video_data = await util.make_api_call_raw<Response>("GET", `/video/${id}/${quality}`);
-    // const video_blob = await video_data!.blob();
-    // const video_url = URL.createObjectURL(video_blob);
-
     const subs_data = await util.make_api_call_raw<Response>("GET", `/subs/${id}`);
     const subs_blob = await subs_data!.blob();
     const subs_url = URL.createObjectURL(subs_blob);
