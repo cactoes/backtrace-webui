@@ -15,9 +15,9 @@ async function load_video(name: string, episode: string, id: string, quality: st
     const video_element = document.querySelector("#video_container>video") as HTMLVideoElement;
     video_element.replaceChildren();
 
-    const video_data = await util.make_api_call_raw<Response>("GET", `/video/${id}/${quality}`);
-    const video_blob = await video_data!.blob();
-    const video_url = URL.createObjectURL(video_blob);
+    // const video_data = await util.make_api_call_raw<Response>("GET", `/video/${id}/${quality}`);
+    // const video_blob = await video_data!.blob();
+    // const video_url = URL.createObjectURL(video_blob);
 
     const subs_data = await util.make_api_call_raw<Response>("GET", `/subs/${id}`);
     const subs_blob = await subs_data!.blob();
@@ -25,7 +25,7 @@ async function load_video(name: string, episode: string, id: string, quality: st
 
     const source = document.createElement("source");
     source.type = "video/mp4";
-    source.src = video_url;
+    source.src = `${location.protocol}//${location.host}/api/video/${id}/${quality}`;
 
     const track = document.createElement("track");
     track.kind = "subtitles";

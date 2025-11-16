@@ -8,6 +8,7 @@ import { BunRouter, get_body } from "../server";
 import { account_manager, proxy_manager } from "../manager/manager";
 import type { File } from "buffer";
 import { save_pfp } from "manager/data";
+import { get_server_details } from "manager/proxy";
 
 export const router = new BunRouter();
 
@@ -19,7 +20,7 @@ class api_controller {
     }
 
     public static async services_list(req: Bun.BunRequest<"/services/list">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -35,7 +36,7 @@ class api_controller {
     }
 
     public static async account_upload_pfp(req: Bun.BunRequest<"/account/upload/pfp">) {
-        const user = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const user = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!user) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -64,7 +65,7 @@ class api_controller {
     }
 
     public static async account_public_me(req: Bun.BunRequest<"/account/public/me">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
 
         if (!result) {
             return new response_builder(400)
@@ -85,6 +86,7 @@ class api_controller {
         }
 
         return new response_builder()
+            .set_header("Set-Cookie", `token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400`)
             .set_payload({ token });
     }
 
@@ -102,7 +104,7 @@ class api_controller {
     }
 
     public static async lists(req: Bun.BunRequest<"/lists">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -134,7 +136,7 @@ class api_controller {
     }
 
     public static async lists_anime(req: Bun.BunRequest<"/lists/anime">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -170,7 +172,7 @@ class api_controller {
     }
 
     public static async lists_anime_delete(req: Bun.BunRequest<"/lists/anime">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -201,7 +203,7 @@ class api_controller {
     }
 
     public static async lists_anime_create(req: Bun.BunRequest<"/lists/anime/create">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -236,7 +238,7 @@ class api_controller {
     }
 
     public static async lists_manga(req: Bun.BunRequest<"/lists/manga">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -272,7 +274,7 @@ class api_controller {
     }
 
     public static async lists_manga_delete(req: Bun.BunRequest<"/lists/manga">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -303,7 +305,7 @@ class api_controller {
     }
 
     public static async lists_manga_create(req: Bun.BunRequest<"/lists/manga/create">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -356,7 +358,7 @@ class api_controller {
     }
 
     public static async all_shows(req: Bun.BunRequest<"/shows">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -374,7 +376,7 @@ class api_controller {
     }
 
     public static async video(req: Bun.BunRequest<"/video/*">) {
-        const result = await account_manager.get_user_from_token(req.headers.get("Authorization"));
+        const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
             return new response_builder(400)
                 .set_message("error: token was invalid");
@@ -382,8 +384,21 @@ class api_controller {
 
         const target_file_name = (new URL(req.url).pathname.slice("/api/video".length));
 
-        const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/video" + target_file_name);
+        // const data = await proxy_manager.make_remote_request_raw<Response>("GET", "toga", "/video" + target_file_name);
+
+        const details = await get_server_details("toga");
         
+        if (!details)
+            return new response_builder(400)
+                .set_message("error: -");
+    
+        const data = await fetch(`${details.server}/video${target_file_name}`, {
+            method: "GET",
+            headers: {
+                "Accept": "video/mp4"
+            }
+        });
+
         return new Response(data!.body, {
             status: data!.status,
             headers: data!.headers
@@ -393,7 +408,7 @@ class api_controller {
     public static async subs(req: Bun.BunRequest<"/subs/*">) {
         const url = new URL(req.url);
 
-        let token = req.headers.get("Authorization");
+        let token = req.headers.get("cookie")?.slice("token=".length) || null;
         if (!token)
             token = url.searchParams.get("t");
 
