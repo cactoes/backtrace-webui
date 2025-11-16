@@ -20,6 +20,11 @@ export class response_builder<T extends Object | Array<any>> {
      */
     constructor(private status: number = 200) {}
 
+    public set_header(name: string, value: string): response_builder<T> {
+        this.headers[name] = value;
+        return this;
+    }
+
     /**
      * @brief   sets the payload field
      */
