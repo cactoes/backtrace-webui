@@ -66,6 +66,7 @@ function create_list_item(obj: instance_object_t) {
     return div;
 }
 
+let sorting = "";
 function update_list() {
     const list_selector = window.location.hash.substring(1) as "anime" | "manga";
     let list = lists[list_selector];
@@ -79,6 +80,14 @@ function update_list() {
         });
     
         list = fuzzy.search(search.replace(/\W+/g, ""));
+    }
+
+    if (sorting == "alphabetical") {
+        list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sorting == "type") {
+        list = [...list].sort((a, b) => a.state - b.state);
+    } else {
+        // list = list;
     }
 
     for (const item of list) {
@@ -115,6 +124,17 @@ async function main() {
                 element.query_loop("div.selector>a", _e => _e.classList.remove("selected"));
                 element.toggle_class(item_element as HTMLElement, "selected");
                 window.location.hash = `${item_element.id.slice(2)}`;
+                update_list();
+            }
+        });
+    });
+
+    element.query_loop<HTMLParagraphElement>("div.sort>p", item_element => {
+        element.link(item_element.id, {
+            click: () => {
+                element.query_loop("div.sort>p", _e => _e.classList.remove("selected"));
+                element.toggle_class(item_element as HTMLElement, "selected");
+                sorting = item_element.id.slice(6);
                 update_list();
             }
         });

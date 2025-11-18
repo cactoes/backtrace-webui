@@ -82,6 +82,7 @@
     padding: 12px 8px;
     background-color: var(--background);
     transition: .2s background-color ease;
+    margin-bottom: 8px;
 }
 
 .content > .filters > .search > i {
@@ -96,6 +97,35 @@
 
 .content > .filters > .search > input:focus {
     outline: none;
+}
+
+.content > .filters > .sort {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    background-color: var(--background);
+    transition: .2s background-color ease;
+    cursor: pointer;
+    padding: 4px;
+
+    margin-bottom: 8px;
+}
+
+.content > .filters > .sort > p {
+    width: calc(33.3% - 2px);
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    transition: .2s background-color ease;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.content > .filters > .sort > p:hover,
+.content > .filters > .sort > p.selected {
+    background-color: var(--secondary-dark);
 }
 
 .content > .filters > .add > button {
