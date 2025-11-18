@@ -231,6 +231,11 @@ async function main() {
 
     const _lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
     lists = _lists!.payload!.data;
+    
+    element.get<HTMLParagraphElement>("ft#finished").innerText = `Finished (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 0).length})`;
+    element.get<HTMLParagraphElement>("ft#watching").innerText = `Watching (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 1).length})`;
+    element.get<HTMLParagraphElement>("ft#planned").innerText = `Planned (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 2).length})`;
+    element.get<HTMLParagraphElement>("ft#dropped").innerText = `Dropped (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 3).length})`;
 
     update_list();
 }
