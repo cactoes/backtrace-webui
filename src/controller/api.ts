@@ -122,7 +122,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -159,7 +159,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -200,7 +200,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -236,7 +236,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -276,7 +276,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -317,7 +317,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -353,7 +353,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
@@ -411,7 +411,7 @@ class api_controller {
                 .set_message("error: token was invalid");
         }
 
-        if (!account_manager.check_permissions(result.permissions, permissions_t.STREAMING)) {
+        if (!account_manager.check_permissions(result.permissions, permissions_t.ANIME_LISTS)) {
             return new response_builder(401)
                 .set_message("error: unauthorized");
         }
