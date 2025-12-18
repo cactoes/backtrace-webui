@@ -185,3 +185,14 @@ const router = {
         window.location.href = loc;
     }
 };
+
+class button_component extends HTMLElement {
+    connectedCallback() {
+        const label = this.getAttribute("label");
+        this.innerHTML = `
+            <button class="component_button_styling" type="button">${label}</button>
+        `
+    }
+}
+
+customElements.define("c-button", button_component);
