@@ -18,7 +18,7 @@ function main(argc: number, argv: string[]): number {
     server.add_router("/files", file_controller.router);
 
     server.start(() => {
-        console.log("server started");
+        console.log(`server started: http://localhost:${process.env.PORT}`);
     });
 
     return 0;
