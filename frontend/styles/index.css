@@ -1,4 +1,175 @@
-@import url("/files/global.css");
+:root {
+    --bg: #0a0a0a;
+    --panel: rgba(18, 18, 18, 0.72);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.6);
+    --hover: rgba(255, 255, 255, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.container > .top-bar {
+    position: sticky;
+    top: 16px;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    background: rgba(10,10,10,0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+}
+
+.container > .top-bar > .logo {
+    font-weight: 600;
+}
+
+.container > .top-bar > .login {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease; 
+}
+
+.container > .front {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+    border-radius: 18px;
+    padding: 34px;
+}
+
+.container > .front h1 {
+    margin: 0;
+}
+
+.container > .front p {
+    margin-top: 10px;
+    color: var(--muted);
+    max-width: 650px;
+}
+
+.container > .front > .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.container > .front > .links > .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    transition: background 0.2s ease;
+}
+
+.link:hover {
+    background: var(--hover);
+}
+
+.container > .section-title {
+    margin-top: 40px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.container > .section {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.container > .section > .card {
+    border: 1px solid var(--border);
+    background: rgba(15, 15, 15, 0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 16px;
+    padding: 16px;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.container > .section > .card:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.container > .section > .card h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.container > .section > .card p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.container > .section > .card > .card-footer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container > .section > .card > .card-footer > .card-footer-icon {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 10px;
+    border: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+
+    transition: all 0.2s ease;
+}
+
+.container > .section > .card > .card-footer > .card-footer-icon > a {
+    text-decoration: none;
+    color: var(--muted);
+}
+
+/* @import url("/files/global.css");
 
 @keyframes fade_in_up {
     from {
@@ -198,4 +369,4 @@ a:hover {
 
 .content > .body > .clock {
     margin-top: 5px;
-}
+} */

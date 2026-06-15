@@ -10,34 +10,101 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js" integrity="sha512-wC/cunGGDjXSl9OHUH0RuqSyW4YNLlsPwhcLxwWW1CR4OeC2E1xpcdZz2DeQkEmums41laI+eGMw95IJ15SS3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="/files/global.js" defer></script>
         <script src="/files/index.js" defer></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="login"><a href="/home">login</a></div>
+        <main id="main" class="container">
+            <header class="top-bar">
+                <div class="logo">cactoes (さぼてん)</div>
+                <button class="login">Login</button>
+            </header>
 
-        <!-- background stars -->
+            <section class="front">
+                <h1>Backtrace</h1>
+                <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsam quae, reprehenderit unde nisi modi dicta? Culpa ad ipsam ullam, corporis soluta libero laudantium quasi praesentium quos a et inventore non.
+                </p>
+
+                <nav class="links">
+                    <a class="link" href="https://github.com/cactoes">GitHub</a>
+                    <a class="link" href="https://www.tiktok.com/@cactoesmen">TikTok</a>
+                    <a class="link" href="https://www.youtube.com/channel/UCeGFwlujzhSgtToxUlUweXQ">YouTube</a>
+                </nav>
+            </section>
+
+            <h2 class="section-title" >GitHub Projects</h2>
+            <section class="section">
+                <span class="card" onclick="window.open('https://github.com/reflection')">
+                    <h3>Reflection UI</h3>
+                    <p>Reflection -UI is a c++20 desktop application library. It offers an c++ api to add visual elements to a window. Internally it uses the WebView2 browser to renderer UI components. </p>
+                    <div class="card-footer">
+                        <div class="card-footer-icon">
+                            <a href="https://github.com/reflection">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </span>
+                <span class="card" onclick="window.open('https://github.com/reflection')">
+                    <h3>Reflection UI</h3>
+                    <p>Reflection -UI is a c++20 desktop application library. It offers an c++ api to add visual elements to a window. Internally it uses the WebView2 browser to renderer UI components. </p>
+                    <div class="card-footer">
+                        <div class="card-footer-icon">
+                            <a href="https://github.com/reflection">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </span>
+                <span class="card" onclick="window.open('https://github.com/reflection')">
+                    <h3>Reflection UI</h3>
+                    <p>Reflection -UI is a c++20 desktop application library. It offers an c++ api to add visual elements to a window. Internally it uses the WebView2 browser to renderer UI components. </p>
+                    <div class="card-footer">
+                        <div class="card-footer-icon">
+                            <a href="https://github.com/reflection">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </span>
+            </section>
+
+            <h2 class="section-title" >Services</h2>
+            <section class="section">
+                <span class="card" onclick="window.open('/lists')">
+                    <h3>Anime / Manga list</h3>
+                    <p>Anime & manga tracker</p>
+                    <div class="card-footer">
+                        <a href="/lists">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </div>
+                </span>
+            </section>
+        </main>
+
+        <!-- <div class="login"><a href="/home">login</a></div>
+
+        <!-- background stars --
         <canvas id="stars"></canvas>
 
-        <!-- moon img + content -->
+        <!-- moon img + content --
         <div id="main">
             <div class="background">
                 <div class="content">
-                    <!-- main title -->
+                    <!-- main title --
                     <h1 class="title animated fade_in_up" >
                         <a href="/">backtrace</a>
                     </h1>
                     
-                    <!-- bio -->
+                    <!-- bio --
                     <div class="body animated">
-                        <!-- basic info -->
+                        <!-- basic info --
                         <div class="bio animated fade_in_side delay1">
                             <b class="sub_text1">cactoes (さぼてん)</b>
                             <b class="sub_text1">editor & ts/c++ dev</b>
                         </div>
     
-                        <!-- socials -->
+                        <!-- socials --
                         <div class="socials animated fade_in_side delay15 noselect">
                             <div class="dash"></div>
                             <a href="https://www.youtube.com/channel/UCeGFwlujzhSgtToxUlUweXQ">
@@ -55,12 +122,12 @@
                         </div>
                     </div>
     
-                    <!-- clock -->
+                    <!-- clock --
                     <div class="clock animated fade_in delay2">
                         <b class="sub_text2" id="clock">00 : 00 : 00</b>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </body>
 </html>
