@@ -59,7 +59,7 @@ body {
     margin-right: 12px;
 }
 
-.container > .top-bar > .login {
+.container > .top-bar > nav > .login {
     border: 1px solid var(--border);
     background: transparent;
     color: var(--text);
@@ -70,8 +70,23 @@ body {
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.container > .top-bar > .login:hover {
+.container > .top-bar > nav > .login:hover {
     background: var(--hover);
+}
+
+.container > .top-bar > nav > a {
+    display: inline-block;
+    color: var(--text);
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.container > .top-bar > nav > *:not(:last-child) {
+    margin-right: 12px;
+}
+
+.container > .top-bar > nav > a:hover {
+    transform: translateY(-2px);
 }
 
 .container > .front {
@@ -174,7 +189,6 @@ body {
     margin: 8px 0 0;
     color: var(--muted);
     font-size: 13px;
-    line-height: 1.4;
     flex: 1;
 }
 
@@ -210,6 +224,17 @@ body {
     text-decoration: none;
     color: var(--muted);
 }
+
+.container > footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px;
+    justify-content: space-between;
+    padding: 0px 8px;
+}
+
 @keyframes fade_in_up {
     from {
         opacity: 0;

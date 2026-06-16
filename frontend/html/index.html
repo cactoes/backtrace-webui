@@ -18,8 +18,12 @@
                     <svg width="32px" height="32px" viewBox="0 0 75.99 75.99" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" enable-background="new 0 0 75.99 75.99" xml:space="preserve">
                         <path fill="#ffffff" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 41.1615,61.029C 28.0464,61.029 17.4145,50.3971 17.4145,37.2819C 17.4145,26.1675 25.0501,16.8364 35.3618,14.2482C 31.1173,18.5382 28.4964,24.4377 28.4964,30.9494C 28.4964,44.0645 39.1284,54.6964 52.2435,54.6964C 54.2442,54.6964 56.1871,54.449 58.0432,53.9831C 53.739,58.3336 47.765,61.029 41.1615,61.029 Z "/>
                     </svg>
-                    BT Ltd.</div>
-                <button class="login">Login</button>
+                    BT Ltd.
+                </div>
+                <nav>
+                    <a class="animated fade_in delay02" id="home" href="/home">home</a>
+                    <button class="login animated fade_in delay02" id="login">Login</button>
+                </nav>
             </header>
 
             <section class="front animated fade_in_up">
@@ -49,9 +53,7 @@
                     <p>A 64-bit custom-made operating system, using GRUB as bootloader, Which can play Minesweeper in usermode!</p>
                     <div class="card-footer">
                         <div class="card-footer-icon">
-                            <a href="https://github.com/cactoes/virtual_reflections_os">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
+                            <i class="fa-solid fa-angle-right"></i>
                         </div>
                     </div>
                 </span>
@@ -60,9 +62,7 @@
                     <p>Reflection -UI is a c++20 desktop application library. It offers an c++ api to add visual elements to a window. Internally it uses the WebView2 browser to renderer UI components.</p>
                     <div class="card-footer">
                         <div class="card-footer-icon">
-                            <a href="https://github.com/cactoes/reflection">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
+                            <i class="fa-solid fa-angle-right"></i>
                         </div>
                     </div>
                 </span>
@@ -71,9 +71,7 @@
                     <p>A console anime timetable viewer.</p>
                     <div class="card-footer">
                         <div class="card-footer-icon">
-                            <a href="https://github.com/cactoes/kachi">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
+                            <i class="fa-solid fa-angle-right"></i>
                         </div>
                     </div>
                 </span>
@@ -81,18 +79,21 @@
 
             <h2 class="section-title animated fade_in_up delay07">Services</h2>
             <section class="section animated fade_in_up delay05">
-                <span class="card" onclick="window.open('/lists')">
+                <span class="card" onclick="window.open('/lists', '_self')">
                     <h3>Anime / Manga list</h3>
                     <p>Anime & manga tracker</p>
                     <div class="card-footer">
                         <div class="card-footer-icon">
-                            <a href="/lists">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
+                            <i class="fa-solid fa-angle-right"></i>
                         </div>
                     </div>
                 </span>
             </section>
+
+            <footer class="animated fade_in_up delay1">
+                <p id="ver" class="version"></p>
+                <p id="time" class="time"></p>
+            </footer>
         </main>
     </body>
 </html>
