@@ -1,57 +1,120 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
 
-.content {
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.container > .section-title {
+    margin: 0 0 12px;
     display: flex;
-    flex-direction: column;
-}
-
-.content > .item {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    padding: 8px 16px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
-    cursor: pointer;
-}
-
-.content > .item:hover {
-    background-color: var(--secondary-dark);
-}
-
-.content > .item:not(:last-child) {
-    margin-bottom: 16px;
-}
-
-.content > .item > .header {
-    display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
 }
 
-.content > .item > .header > p {
-    margin-left: 8px;
-    color: var(--text-secondary);
+.container > .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
 }
 
-.content > .item > .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.container > .section {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 12px;
 }
 
-.content > .item > .info > .stat {
+.container > .section > .card {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--border);
+    background: rgba(15,15,15,0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    color: var(--text);
 }
 
-.content > .item > .info > .stat > h2 {
+.container > .section > .card:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.container > .section > .card > .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.container > .section > .card > .card-header > i {
+    font-size: 15px;
+    color: var(--muted);
+}
+
+.container > .section > .card > .card-header > p {
+    margin: 0;
+}
+
+.container > .section > .card > .card-stats {
+    display: flex;
+    gap: 16px;
+}
+
+.container > .section > .card > .card-stats > .stat > h2 {
+    font-size: 22px;
     font-weight: 600;
+    margin: 0;
 }
 
-.content > .item > .info > .stat > p {
-    color: var(--text-secondary);
+.container > .section > .card > .card-stats > .stat > p {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 2px 0 0;
+}
+
+.container > .section > .card > .card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container > .section > .card > .card-footer > .card-footer-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 13px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.container > .section > .card > .card-footer > .card-footer-icon:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.container > footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px;
+    justify-content: space-between;
+    padding: 0px 8px;
 }
