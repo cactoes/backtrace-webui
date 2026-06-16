@@ -1,3 +1,4 @@
+// @ts-ignore
 async function main(): Promise<void> {
     util.check_logged_in().then(is_logged_in => {
         const login_button = document.getElementById("login");
