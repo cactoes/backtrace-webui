@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --text: #f6f6f6;
     --text-secondary: #686868;
     --background: #161616;
@@ -34,10 +34,10 @@ body {
     background-color: var(--background);
     width: 100vw;
     height: 100vh;
-    display: flex;
+    display: flex; */
     /* flex-direction: row; */
     /* overflow: hidden; */
-
+/* 
     flex-direction: column;
     padding: 40px;
     background-image: radial-gradient(#ffffff18 1px, transparent 0);
@@ -57,4 +57,93 @@ body {
         width: 70vw;
         margin: 0 auto;
     }
+} */
+
+:root {
+    --bg: #0a0a0a;
+    --panel: rgba(18, 18, 18, 0.72);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.6);
+    --hover: rgba(255, 255, 255, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    font-family: Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+    background: #ffffff;
+    color: #000000;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+@keyframes fade_in_up {
+    from {
+        opacity: 0;
+        transform: translateY(32px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade_in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes fade_in_side {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.animated {
+    -webkit-animation-duration: 800ms;
+    animation-duration: 800ms;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.delay02 { -webkit-animation-delay: .2s;       animation-delay: .2s; }
+.animated.delay05 { -webkit-animation-delay: .5s;       animation-delay: .5s; }
+.animated.delay07 { -webkit-animation-delay: .7s;       animation-delay: .7s; }
+.animated.delay1 {  -webkit-animation-delay: 1s;        animation-delay: 1s; }
+.animated.delay15 { -webkit-animation-delay: 1.5s;      animation-delay: 1.5s; }
+.animated.delay2 {  -webkit-animation-delay: 2s;        animation-delay: 2s; }
+
+.fade_in_up {
+    -webkit-animation-name: fade_in_up;
+    animation-name: fade_in_up;
+}
+
+.fade_in_side {
+    -webkit-animation-name: fade_in_side;
+    animation-name: fade_in_side;
+}
+
+.fade_in {
+    -webkit-animation-name: fade_in;
+    animation-name: fade_in;
 }
