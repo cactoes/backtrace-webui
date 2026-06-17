@@ -1,0 +1,15 @@
+@import url("/files/global.css");
+
+body {
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #050505;
+    color: var(--muted);
+
+    font-size: 13px;
+}
