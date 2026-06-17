@@ -102,11 +102,12 @@ export async function resolve_web_file(fullname: string): Promise<[Uint8Array, {
         case "js":      path = "scripts/js"; break;
         case "css":     path = "styles"; break;
         case "png":
+        case "ico":
         case "jpg":     path = "media"; break;
         case "html":    path = "html"; break;
         default:        return undefined;
     }
-    
+
     const file = Bun.file(`frontend/${path}/${name}.${ext}`);
 
     if (!(await file.exists()))
@@ -121,6 +122,7 @@ export async function resolve_web_file(fullname: string): Promise<[Uint8Array, {
         case "css":     file_meta = { "Content-Type": "text/css" }; break;
         case "html":    file_meta = { "Content-Type": "text/html" }; break;
         case "png":     file_meta = { "Content-Type": "image/png" }; break;
+        case "ico":     file_meta = { "Content-Type": "image/x-icon" }; break;
         case "jpg":     file_meta = { "Content-Type": "image/jpeg" }; break;
         default:        return undefined;
     }
