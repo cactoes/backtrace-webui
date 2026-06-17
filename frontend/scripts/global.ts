@@ -45,7 +45,7 @@ const util = {
             .map(b => b.toString(16).padStart(2, "0"))
             .join("");
     },
-    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<{ message: string, error: boolean, payload?: R } | undefined> {
+    async make_api_call<R>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }, can_redirect: boolean = true): Promise<{ message: string, error: boolean, payload?: R } | undefined> {
         try {
             const base = `${location.protocol}//${location.host}`;
             const result = await fetch(`${base}/api${endpoint}`, {
@@ -59,8 +59,15 @@ const util = {
                 },
                 ...(type != "GET" && { body: JSON.stringify(data) })
             });
-    
-            return await result.json();
+
+            const response_data: { message: string, error: boolean, payload?: R } = await result.json();
+
+            if (can_redirect && result.status == 400 && response_data.message == "error: token was invalid") {
+                window.location.href = "/login";
+                return undefined;
+            }
+
+            return response_data;
         } catch (_) {
             return undefined;            
         }
