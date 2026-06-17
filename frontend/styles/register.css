@@ -17,7 +17,7 @@ body {
 .wrapper {
     width: 100%;
     max-width: 420px;
-    padding: 20px;
+    padding: 16px;
 }
 
 .form {
@@ -26,7 +26,7 @@ body {
     backdrop-filter: blur(18px);
 
     border-radius: 18px;
-    padding: 32px;
+    padding: 28px;
 }
 
 .name {
@@ -51,7 +51,7 @@ body {
     width: 100%;
 
     margin-bottom: 18px;
-    padding: 12px 14px;
+    padding: 10px 12px;
 
     border-radius: 12px;
     border: 1px solid var(--border);
@@ -78,7 +78,7 @@ body {
     width: 100%;
 
     margin-top: 6px;
-    padding: 12px;
+    padding: 10px 12px;
 
     border: 1px solid var(--border);
     border-radius: 12px;
