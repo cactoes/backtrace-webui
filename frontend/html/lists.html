@@ -4,6 +4,7 @@
         <title>backtrace | Lists</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/files/global.css">
         <link rel="stylesheet" href="/files/lists.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="icon" type="image/x-icon" href="/files/icon.ico">
@@ -22,9 +23,9 @@
                 <p>Note</p>
                 <input type="text" id="d#note">
                 <p>State</p>
-                <!-- <input type="text" id="d#state"> -->
                 <div id="d#dropdown" class="dropdown">
                     <span id="d#state"></span>
+                    <i class="fa-solid fa-chevron-down"></i>
                     <div class="content">
                         <p id="dc#finished" class="finished">Finished</p>
                         <p id="dc#watching" class="watching">Watching</p>
@@ -37,44 +38,57 @@
             </div>
             <div class="background"></div>
         </div>
-        <div id="ver"></div>
-        <div class="topbar">
-            <div class="route">
-                <a href="/home">BACKTRACE</a>
-                <p>/</p>
-                <p>LISTS</p>
+
+        <main class="container">
+            <header class="top-bar animated fade_in">
+                <div class="logo">
+                    <svg width="32px" height="32px" viewBox="0 0 75.99 75.99" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" enable-background="new 0 0 75.99 75.99" xml:space="preserve">
+                        <path fill="#ffffff" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 41.1615,61.029C 28.0464,61.029 17.4145,50.3971 17.4145,37.2819C 17.4145,26.1675 25.0501,16.8364 35.3618,14.2482C 31.1173,18.5382 28.4964,24.4377 28.4964,30.9494C 28.4964,44.0645 39.1284,54.6964 52.2435,54.6964C 54.2442,54.6964 56.1871,54.449 58.0432,53.9831C 53.739,58.3336 47.765,61.029 41.1615,61.029 Z "/>
+                    </svg>
+                    BT Ltd.
+                </div>
+                <nav>
+                    <a class="animated fade_in delay02" href="/home">home</a>
+                    <img id="i#pfp" class="pfp">
+                </nav>
+            </header>
+
+            <div class="lists-layout">
+                <aside class="filters animated fade_in_up delay02 noselect">
+                    <div class="selector">
+                        <a id="fs#anime" href="#anime">Anime</a>
+                        <a id="fs#manga" href="#manga">Manga</a>
+                    </div>
+
+                    <h2 class="section-title">filter</h2>
+                    <div class="type noselect">
+                        <p id="ft#finished" class="finished">Finished</p>
+                        <p id="ft#watching" class="watching">Watching</p>
+                        <p id="ft#planned" class="planned">Planned</p>
+                        <p id="ft#dropped" class="dropped">Dropped</p>
+                    </div>
+
+                    <h2 class="section-title">search</h2>
+                    <div class="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="f#search" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="sailor moon">
+                    </div>
+
+                    <h2 class="section-title">sort</h2>
+                    <div class="sort">
+                        <p id="fsort#added" class="selected">Added</p>
+                        <p id="fsort#alphabetical">Alphabetical</p>
+                        <p id="fsort#type">Type</p>
+                    </div>
+
+                    <button class="add-btn" id="f#add">
+                        <i class="fa-solid fa-plus"></i>
+                        Add
+                    </button>
+                </aside>
+
+                <div id="list" class="list animated fade_in_up delay05"></div>
             </div>
-            <div class="profile">
-                <img id="i#pfp">
-            </div>
-        </div>
-        <div class="content">
-            <div class="filters noselect">
-                <div class="selector">
-                    <a id="fs#anime" href="#anime">Anime</a>
-                    <a id="fs#manga" href="#manga">Manga</a>
-                </div>
-                <div class="type noselect">
-                    <p id="ft#finished" class="finished">Finished</p>
-                    <p id="ft#watching" class="watching">Watching</p>
-                    <p id="ft#planned" class="planned">Planned</p>
-                    <p id="ft#dropped" class="dropped">Dropped</p>
-                </div>
-                <div class="search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="f#search" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="sailor moon">
-                </div>
-                <div class="sort">
-                    <p id="fsort#added" class="selected">Added</p>
-                    <p id="fsort#alphabetical">Alphabetical</p>
-                    <p id="fsort#type">Type</p>
-                </div>
-                <div class="add">
-                    <button id="f#add"><i class="fa-solid fa-plus"></i></button>
-                </div>
-            </div>
-            <div id="list" class="list">
-            </div>
-        </div>
+        </main>
     </body>
 </html>

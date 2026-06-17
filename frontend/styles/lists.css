@@ -1,198 +1,226 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
 
-.content {
-    display: flex;
-    flex-direction: column;
-}
-
-.content > .filters {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-}
-
-.content > .filters > .selector {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
-    cursor: pointer;
-    padding: 4px;
-
-    margin-bottom: 8px;
-}
-
-.content > .filters > .selector > a {
-    width: calc(50% - 2px);
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px;
-    transition: .2s background-color ease;
-    text-decoration: none;
-}
-
-.content > .filters > .selector > a:hover,
-.content > .filters > .selector > a.selected {
-    background-color: var(--secondary-dark);
-}
-
 .finished { --color: hsl(236, 15%, 60%); }
 .watching { --color: hsl(128, 15%, 60%); }
-.planned  { --color: hsl(  0, 00%, 60%); }
+.planned  { --color: hsl(  0,  0%, 60%); }
 .dropped  { --color: hsl(  0, 15%, 60%); }
 
-.content > .filters > .type {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
-    cursor: pointer;
-    padding: 4px;
-
-    margin-bottom: 8px;
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
-.content > .filters > .type > p {
-    width: calc(25% - 2px);
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px;
-    transition: .2s background-color ease;
-    text-decoration: none;
-    font-size: 13px;
+.lists-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 14px;
+    align-items: start;
 }
 
-.content > .filters > .type > p:hover,
-.content > .filters > .type > p.selected {
-    background-color: var(--color);
-}
-
-.content > .filters > .search {
-    display: flex;
-    flex-direction: row;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    padding: 12px 8px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
-    margin-bottom: 8px;
-}
-
-.content > .filters > .search > i {
-    margin-left: 8px;
-}
-
-.content > .filters > .search > input {
-    width: 100%;
-    background-color: var(--background);
-    margin-left: 16px;
-}
-
-.content > .filters > .search > input:focus {
-    outline: none;
-}
-
-.content > .filters > .sort {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
-    cursor: pointer;
-    padding: 4px;
-
-    margin-bottom: 8px;
-}
-
-.content > .filters > .sort > p {
-    width: calc(33.3% - 2px);
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px;
-    transition: .2s background-color ease;
-    text-decoration: none;
-    font-size: 13px;
-}
-
-.content > .filters > .sort > p:hover,
-.content > .filters > .sort > p.selected {
-    background-color: var(--secondary-dark);
-}
-
-.content > .filters > .add > button {
-    padding: 4px 12px;
-    background-color: var(--background);
-    border: 1px solid var(--secondary);
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all .2s ease;
-    margin-top: 8px;
-    width: 100%;
-    height: 100%;
-}
-
-.content > .filters > .add > button:focus,
-.content > .filters > .add > button:hover {
-    border: 1px solid var(--primary);
-}
-
-.content > .list > {
+.filters {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--border);
+    background: rgba(15,15,15,0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+    padding: 16px;
+    position: sticky;
+    top: 80px;
 }
 
-.content > .list > .item {
+.filters > .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+    margin: 6px 0 2px;
+}
+
+.filters > .selector {
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    margin-bottom: 4px;
+}
+
+.filters > .selector > a {
+    flex: 1;
+    text-align: center;
+    padding: 6px;
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.filters > .selector > a:hover,
+.filters > .selector > a.selected {
+    background: var(--hover);
+    color: var(--text);
+}
+
+.filters > .type {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--secondary);
-    border-radius: 6px;
-    padding: 8px;
-    background-color: var(--background);
-    transition: .2s background-color ease;
+    gap: 4px;
 }
 
-.content > .list > .item:hover {
-    background-color: var(--secondary-dark);
+.filters > .type > p {
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
-.content > .list > .item:not(:last-child) {
-    margin-bottom: 8px;
-}
-
-.content > .list > .item > h3 {
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-}
-
-.content > .list > .item > p:first-child {
+.filters > .type > p:hover,
+.filters > .type > p.selected {
+    background: var(--hover);
     color: var(--color);
 }
 
-.content > .list > .item > p:last-child {
-    color: var(--text-secondary);
+.filters > .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s ease;
 }
 
+.filters > .search:hover,
+.filters > .search:focus-within {
+    border-color: rgba(255,255,255,0.2);
+}
+
+.filters > .search > i {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.filters > .search > input {
+    flex: 1;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    border: none;
+}
+
+.filters > .search > input::placeholder {
+    color: var(--muted);
+}
+
+.filters > .sort {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filters > .sort > p {
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.filters > .sort > p:hover,
+.filters > .sort > p.selected {
+    background: var(--hover);
+    color: var(--text);
+}
+
+.filters > .add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.filters > .add-btn:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+/* ── list items ── */
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.list > .item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid var(--border);
+    background: rgba(15,15,15,0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.list > .item:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.list > .item > p:first-child {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color);
+    letter-spacing: 0.04em;
+}
+
+.list > .item > h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.list > .item > p:last-child {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* ── dialogue ── */
+
 .dialogue {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-
     display: none;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 
 .dialogue > .background {
@@ -201,131 +229,165 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    opacity: .7;
-    background-color: var(--background);
-    z-index: 1;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .dialogue > .settings {
     position: relative;
     z-index: 2;
-    background-color: var(--background);
     display: flex;
     flex-direction: column;
-
+    gap: 6px;
+    width: 320px;
     padding: 24px;
+    border: 1px solid var(--border);
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+}
 
-    width: 300px;
+.dialogue > .settings > span > p {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
 
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
+.dialogue > .settings > h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px;
 }
 
 .dialogue > .settings > .close {
     position: absolute;
-    top: -6px;
-    right: 0;
-
-    margin-right: 24px;
-    margin-top: 24px;
-
-    cursor: pointer;
-}
-
-.dialogue > .settings > h2 {
-    color: var(--text);
-    margin-bottom: 24px;
-}
-
-.dialogue > .settings > span {
+    top: 20px;
+    right: 20px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
     display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease;
 }
 
-.dialogue > .settings > span > p:first-child {
-    color: var(--secondary);
-    font-weight: 600;
+.dialogue > .settings > .close:hover {
+    background: var(--hover);
 }
 
 .dialogue > .settings > p {
-    margin-bottom: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
 }
 
 .dialogue > .settings > input {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 13px;
     outline: none;
-    background-color: var(--background);
-    border: 1px solid var(--secondary);
-    border-radius: 5px;
-    padding: 4px 12px;
-    margin-bottom: 18px;
-    transition: all .2s ease;
-
-    margin-bottom: 8px;
+    transition: border-color 0.2s ease;
 }
 
 .dialogue > .settings > input:hover,
 .dialogue > .settings > input:focus {
-    outline: none;
-    border: 1px solid var(--primary);
-}
-
-.dialogue > .settings > button {
-    padding: 4px 12px;
-    background-color: var(--background);
-    border: 1px solid var(--secondary);
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all .2s ease;
-    margin-top: 8px;
-}
-
-.dialogue > .settings > button:focus,
-.dialogue > .settings > button:hover {
-    border: 1px solid var(--primary);
-}
-
-.dialogue > .settings > button.delete:hover {
-    border: 1px solid var(--red);
-    background-color: var(--secondary-dark);
+    border-color: rgba(255,255,255,0.2);
 }
 
 .dialogue > .settings > .dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     position: relative;
-    display: inline-block;
-
-    background-color: var(--background);
-    border: 1px solid var(--secondary);
-    border-radius: 5px;
-    padding: 4px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: border-color 0.2s ease;
 }
 
 .dialogue > .settings > .dropdown > span {
     color: var(--color);
 }
 
+.dialogue > .settings > .dropdown > i {
+    font-size: 11px;
+    color: var(--muted);
+}
+
 .dialogue > .settings > .dropdown > .content {
     display: none;
     position: absolute;
-    background-color: var(--background);
-    min-width: calc(300px - 48px);
-    z-index: 1;
-    border: 1px solid var(--secondary);
-    border-radius: 5px;
-    margin-left: -14px;
-    margin-top: 4px;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(15,15,15,0.98);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 10;
+    backdrop-filter: blur(16px);
 }
 
 .dialogue > .settings > .dropdown > .content > p {
-    cursor: pointer;
-    padding: 4px 12px;
+    padding: 9px 14px;
+    font-size: 13px;
     color: var(--color);
-    transition: .2s background-color ease;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .dialogue > .settings > .dropdown > .content > p:hover {
-    background-color: var(--secondary-dark);
+    background: var(--hover);
 }
 
-.dialogue > .settings > .dropdown.fake_hover .content,
-.dialogue > .settings > .dropdown:hover .content {
+.dialogue > .settings > .dropdown.open .content {
     display: block;
+}
+
+.dialogue > .settings > button {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dialogue > .settings > button:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.dialogue > .settings > button.delete:hover {
+    border-color: hsl(0, 15%, 60%);
+    color: hsl(0, 15%, 60%);
+}
+
+@media (max-width: 640px) {
+    .lists-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        position: static;
+    }
 }

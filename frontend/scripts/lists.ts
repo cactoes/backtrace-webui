@@ -46,8 +46,6 @@ function create_list_item(obj: instance_object_t) {
         element.get<HTMLInputElement>("d#note").value = obj.current;
         element.get<HTMLInputElement>("d#state").innerText = resolve_status(obj.state)[0];
         element.get<HTMLInputElement>("d#state").className = resolve_status(obj.state)[1];
-
-        window.scrollTo({ top: 0 });
     };
 
     const p1 = document.createElement("p");
@@ -124,7 +122,15 @@ async function main() {
                 element.query_loop("div.selector>a", _e => _e.classList.remove("selected"));
                 element.toggle_class(item_element as HTMLElement, "selected");
                 window.location.hash = `${item_element.id.slice(2)}`;
+
                 update_list();
+
+                let list_selector = window.location.hash.substring(1);
+
+                element.get<HTMLParagraphElement>("ft#finished").innerText = `Finished (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 0).length})`;
+                element.get<HTMLParagraphElement>("ft#watching").innerText = `Watching (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 1).length})`;
+                element.get<HTMLParagraphElement>("ft#planned").innerText = `Planned (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 2).length})`;
+                element.get<HTMLParagraphElement>("ft#dropped").innerText = `Dropped (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 3).length})`;
             }
         });
     });
@@ -161,8 +167,6 @@ async function main() {
             element.get<HTMLInputElement>("d#note").value = "";
             element.get<HTMLInputElement>("d#state").innerText = resolve_status(2)[0];
             element.get<HTMLInputElement>("d#state").className = resolve_status(2)[1];
-
-            window.scrollTo({ top: 0 });
         }
     });
 
@@ -234,12 +238,6 @@ async function main() {
         });
     });
 
-    element.link("d#dropdown", {
-        click: (e) => {
-            element.toggle_class(element.get("d#dropdown"), "fake_hover");
-        }
-    });
-
     let list_selector = window.location.hash.substring(1);
 
     if (!["anime", "manga"].includes(list_selector)) {
@@ -247,11 +245,22 @@ async function main() {
         list_selector = "anime";
     }
 
+    element.link("d#dropdown", {
+        click: (e) => {
+            e.stopPropagation();
+            element.toggle_class(element.get("d#dropdown"), "open");
+        }
+    });
+
+    document.addEventListener("click", () => {
+        element.get("d#dropdown").classList.remove("open");
+    });
+
     element.get<HTMLAnchorElement>(`fs#${list_selector}`).classList.add("selected");
 
     const _lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
     lists = _lists!.payload!.data;
-    
+
     element.get<HTMLParagraphElement>("ft#finished").innerText = `Finished (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 0).length})`;
     element.get<HTMLParagraphElement>("ft#watching").innerText = `Watching (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 1).length})`;
     element.get<HTMLParagraphElement>("ft#planned").innerText = `Planned (${lists[list_selector as "anime" | "manga"].filter(k => k.state == 2).length})`;
