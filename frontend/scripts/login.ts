@@ -15,7 +15,7 @@ async function submit_callback() {
     password_input.classList.remove("error");
 
     const result = await util.make_api_call<{ token: string }>("POST", "/account/login", { username: username_input.value, password: await util.sha256(password_input.value) });
-    
+
     if (!result || result.error) {
         element.get<HTMLInputElement>("input#username").classList.add("error");
         element.get<HTMLInputElement>("input#password").classList.add("error");

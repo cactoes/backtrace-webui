@@ -87,7 +87,6 @@ export function check_permissions(permissions: number, required: number) {
 
 export async function get_user_from_token(token: string | null): Promise<user_t | undefined> {
     const payload = await JWTManager.get_instance().get_payload<{ uuid: number }>(token);
-
     if (!payload)
         return undefined;
 
