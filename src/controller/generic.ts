@@ -3,9 +3,9 @@
 /// @brief      generic routes
 //==========================================
 
-import { account_manager } from "../manager/manager";
+import { account_manager } from "manager/manager";
 import { BunRouter, resolve_web_file } from "../server";
-import { permissions_t } from "../manager/account";
+import { permissions_t } from "manager/account";
 
 export const router = new BunRouter();
 

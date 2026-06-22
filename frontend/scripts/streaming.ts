@@ -1,6 +1,4 @@
-import { element, util, component } from "./global.ts";
-
-export interface video_meta_entry_t {
+interface video_meta_entry_t {
     episodes: {
         name: string,
         hash: string
@@ -67,7 +65,7 @@ async function main() {
 
         const episode_list = document.createElement("ul");
 
-        for (const episode of show_info[show_name]!.episodes) {
+        for (const episode of show_info[show_name].episodes) {
             const episode_entry = document.createElement("li");
 
             const span = document.createElement("span");

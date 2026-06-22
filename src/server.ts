@@ -3,7 +3,7 @@
 /// @brief      bun router helper functions
 //==========================================
 
-import { data_manager } from "./manager/manager";
+import { data_manager } from "manager/manager";
 import type { response_builder } from "./utils/utils";
 
 export class BunRouter {

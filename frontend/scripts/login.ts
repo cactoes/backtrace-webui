@@ -1,5 +1,3 @@
-import { element, util, jwt } from "./global.ts";
-
 async function submit_callback() {
     const username_input = element.get<HTMLInputElement>("input#username");
     const password_input = element.get<HTMLInputElement>("input#password");

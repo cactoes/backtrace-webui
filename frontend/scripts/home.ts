@@ -1,7 +1,3 @@
-import { element, util, component } from "./global.ts";
-import type { instance_object_t } from "./lists.ts";
-import type { video_meta_entry_t } from "./streaming.ts";
-
 // @ts-ignore
 async function main() {
     await util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
@@ -57,7 +53,7 @@ async function main() {
         element.get<HTMLHeadingElement>("il#shows").innerText = `${Object.keys(_shows.payload!).length}`;
         let episode_count = 0;
         for (const show_name of Object.keys(_shows.payload!)) {
-            episode_count += _shows.payload![show_name]!.episodes.length;
+            episode_count += _shows.payload![show_name].episodes.length;
         }
         element.get<HTMLHeadingElement>("il#episodes").innerText = `${episode_count}`;
     }

@@ -1,7 +1,4 @@
-import { FuzzySearch } from "./fuzzy_search.ts";
-import { element, util, component } from "./global.ts";
-
-export interface instance_object_t {
+interface instance_object_t {
     _id: string,
     name: string,
     current: string,
@@ -9,10 +6,10 @@ export interface instance_object_t {
     state: 0 | 1 | 2 | 3
 };
 
-// async function edit_dialogue(obj: instance_object_t[]) {
-//     // update dialogue
-//     // show dialogue
-// }
+async function edit_dialogue(obj: instance_object_t[]) {
+    // update dialogue
+    // show dialogue
+}
 
 let lists: { anime: instance_object_t[]; manga: instance_object_t[]; } = {
     anime: [],
@@ -111,8 +108,8 @@ async function main() {
             click: () => {
                 element.toggle_class(item_element as HTMLElement, "selected");
                 item_element.classList.contains("selected")
-                    ? filters.push(resolve_filter(item_element.classList[0]!))
-                    : filters = filters.filter(filter => filter != resolve_filter(item_element.classList[0]!));
+                    ? filters.push(resolve_filter(item_element.classList[0]))
+                    : filters = filters.filter(filter => filter != resolve_filter(item_element.classList[0]));
 
                 update_list();
             }
