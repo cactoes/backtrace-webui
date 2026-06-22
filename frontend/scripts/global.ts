@@ -1,4 +1,4 @@
-const element = {
+export const element = {
     get<T extends HTMLElement>(elementid: string) {
         return (document.getElementById(elementid) as T);
     },
@@ -25,7 +25,7 @@ const element = {
     }
 };
 
-const jwt = {
+export const jwt = {
     get() {
         return window.localStorage.getItem("token") || "";
     },
@@ -34,7 +34,7 @@ const jwt = {
     }
 };
 
-const util = {
+export const util = {
     make_interval(fn: () => void, ms: number): void {
         fn();
         setInterval(fn, ms);
@@ -118,7 +118,7 @@ const util = {
     }
 };
 
-const component = {
+export const component = {
     router: {
         update() {
             const nav_element = document.getElementById("navigation")!;
@@ -187,19 +187,19 @@ const component = {
     }
 };
 
-const router = {
+export const router = {
     to(loc: string) {
         window.location.href = loc;
     }
 };
 
-class button_component extends HTMLElement {
-    connectedCallback() {
-        const label = this.getAttribute("label");
-        this.innerHTML = `
-            <button class="component_button_styling" type="button">${label}</button>
-        `
-    }
-}
+// class button_component extends HTMLElement {
+//     connectedCallback() {
+//         const label = this.getAttribute("label");
+//         this.innerHTML = `
+//             <button class="component_button_styling" type="button">${label}</button>
+//         `
+//     }
+// }
 
-customElements.define("c-button", button_component);
+// customElements.define("c-button", button_component);

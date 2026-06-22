@@ -7,9 +7,9 @@ import { response_builder } from "../utils/utils";
 import { BunRouter, get_body } from "../server";
 import { account_manager, proxy_manager } from "../manager/manager";
 import type { File } from "buffer";
-import { save_pfp } from "manager/data";
-import { get_server_details } from "manager/proxy";
-import { permissions_t } from "manager/account";
+import { save_pfp } from "../manager/data";
+import { get_server_details } from "../manager/proxy";
+import { permissions_t } from "../manager/account";
 
 export const router = new BunRouter();
 

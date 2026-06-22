@@ -41,7 +41,7 @@ class Helper {
     }
 }
 
-class FuzzySearch {
+export class FuzzySearch {
     constructor(private haystack: any[] = [], private keys: string[] = [], private options: any = {}) {
         if (! Array.isArray(keys)) {
             options = keys;

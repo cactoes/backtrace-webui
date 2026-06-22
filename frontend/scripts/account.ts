@@ -1,3 +1,5 @@
+import { element, util, component, jwt } from "./global.ts";
+
 // TODO @since 18/09/2025 -- 14:43
 // refactor
 
@@ -9,7 +11,13 @@ async function main() {
     
     element.link("file", {
         change: () => {
-            const file_data: File = element.get<HTMLInputElement>("file").files![0];
+            const file_data: File | undefined = element.get<HTMLInputElement>("file").files![0];
+            if (!file_data) {
+                element.get<HTMLParagraphElement>("fu#label").classList.add("error");
+                element.get<HTMLParagraphElement>("file_stats").innerHTML = `Unable to load file!`;
+                return;
+            }
+
             const is_file_too_big = file_data.size > 1 * 1024 * 1014;
     
             if (is_file_too_big)
@@ -27,7 +35,7 @@ async function main() {
             if (!input!.files?.length) return;
     
             const form = new FormData();
-            form.append("image", input.files[0]);
+            form.append("image", input.files![0]!);
     
             const res = await fetch(`${util.get_api_url()}/account/upload/pfp`, {
                 method: "POST",

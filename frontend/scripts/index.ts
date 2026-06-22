@@ -1,3 +1,5 @@
+import { element, util } from "./global.ts";
+
 function format_time(date: Date) {
     const dt_ms = Date.now() - date.getTime();
     const dt_days = Math.floor(dt_ms / (1000 * 60 * 60 * 24));
