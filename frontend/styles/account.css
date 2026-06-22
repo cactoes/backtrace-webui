@@ -1,75 +1,131 @@
 @import url("/files/global.css");
 @import url("/files/component.topbar.css");
 
-.content > .container > .title {
-    font-weight: 400;
-    margin-bottom: 8px;
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
-.content > .container:not(:last-child) {
-    margin-bottom: 26px;
-}
-
-.content > .container > input {
+.container > .section-title {
+    margin: 0 0 12px;
     display: flex;
-    justify-content: center;
-    width: 100%;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    background-color: var(--background);
-    transition: .2s all ease;
-    padding: 8px 16px;
-    margin-right: 16px;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
 }
 
-.content > .container > .fileuploader input {
+.container > .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.content > .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--border);
+    background: rgba(15,15,15,0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.content > .panel > .label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+}
+
+.content > .panel > input {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s ease;
+}
+
+.content > .panel > input:not([disabled]):hover,
+.content > .panel > input:not([disabled]):focus {
+    border-color: rgba(255,255,255,0.2);
+}
+
+.content > .panel > input[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.content > .panel > .fileuploader {
+    display: flex;
+    gap: 8px;
+}
+
+.content > .panel > .fileuploader input {
     display: none;
 }
 
-.content > .container > .fileuploader {
+.content > .panel > .fileuploader > label {
+    flex: 1;
     display: flex;
-    flex-direction: row;
-}
-
-.content > .container > .fileuploader > label.error {
-    border: 1px solid var(--red);
-}
-
-.content > .container > .fileuploader > label {
-    display: flex;
+    align-items: center;
     justify-content: center;
-    width: 100%;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    background-color: var(--background);
-    transition: .2s all ease;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+    font-size: 13px;
     cursor: pointer;
-    padding: 8px 16px;
-    margin-right: 16px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.content > .container > .fileuploader > label:focus,
-.content > .container > .fileuploader > label:hover {
-    background-color: var(--secondary-dark);
+.content > .panel > .fileuploader > label > i {
+    font-size: 13px;
+    color: var(--muted);
 }
 
-.content > .container > .fileuploader > button {
+.content > .panel > .fileuploader > label:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
+}
+
+.content > .panel > .fileuploader > label.error {
+    border-color: hsl(0, 15%, 60%);
+}
+
+.content > .panel > .fileuploader > button {
     padding: 8px 16px;
-    background-color: var(--background);
-    border: 1px solid var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: all .2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.content > .container > .fileuploader > button:focus,
-.content > .container > .fileuploader > button:hover {
-    background-color: var(--secondary-dark);
+.content > .panel > .fileuploader > button:hover {
+    background: var(--hover);
+    transform: translateY(-2px);
 }
 
-.content > .container > #file_stats {
-    padding: 4px;
-    margin-left: 4px;
-    color: var(--text-secondary);
+.content > .panel > #file_stats {
     font-size: 12px;
+    color: var(--muted);
 }
