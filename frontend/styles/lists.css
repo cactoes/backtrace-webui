@@ -164,8 +164,6 @@
     transform: translateY(-2px);
 }
 
-/* ── list items ── */
-
 .list {
     display: flex;
     flex-direction: column;
@@ -208,8 +206,6 @@
     color: var(--muted);
     margin: 0;
 }
-
-/* ── dialogue ── */
 
 .dialogue {
     position: fixed;
