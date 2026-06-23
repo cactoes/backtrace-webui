@@ -7,6 +7,13 @@ type MakeFieldsOptional<T> = {
     [K in keyof T]?: T[K] | undefined;
 };
 
+interface config_file_t {
+    version: {
+        ui: string;
+        api: string;
+    }
+}
+
 //==========================================
 /// @file       utils/mutex.ts
 //==========================================

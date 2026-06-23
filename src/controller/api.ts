@@ -5,7 +5,7 @@
 
 import { response_builder } from "../utils/utils";
 import { BunRouter, get_body } from "../server";
-import { account_manager, proxy_manager } from "../manager/manager";
+import { account_manager, proxy_manager, data_manager } from "../manager/manager";
 import type { File } from "buffer";
 import { save_pfp } from "manager/data";
 import { get_server_details } from "manager/proxy";
@@ -393,10 +393,13 @@ class api_controller {
         const data_toga = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
             "GET", "toga", "/");
 
+        const [ file, release ] = await data_manager.get_file_with_lock<config_file_t>("config");
+        release();
+
         return new response_builder()
             .set_payload({
-                ui: "2.1.0",
-                api: "0.0.1",
+                ui: file.version.ui,
+                api: file.version.api,
                 proxy: {
                     "yuno": data_yuno?.data?.version || "0.0.0",
                     "toga": data_toga?.data?.version || "0.0.0",
