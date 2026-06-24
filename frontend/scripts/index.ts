@@ -60,24 +60,8 @@ async function main(): Promise<void> {
         }
     });
 
-    util.make_api_call<{ ui: string, api: any, proxy: any }>("GET", "/version").then(result => {
-        element.get<HTMLDivElement>("ver").innerText = `v${result!.payload!.ui}`;
-    });
-
-    util.make_interval(() => {
-        const fmt_time = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
-
-        const now = new Date();
-
-        const [ hours, minutes, seconds ] = [
-            fmt_time(now.getHours()),
-            fmt_time(now.getMinutes()),
-            fmt_time(now.getSeconds())
-        ];
-
-        document.getElementById("time")!.innerText =
-            `${hours} : ${minutes} : ${seconds}`;
-    }, 1000);
+    component.set_version();
+    component.set_clock();
 
     document
         .querySelectorAll("section>span")

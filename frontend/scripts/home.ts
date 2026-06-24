@@ -2,31 +2,8 @@
 async function main() {
     await util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
     component.set_pfp();
-
-    util.make_api_call<{ ui: string, api: any, proxy: any }>("GET", "/version").then(result => {
-        element.get<HTMLDivElement>("ver").innerText = `v${result!.payload!.ui}`;
-    });
-
-    util.make_interval(() => {
-        const fmt_time = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
-
-        const now = new Date();
-
-        const [ hours, minutes, seconds ] = [
-            fmt_time(now.getHours()),
-            fmt_time(now.getMinutes()),
-            fmt_time(now.getSeconds())
-        ];
-
-        document.getElementById("time")!.innerText =
-            `${hours} : ${minutes} : ${seconds}`;
-    }, 1000);
-
-    // document.querySelectorAll("div.item").forEach(item_element => {
-    //     element.link(item_element.id, {
-    //         click: () => router.to(`/${item_element.getAttribute("link") || "home"}`)
-    //     });
-    // });
+    component.set_version();
+    component.set_clock();
 
     const _lists = await util.make_api_call<{ message: string, success: boolean, data: { anime: instance_object_t[], manga: instance_object_t[] } }>("GET", "/lists");
 
