@@ -37,7 +37,7 @@
     border: 1px solid var(--border);
     background: rgba(15,15,15,0.65);
     backdrop-filter: blur(16px);
-    border-radius: 14px;
+    border-radius: 10px;
     padding: 16px;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
@@ -93,7 +93,7 @@
 .container > .section > .card > .card-footer > .card-footer-icon {
     width: 28px;
     height: 28px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid var(--border);
     background: rgba(255,255,255,0.02);
     color: var(--muted);
