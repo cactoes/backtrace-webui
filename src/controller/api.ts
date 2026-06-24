@@ -23,7 +23,7 @@ class api_controller {
     public static async services_list(req: Bun.BunRequest<"/services/list">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -118,7 +118,7 @@ class api_controller {
     public static async lists(req: Bun.BunRequest<"/lists">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -155,7 +155,7 @@ class api_controller {
     public static async lists_anime(req: Bun.BunRequest<"/lists/anime">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -196,7 +196,7 @@ class api_controller {
     public static async lists_anime_delete(req: Bun.BunRequest<"/lists/anime">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -232,7 +232,7 @@ class api_controller {
     public static async lists_anime_create(req: Bun.BunRequest<"/lists/anime/create">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -272,7 +272,7 @@ class api_controller {
     public static async lists_manga(req: Bun.BunRequest<"/lists/manga">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -313,7 +313,7 @@ class api_controller {
     public static async lists_manga_delete(req: Bun.BunRequest<"/lists/manga">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -349,7 +349,7 @@ class api_controller {
     public static async lists_manga_create(req: Bun.BunRequest<"/lists/manga/create">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -410,7 +410,7 @@ class api_controller {
     public static async all_shows(req: Bun.BunRequest<"/shows">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -433,7 +433,7 @@ class api_controller {
     public static async video(req: Bun.BunRequest<"/video/*">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
@@ -472,7 +472,7 @@ class api_controller {
     public static async subs(req: Bun.BunRequest<"/subs/*">) {
         const result = await account_manager.get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || null);
         if (!result) {
-            return new response_builder(400)
+            return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
