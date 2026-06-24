@@ -26,7 +26,7 @@
     border: 1px solid var(--border);
     background: rgba(15,15,15,0.65);
     backdrop-filter: blur(16px);
-    border-radius: 14px;
+    border-radius: 10px;
     padding: 16px;
     position: sticky;
     top: 80px;
@@ -54,7 +54,7 @@
     flex: 1;
     text-align: center;
     padding: 6px;
-    border-radius: 7px;
+    border-radius: 8px;
     font-size: 13px;
     color: var(--muted);
     text-decoration: none;
@@ -177,7 +177,7 @@
     border: 1px solid var(--border);
     background: rgba(15,15,15,0.65);
     backdrop-filter: blur(16px);
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 14px 16px;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
@@ -242,7 +242,7 @@
     background: rgba(10, 10, 10, 0.65);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
+    border-radius: 10px;
 }
 
 .dialogue > .settings > span > p {
@@ -265,7 +265,7 @@
     right: 20px;
     width: 28px;
     height: 28px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid var(--border);
     background: rgba(255,255,255,0.02);
     color: var(--muted);
@@ -290,7 +290,7 @@
 .dialogue > .settings > input {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px 12px;
     color: var(--text);
     font-size: 13px;
@@ -310,7 +310,7 @@
     position: relative;
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 13px;
