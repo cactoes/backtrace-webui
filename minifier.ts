@@ -117,12 +117,34 @@ async function main(argc: number, argv: string[]): Promise<number> {
     
     const css_minify_timer = timer.started();
 
+    const style_files = [];
+
     for (const file of fs.readdirSync(styles_path)) {
         if (file.endsWith(".min.css") || !file.endsWith(".css"))
             continue;
 
+        style_files.push({ filename: file, data: undefined });
+    }
+
+    for (const file of fs.readdirSync(styles_path)) {
+        if (file.endsWith(".min.css") || !file.endsWith(".css"))
+            continue;
         
-        const style = await Bun.file(path.join(styles_path, file)).text();
+        let style = await Bun.file(path.join(styles_path, file)).text();
+
+        const imports = style.split("\n").filter(a => a.startsWith("@import url"))
+        .map(p => {
+            const begin = p.indexOf("/", p.indexOf("/") + 1) + 1;
+            const end = p.lastIndexOf("\"");
+            return [p.slice(begin, end), p];
+        })
+        .filter(a => style_files.find(b => b.filename == a[0]));
+
+        for (const [filename, target] of imports) {
+            const remote_file = await Bun.file(path.join(styles_path, filename)).text();
+            style = style.replace(target, remote_file);
+        }
+
         const style_min = minify_css(style);
         
         Bun.file(path.join(styles_path, "build/", file.replace(".css", ".min.css"))).write(style_min);
