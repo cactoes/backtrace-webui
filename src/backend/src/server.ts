@@ -2,7 +2,7 @@ import * as Bun from "bun";
 import { response_builder } from "./response_builder";
 import { get_certs } from "./manager/data_manager";
 
-export class bun_router {
+export class BunRouter {
     public routes: { [key: string]: { [m: string ]: (req: Bun.BunRequest<any>) => Promise<Response> } }[] = [];
 
     private add_route(url: string, method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", callback: any) {
@@ -50,14 +50,14 @@ export class bun_router {
     }
 };
 
-export class bun_server {
+export default class bun_server {
     public routes: any = {};
 
     constructor(
         public port: string | undefined,
         private use_certs: boolean = false) {}
 
-    public add_router(url: string, router: bun_router) {
+    public add_router(url: string, router: BunRouter) {
         if (url == "" || url == "/") {
             Object.assign(this.routes, ...router.routes);
             return;

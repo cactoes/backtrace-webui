@@ -2,10 +2,11 @@ import { get_user_from_token, check_permissions, login_user, JWTManager, registe
 import { get_file_with_lock, save_pfp } from "@backend/manager/data_manager";
 import { get_all_server_details, probe_remote, make_remote_request, get_server_details, make_remote_request_raw } from "@backend/manager/proxy_manager";
 import { response_builder } from "@backend/response_builder";
-import { bun_router, get_body } from "@backend/server";
+import { BunRouter, get_body } from "@backend/server";
 import type { File } from "buffer";
+import AbstractController from "./abstract_controller";
 
-export default class apicontroller {
+export default class ApiController implements AbstractController {
     constructor() {}
 
     private async fallback(req: Bun.BunRequest<"/*">) {
@@ -16,13 +17,16 @@ export default class apicontroller {
 
     private async services_list(req: Bun.BunRequest<"/services/list">) {
         const result = await get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
-        if (!result) {
+        
+        if (result == undefined) {
             return new response_builder(401)
                 .set_message("error: token was invalid");
         }
 
         const details = await get_all_server_details();
+
         const result_servers: [string, boolean][] = [];
+
         for (const server_id of Object.keys(details))
             result_servers.push([server_id, await probe_remote(server_id)]);
 
@@ -485,8 +489,8 @@ export default class apicontroller {
         });
     }
 
-    public create_bindings(): bun_router {
-        const router = new bun_router();
+    public create_router(): BunRouter {
+        const router = new BunRouter();
         router.get("/*", this.fallback.bind(this));
         router.get("/services/list", this.services_list.bind(this));
         router.post("/account/upload/pfp", this.account_upload_pfp.bind(this));

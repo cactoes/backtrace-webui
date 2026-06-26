@@ -1,8 +1,9 @@
 import { check_permissions, get_user_from_token, permissions_t } from "@backend/manager/account_manager";
 import { resolve_web_file } from "@backend/manager/data_manager";
-import { bun_router } from "@backend/server";
+import { BunRouter } from "@backend/server";
+import AbstractController from "./abstract_controller";
 
-export default class webcontroller {
+export default class WebController implements AbstractController {
     static pages = [
         { name: "home", required_permissions: 0, },
         { name: "account", required_permissions: 0, },
@@ -17,11 +18,11 @@ export default class webcontroller {
     constructor() {}
 
     private check_valid_page(page_name: string): boolean {
-        return webcontroller.pages.find(p => p.name == page_name) != undefined;
+        return WebController.pages.find(p => p.name == page_name) != undefined;
     }
 
     private check_page_permissions(page_name: string, user_permissions: number): boolean {
-        const page = webcontroller.pages.find(p => p.name == page_name);
+        const page = WebController.pages.find(p => p.name == page_name);
         if (!page)
             return false;
 
@@ -78,8 +79,8 @@ export default class webcontroller {
         return new Response(file as BodyInit, { headers: { ...meta } });
     }
 
-    public create_bindings(): bun_router {
-        const router = new bun_router();
+    public create_router(): BunRouter {
+        const router = new BunRouter();
         router.get("/", this.home.bind(this));
         router.get("/:page", this.page.bind(this));
         router.get("/:page/*", this.page_backup.bind(this));
