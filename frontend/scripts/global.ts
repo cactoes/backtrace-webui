@@ -54,15 +54,15 @@ const util = {
                 headers: {
                     "Accept": "application/json",
                     "Authorization": jwt.get(),
-                    ...(type != "GET" && { "Content-Type": "application/json" }),
+                    ...(data && { "Content-Type": "application/json" }),
                     ...headers
                 },
-                ...(type != "GET" && { body: JSON.stringify(data) })
+                ...(data && { body: JSON.stringify(data) })
             });
 
             const response_data: { message: string, error: boolean, payload?: R } = await result.json();
 
-            if (can_redirect && result.status == 400 && response_data.message == "error: token was invalid") {
+            if (can_redirect && result.status == 401) {
                 window.location.href = "/login";
                 return undefined;
             }
@@ -119,63 +119,6 @@ const util = {
 };
 
 const component = {
-    router: {
-        update() {
-            const nav_element = document.getElementById("navigation")!;
-
-            window.location.pathname.split("/").filter(Boolean).forEach(segment => {
-                const p = document.createElement("p");
-                p.innerHTML = `${segment.slice(0, 1).toUpperCase()}${segment.slice(1)}`;
-                nav_element.appendChild(p);
-
-                const slice = document.createElement("div");
-                slice.className = "slice";
-                slice.innerText = "/";
-                nav_element.appendChild(slice);
-            });
-
-            nav_element.removeChild(nav_element.lastChild!);
-
-            (nav_element.firstElementChild as HTMLParagraphElement).addEventListener("click", () => {
-                window.location.href = "/";
-            });
-        }
-    },
-    sidebar: {
-        async setup() {
-            const result = await util.make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
-            const url = window.location.pathname.split("/").filter(Boolean)[0];
-
-            const sidebar = document.querySelector(".sidebar")!;
-            sidebar.innerHTML = `<div class="sidebar">
-                    <div class="section1">
-                        <div class="image"><img src="/files/pfp/${result!.payload!.user.uuid}"></div>
-                        <div class="details">
-                            <!-- // TODO @since 01/05/2025 -- 20:49
-                                // add skeleton loaders -->
-                            <h3>${result!.payload!.user.username}</h3>
-                            <p>${result!.payload!.user.uuid}</p>
-                        </div>
-                    </div>
-                    <div id="sidebar" class="section2">
-                        <button id="button#sidebar#home" class="button ${url == "home" ? "active" : ""}"><i class="fa-solid fa-house"></i>Home</button>
-                        <button id="button#sidebar#profile" class="button ${url == "profile" ? "active" : ""}"><i class="fa-solid fa-user"></i>Profile</button>
-                        <button id="button#sidebar#passwords" class="button ${url == "passwords" ? "active" : ""}"><i class="fa-solid fa-lock"></i>Passwords</button>
-                        <button id="button#sidebar#lists" class="button ${url == "lists" ? "active" : ""}"><i class="fa-solid fa-list"></i>Lists</button>
-                    </div>
-                </div>`
-            
-            component.router.update();
-
-            document.getElementById("sidebar")!.querySelectorAll("button").forEach(button => {
-                element.link(button.id, {
-                    click: () => {
-                        window.location.href = `${button.id.split("#").at(-1)}`
-                    }
-                });
-            });
-        }
-    },
     async set_pfp() {
         const result = await util.make_api_call<{ user: { username: string, uuid: number } }>("GET", "/account/public/me");
         element.get<HTMLImageElement>("i#pfp").src = `/files/pfp/${result!.payload!.user.uuid}`;
@@ -184,6 +127,30 @@ const component = {
                 router.to("/account");
             }
         });
+    },
+    async set_version() {
+        util.make_api_call<{ ui: string, api: any, proxy: any }>("GET", "/version").then(result => {
+            if (!result || !result.payload)
+                return;
+
+            element.get<HTMLDivElement>("ver").innerText = `v${result!.payload!.ui}`;
+        });
+    },
+    async set_clock() {
+        util.make_interval(() => {
+            const fmt_time = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
+
+            const now = new Date();
+
+            const [ hours, minutes, seconds ] = [
+                fmt_time(now.getHours()),
+                fmt_time(now.getMinutes()),
+                fmt_time(now.getSeconds())
+            ];
+
+            document.getElementById("time")!.innerText =
+                `${hours} : ${minutes} : ${seconds}`;
+        }, 1000);
     }
 };
 
@@ -192,14 +159,3 @@ const router = {
         window.location.href = loc;
     }
 };
-
-class button_component extends HTMLElement {
-    connectedCallback() {
-        const label = this.getAttribute("label");
-        this.innerHTML = `
-            <button class="component_button_styling" type="button">${label}</button>
-        `
-    }
-}
-
-customElements.define("c-button", button_component);

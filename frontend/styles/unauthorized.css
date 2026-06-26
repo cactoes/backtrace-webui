@@ -8,8 +8,27 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: #050505;
-    color: var(--muted);
+    flex-direction: column;
 
+    position: relative;
+}
+
+h3 {
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.redirect-text {
     font-size: 13px;
+    color: var(--muted);
+}
+
+.redirect-text > a {
+    color: var(--text);
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.redirect-text > a:hover {
+    transform: translateY(-2px);
 }
