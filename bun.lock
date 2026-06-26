@@ -3,17 +3,23 @@
   "workspaces": {
     "": {
       "name": "backend",
+      "devDependencies": {
+        "@types/bun": "latest",
+        "@types/node": "^22.14.0",
+        "typescript": "^5.0.0",
+      },
+    },
+    "src/backend": {
+      "name": "backtrace-backend",
+      "version": "1.0.0",
       "dependencies": {
         "jose": "^6.0.10",
         "terser": "^5.39.1",
       },
-      "devDependencies": {
-        "@types/bun": "latest",
-        "@types/node": "^22.14.0",
-      },
-      "peerDependencies": {
-        "typescript": "^5",
-      },
+    },
+    "src/frontend": {
+      "name": "backtrace-frontend",
+      "version": "1.0.0",
     },
   },
   "packages": {
@@ -36,6 +42,10 @@
     "@types/ws": ["@types/ws@8.18.1", "", { "dependencies": { "@types/node": "*" } }, "sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg=="],
 
     "acorn": ["acorn@8.14.1", "", { "bin": { "acorn": "bin/acorn" } }, "sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg=="],
+
+    "backtrace-backend": ["backtrace-backend@workspace:src/backend"],
+
+    "backtrace-frontend": ["backtrace-frontend@workspace:src/frontend"],
 
     "buffer-from": ["buffer-from@1.1.2", "", {}, "sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ=="],
 

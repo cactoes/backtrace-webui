@@ -1,20 +1,13 @@
 {
     "name": "backtrace-webui",
-    "main": "./index.ts",
-    "scripts": {
-        "frontend:build": "cd frontend && tsc && bun run ..\\\\minifier.ts",
-        "frontend:dev": "cd frontend && tsc --watch",
-        "backend:dev": "bun --watch ./src/index.ts"
-    },
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "src/*"
+    ],
     "devDependencies": {
+        "typescript": "^5.0.0",
         "@types/bun": "latest",
         "@types/node": "^22.14.0"
-    },
-    "peerDependencies": {
-        "typescript": "^5"
-    },
-    "dependencies": {
-        "jose": "^6.0.10",
-        "terser": "^5.39.1"
     }
 }

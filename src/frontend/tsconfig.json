@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "sourceMap": false,
+        "rootDir": "scripts",
+        "outDir": "scripts/build/"
+    },
+    "include": ["./scripts"]
+}

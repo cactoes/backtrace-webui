@@ -1,0 +1,5 @@
+# ignore the build
+scripts/build/
+
+# ignore minified
+styles/build/

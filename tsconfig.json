@@ -1,33 +1,26 @@
 {
     "compilerOptions": {
-        // Environment setup & latest features
-        "lib": ["esnext"],
-        "target": "ESNext",
+        "target": "ES2017",
+        "experimentalDecorators": true,
+        "useDefineForClassFields": false,
         "module": "ESNext",
-        "moduleDetection": "force",
-        "jsx": "react-jsx",
-        "allowJs": true,
-
-        // Bundler mode
         "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "verbatimModuleSyntax": true,
-        "noEmit": true,
-
-        // Best practices
+        "moduleDetection": "force",
         "strict": true,
-        "skipLibCheck": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedIndexedAccess": true,
-
-        // Some stricter flags (disabled by default)
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noPropertyAccessFromIndexSignature": false,
-
-        "baseUrl": "./src",
-        // "paths": {
-        //     "@controller": ["./controllers/*"]
-        // }
-    }
+        "noImplicitReturns": true,
+        "skipLibCheck": true,
+        "lib": ["ESNext", "DOM"],
+        "paths": {
+            "@backend/*": ["./src/backend/src/*"],
+            "@web/*": ["./src/web/src/*"],
+        },
+    },
+    "exclude": ["./node_modules"]
 }

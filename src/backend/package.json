@@ -1,0 +1,12 @@
+{
+    "name": "backtrace-backend",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "bun --watch ./src/index.ts"
+    },
+    "dependencies": {
+        "jose": "^6.0.10",
+        "terser": "^5.39.1"
+    }
+}

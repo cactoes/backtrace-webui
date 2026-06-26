@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>backtrace | Account</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/files/account.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="icon" type="image/x-icon" href="/files/icon.ico">
+        <script type="module" src="/files/account.js" defer></script>
+    </head>
+    <body>
+        <main class="container">
+            <header class="top-bar animated fade_in">
+                <div class="logo">
+                    <svg width="32px" height="32px" viewBox="0 0 75.99 75.99" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" enable-background="new 0 0 75.99 75.99" xml:space="preserve">
+                        <path fill="#ffffff" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 41.1615,61.029C 28.0464,61.029 17.4145,50.3971 17.4145,37.2819C 17.4145,26.1675 25.0501,16.8364 35.3618,14.2482C 31.1173,18.5382 28.4964,24.4377 28.4964,30.9494C 28.4964,44.0645 39.1284,54.6964 52.2435,54.6964C 54.2442,54.6964 56.1871,54.449 58.0432,53.9831C 53.739,58.3336 47.765,61.029 41.1615,61.029 Z "/>
+                    </svg>
+                    BT Ltd.
+                </div>
+                <nav>
+                    <a class="animated fade_in delay02" href="/home">home</a>
+                    <a class="pfp" href="/account"><img id="i#pfp"></a>
+                </nav>
+            </header>
+
+            <h2 class="section-title animated fade_in delay02">Account</h2>
+
+            <div class="content animated fade_in_up delay02">
+                <div class="panel">
+                    <p class="label">UUID</p>
+                    <input type="text" name="uuid" id="ci#uuid" disabled>
+                </div>
+
+                <div class="panel">
+                    <p class="label">Profile Picture</p>
+                    <div class="fileuploader">
+                        <label id="fu#label">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                            <span>Choose file</span>
+                            <input id="file" type="file" accept="image/png, image/jpg, image/jpeg" />
+                        </label>
+                        <button id="btn">Upload</button>
+                    </div>
+                    <p id="file_stats">No file selected</p>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
