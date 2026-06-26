@@ -387,11 +387,14 @@ class api_controller {
     }
 
     public static async version(_: Bun.BunRequest<"/version">) {
-        const data_yuno = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
-            "GET", "yuno", "/");
+        const proxy_servers = await proxy_manager.get_all_server_details();
 
-        const data_toga = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>(
-            "GET", "toga", "/");
+        const results: { [k: string]: string } = {};
+
+        for (const server_name of Object.keys(proxy_servers)) {
+            const result = await proxy_manager.make_remote_request<{ message: string, success: boolean, data: { version: string } }>("GET", server_name, "/");
+            results[server_name] = result?.data?.version || "0.0.0";
+        }
 
         const [ file, release ] = await data_manager.get_file_with_lock<config_file_t>("config");
         release();
@@ -400,10 +403,7 @@ class api_controller {
             .set_payload({
                 ui: file.version.ui,
                 api: file.version.api,
-                proxy: {
-                    "yuno": data_yuno?.data?.version || "0.0.0",
-                    "toga": data_toga?.data?.version || "0.0.0",
-                }
+                proxy: results
             });
     }
 
