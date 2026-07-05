@@ -23,6 +23,62 @@
                     <a class="pfp" href="/account"><img id="i#pfp"></a>
                 </nav>
             </header>
+
+            <h2 class="section-title animated fade_in delay05">Services</h2>
+            <div class="list animated fade_in_up delay02">
+                <div class="item" service="yuno" onclick="window.open('/lists', '_self')">
+                    <div class="item-header">
+                        <div class="name">
+                            <i class="fa-solid fa-database"></i>
+                            <h3><span class="type">database</span><span class="sep">/</span>Yuno</h3>
+                        </div>
+                        <i class="fa-solid fa-circle status waiting"></i>
+                    </div>
+                    <p>Backend data store for anime / manga tracking.</p>
+                    <p class="version"></p>
+                </div>
+
+                <div class="item" service="toga" onclick="window.open('/streaming', '_self')">
+                    <div class="item-header">
+                        <div class="name">
+                            <i class="fa-solid fa-clapperboard"></i>
+                            <h3><span class="type">streaming</span><span class="sep">/</span>Toga</h3>
+                        </div>
+                        <i class="fa-solid fa-circle status waiting"></i>
+                    </div>
+                    <p>Backend for storing and delivering video content.</p>
+                    <p class="version"></p>
+                </div>
+
+                <div class="item" service="starguardian" onclick="window.open('/passwords', '_self')">
+                    <div class="item-header">
+                        <div class="name">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <h3><span class="type">password-manager</span><span class="sep">/</span>Star Guardian</h3>
+                        </div>
+                        <i class="fa-solid fa-circle status waiting"></i>
+                    </div>
+                    <p>Secure password storage with encryption and generation tools.</p>
+                    <p class="version"></p>
+                </div>
+
+                <div class="item noclick" service="artoria">
+                    <div class="item-header">
+                        <div class="name">
+                            <i class="fa-solid fa-microchip"></i>
+                            <h3><span class="type">discord-bot</span><span class="sep">/</span>Artoria</h3>
+                        </div>
+                        <i class="fa-solid fa-circle status waiting"></i>
+                    </div>
+                    <p>Discord bot backend service.</p>
+                    <p class="version"></p>
+                </div>
+            </div>
+
+            <footer class="animated fade_in_up delay1">
+                <p id="ver" class="version"></p>
+                <p id="time" class="time"></p>
+            </footer>
         </main>
     </body>
 </html>

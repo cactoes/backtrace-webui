@@ -1,8 +1,11 @@
 {
     "yuno": {
-        "server": "http://192.168.178.219:8082"
+        "server": "http://localhost:8082"
     },
     "toga": {
         "server": "http://localhost:8083"
+    },
+    "starguardian": {
+        "server": "http://localhost:8100"
     }
 }
