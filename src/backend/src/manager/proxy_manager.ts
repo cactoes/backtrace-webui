@@ -61,9 +61,12 @@ export async function make_remote_request_raw<T>(type: "GET" | "POST" | "PATCH" 
     }
 }
 
-export async function probe_remote(server_id: string): Promise<boolean> {
-    const data = await make_remote_request<{ message: string }>("GET", server_id, "/");
-    return data != undefined &&
+export async function probe_remote(server_id: string): Promise<[boolean, string]> {
+    const data = await make_remote_request<{ message: string, data: { version: string } }>("GET", server_id, "/");
+    return [
+        data != undefined &&
         data.message != undefined &&
-        data.message === "Online";
+        data.message === "Online",
+        data != undefined && data.data != undefined ? data.data.version : ""
+    ];
 }

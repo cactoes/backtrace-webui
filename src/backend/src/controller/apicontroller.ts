@@ -25,7 +25,7 @@ export default class ApiController implements AbstractController {
 
         const details = await get_all_server_details();
 
-        const result_servers: [string, boolean][] = [];
+        const result_servers: [string, [boolean, string]][] = [];
 
         for (const server_id of Object.keys(details))
             result_servers.push([server_id, await probe_remote(server_id)]);
