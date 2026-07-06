@@ -23,5 +23,4 @@ interface instance_object_t {
     name: string,
     current: string,
     state: state
-
 };
