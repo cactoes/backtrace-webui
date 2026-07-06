@@ -6,11 +6,11 @@ let lists: password_t[] = [];
 let search: string = "";
 let sorting = "";
 
-function get_password() {
-    return "test";
+function get_password(): string {
+    return sessionStorage.getItem("master-key") ?? "";
 }
 
-function create_field_list_item(list: password_t, obj: password_field_t) {
+function create_field_list_item(obj: password_field_t) {
     const div = document.createElement("div");
     div.className = "field";
     const p1 = document.createElement("p");
@@ -76,12 +76,12 @@ function create_list_item(obj: password_t) {
         element.get<HTMLDivElement>("d#fields").innerHTML = "";
 
         for (const field of obj.fields)
-            element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(obj, field));
+            element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(field));
 
         element.link("d#add-field", {
             click: () => {
                 obj.fields.push({ name: "", value: "", is_new: true } as password_field_t);
-                element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(obj, obj.fields[obj.fields.length - 1]));
+                element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(obj.fields[obj.fields.length - 1]));
             }
         });
     };
@@ -128,8 +128,12 @@ async function main() {
     util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
     component.set_pfp();
 
-    const has_account_result = await util.make_api_call<{ message: string, success: boolean, data: { status: "SETUP_COMPLETE" | "TO_BE_SETUP" } }>("GET", "/password/account/check");
-    if (!has_account_result || !has_account_result.payload || has_account_result.payload.data.status != "SETUP_COMPLETE")
+    const has_account_result = await util.make_api_call<{ status: "SETUP_COMPLETE" | "TO_BE_SETUP" }>("GET", "/password/account/check");
+    
+    if (!has_account_result || !has_account_result.payload || has_account_result.payload.status != "SETUP_COMPLETE")
+        window.location.href = "/password-register";
+
+    if (get_password() == "")
         window.location.href = "/password-register";
 
     element.link("d#close", {
@@ -193,7 +197,7 @@ async function main() {
             element.link("d#add-field", {
                 click: () => {
                     obj.fields.push({ name: "", value: "", is_new: true } as password_field_t);
-                    element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(obj, obj.fields[obj.fields.length - 1]));
+                    element.get<HTMLDivElement>("d#fields").appendChild(create_field_list_item(obj.fields[obj.fields.length - 1]));
                 }
             });
 
