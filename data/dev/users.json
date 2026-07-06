@@ -8,6 +8,10 @@
             {
                 "server": "yuno",
                 "id": "_1000"
+            },
+            {
+                "server": "starguardian",
+                "id": "_1000"
             }
         ]
     },
@@ -16,12 +20,7 @@
         "uuid": 1,
         "username": "test",
         "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",
-        "servers": [
-            {
-                "server": "starguardian",
-                "id": "_1002"
-            }
-        ]
+        "servers": []
     },
     {
         "permissions": 0,
