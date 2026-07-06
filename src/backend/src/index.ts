@@ -6,6 +6,7 @@ import FileController from "./controller/filecontroller";
 import WebController from "./controller/webcontroller";
 
 import { JWTManager } from "./manager/account_manager";
+import PasswordController from "./controller/api_password_controller";
 
 const port: string = process.env.PORT!;
 const use_certs: boolean = process.env.IS_PRODUCTION === "true";
@@ -16,6 +17,7 @@ JWTManager.get_instance().set_secret(process.env.JWT_SECRET!);
 api.add_router("/", new WebController().create_router());
 api.add_router("/files", new FileController().create_router());
 api.add_router("/api", new ApiController().create_router());
+api.add_router("/api/password", new PasswordController().create_router());
 
 api.start(() => {
     console.log(`webserver/backtrace-webui is running on http://localhost:${port}`);

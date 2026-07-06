@@ -18,3 +18,4 @@ Content-Type: application/json
 GET {{base_url}}/api/lists
 Accept: application/json
 Authorization: {{jwt_token}}
+Cookie: token={{jwt_token}}

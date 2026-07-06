@@ -15,7 +15,7 @@ export async function get_server_details(id: string): Promise<server_t | undefin
     return (servers as server_list_t)[id];
 }
 
-export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "PUT", server_id: string, endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<MakeFieldsOptional<T> | undefined> {
+export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "PUT" | "DELETE", server_id: string, endpoint: string, data?: Object | Array<any>, headers?: { [key: string]: string }): Promise<MakeFieldsOptional<T> | undefined> {
     const details = await get_server_details(server_id);
 
     if (!details)
