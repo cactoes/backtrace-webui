@@ -44,7 +44,7 @@ async function main() {
     const preload_quality = url.searchParams.get("q");
 
     if (preload_show && preload_episode && preload_quality) {
-        const episode = show_info[preload_show]?.episodes.find(v => v.hash == preload_episode);
+        const episode = show_info[preload_show]?.episodes.find((v: any) => v.hash == preload_episode);
         if (episode && [ "1080p", "720p", "480p" ].includes(preload_quality)) {
             load_video(preload_show, episode.name, episode.hash, preload_quality);
             return;

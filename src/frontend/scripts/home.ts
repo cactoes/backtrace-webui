@@ -1,6 +1,15 @@
 import { util, component, element } from "./global.js";
 
-// @ts-ignore
+type state = 0 | 1 | 2 | 3
+
+interface instance_object_t {
+    _id: string,
+    name: string,
+    current: string,
+    state: state
+
+}
+
 async function main() {
     await util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
     component.set_pfp();

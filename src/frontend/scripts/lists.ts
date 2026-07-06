@@ -95,7 +95,6 @@ function update_list() {
 // @ts-ignore
 async function main() {
     util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
-    util.set_version();
     component.set_pfp();
 
     element.query_loop<HTMLParagraphElement>("div.type>p", item_element => {
