@@ -34,7 +34,7 @@ async function main(): Promise<void> {
             }
 
             if (version)
-                element.querySelector(".version")!.innerHTML = `v${version}`;
+                element.querySelector(".version")!.innerHTML = `${version}`;
         });
 }
 
