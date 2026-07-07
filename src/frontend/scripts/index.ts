@@ -216,10 +216,32 @@ function render(timestamp: number) {
     renderer.render(scene, camera);
 }
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+let lastWidth = window.innerWidth;
+let lastHeight = window.innerHeight;
+let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+function handleResize() {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+
+    const widthChanged = newWidth !== lastWidth;
+    const heightDelta = Math.abs(newHeight - lastHeight);
+    const significantHeightChange = heightDelta > 150;
+
+    if (!widthChanged && !significantHeightChange)
+        return;
+
+    lastWidth = newWidth;
+    lastHeight = newHeight;
+
+    camera.aspect = newWidth / newHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(newWidth, newHeight);
+}
+
+window.addEventListener('resize', () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(handleResize, 150);
 });
 
 requestAnimationFrame(render);
