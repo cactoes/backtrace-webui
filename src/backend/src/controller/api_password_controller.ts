@@ -74,6 +74,7 @@ export default class PasswordController implements AbstractController {
         );
 
         if (!data || data.success == false) {
+            release_users();
             return new response_builder(500)
                 .set_message("error: remote server not found or unreachable");
         }
