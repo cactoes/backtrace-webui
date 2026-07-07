@@ -29,7 +29,7 @@
             <div class="content animated fade_in_up delay02">
                 <div class="panel">
                     <p class="label">UUID</p>
-                    <input type="text" name="uuid" id="ci#uuid" disabled>
+                    <input type="text" name="uuid" id="ci#uuid" readonly>
                 </div>
 
                 <div class="panel">
@@ -43,6 +43,11 @@
                         <button id="btn">Upload</button>
                     </div>
                     <p id="file_stats">No file selected</p>
+                </div>
+
+                <div class="panel">
+                    <p class="label">Permissions</p>
+                    <div class="permissions" id="permissions"></div>
                 </div>
             </div>
         </main>
