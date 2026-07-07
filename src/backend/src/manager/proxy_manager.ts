@@ -29,7 +29,7 @@ export async function make_remote_request<T>(type: "GET" | "POST" | "PATCH" | "P
                 ...(type != "GET" && { "Content-Type": "application/json" }),
                 ...headers
             },
-            signal: AbortSignal.timeout(3000),
+            signal: AbortSignal.timeout(9000),
             ...(type != "GET" && { body: JSON.stringify(data) })
         });
 
