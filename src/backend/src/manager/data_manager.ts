@@ -82,10 +82,15 @@ export async function get_file_with_lock<T extends (Object | Array<any>)>(filena
     if (mutex_map[filename] == undefined)
         mutex_map[filename] = new Mutex();
 
-    return [
-        await Bun.file(resolve_path(filename)).json(),
-        await mutex_map[filename].acquire()
-    ];
+    const release = await mutex_map[filename].acquire();
+
+    try {
+        const data = await Bun.file(resolve_path(filename)).json() as T;
+        return [data, release];
+    } catch (err) {
+        release();
+        throw err;
+    }
 }
 
 /**
