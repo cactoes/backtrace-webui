@@ -52,7 +52,6 @@ function render_permissions(mask: number) {
 // @ts-ignore
 async function main() {
     util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
-    util.set_version();
     component.set_pfp();
     
     element.link("file", {

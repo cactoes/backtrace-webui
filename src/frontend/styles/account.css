@@ -45,7 +45,6 @@
     font-size: 12px;
     font-weight: 600;
     color: var(--muted);
-    letter-spacing: 0.04em;
 }
 
 .content > .panel > input {
@@ -195,5 +194,4 @@
 .permissions > .perm > .perm-body > .perm-status {
     font-size: 11px;
     color: var(--muted);
-    letter-spacing: 0.03em;
 }
