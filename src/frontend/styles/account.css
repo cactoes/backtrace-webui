@@ -30,6 +30,35 @@
     gap: 12px;
 }
 
+.panel > textarea {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    min-height: 70px;
+    transition: border-color 0.2s ease;
+}
+
+.panel > textarea:hover,
+.panel > textarea:focus {
+    border-color: rgba(255,255,255,0.2);
+}
+
+.panel > textarea::placeholder {
+    color: var(--muted);
+}
+
+.panel > input.saved,
+.panel > textarea.saved {
+    border-color: hsla(128, 30%, 60%);
+    transition: border-color 0.2s ease;
+}
+
 .content > .panel {
     display: flex;
     flex-direction: column;
@@ -115,6 +144,49 @@
 
 .content > .panel > .fileuploader > label.error {
     border-color: hsl(0, 15%, 60%);
+}
+
+.uuid-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.uuid-chip:hover {
+    background: var(--hover);
+    border-color: rgba(255,255,255,0.2);
+}
+
+.uuid-chip > .uuid-text {
+    font-size: 12px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uuid-chip > i {
+    font-size: 12px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.uuid-chip.copied {
+    border-color: rgba(255,255,255,0.25);
+}
+
+.uuid-chip.copied > .uuid-text,
+.uuid-chip.copied > i {
+    color: var(--text);
 }
 
 .content > .panel > .fileuploader > button {

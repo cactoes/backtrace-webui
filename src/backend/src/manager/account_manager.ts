@@ -137,10 +137,11 @@ export async function register_user(username: string, password: string, key: str
     }
 
     const user = {
-        permissions: 0,
+        permissions: permissions_t.ANIME_LISTS,
         uuid: get_next_uuid(users),
         username: username,
         password: sha256(password + "salt"),
+        created_at: Date.now(),
         servers: [
             {
                 "server": "yuno",
@@ -156,4 +157,30 @@ export async function register_user(username: string, password: string, key: str
     save_file_and_unlock("keys", release_keys, keys);
 
     return await JWTManager.get_instance().create_token(user);
+}
+
+export async function save_user(user: user_t): Promise<boolean> {
+    const [ users, release_users ] = await get_file_with_lock<user_t[]>("users");
+
+    const target_user = users.find(v => v.uuid == user.uuid);
+    if (!target_user) {
+        release_users();
+        return false;
+    }
+
+    if (user.company)
+        target_user.company = `${user.company}`;
+
+    if (user.location)
+        target_user.location = `${user.location}`;
+
+    if (user.website)
+        target_user.website = `${user.website}`;
+
+    if (user.description)
+        target_user.description = `${user.description}`;
+
+    save_file_and_unlock("users", release_users, users);
+
+    return true;
 }

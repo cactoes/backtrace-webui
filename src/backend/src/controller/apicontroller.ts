@@ -1,4 +1,4 @@
-import { get_user_from_token, check_permissions, login_user, JWTManager, register_user, permissions_t, get_user_from_uuid } from "@backend/manager/account_manager";
+import { get_user_from_token, check_permissions, login_user, JWTManager, register_user, permissions_t, get_user_from_uuid, save_user } from "@backend/manager/account_manager";
 import { get_file_with_lock, save_pfp } from "@backend/manager/data_manager";
 import { get_all_server_details, probe_remote, make_remote_request, get_server_details, make_remote_request_raw } from "@backend/manager/proxy_manager";
 import { response_builder } from "@backend/response_builder";
@@ -54,6 +54,27 @@ export default class ApiController implements AbstractController {
         return new response_builder();
     }
 
+    private async account_update(req: Bun.BunRequest<"/account/update">) {
+        const user = await get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
+        if (!user) {
+            return new response_builder(400)
+                .set_message("error: token was invalid");
+        }
+
+        const body = await get_body<{ company: string, location: string, website: string, description: string }>(req);
+        user.company = body.company;
+        user.location = body.location;
+        user.website = body.website;
+        user.description = body.description;
+
+        if (!(await save_user(user))) {
+            return new response_builder(500)
+                .set_message("error: failed to save user");
+        }
+
+        return new response_builder();
+    }
+
     private async account_check_token(req: Bun.BunRequest<"/account/check/token">) {
         const body = await get_body<{ token: string }>(req);
 
@@ -83,7 +104,16 @@ export default class ApiController implements AbstractController {
         }
 
         return new response_builder()
-            .set_payload({ user: { username: result.username, uuid: result.uuid, permissions: result.permissions } });
+            .set_payload({ user: {
+                username: result.username,
+                uuid: result.uuid,
+                permissions: result.permissions,
+                created_at: result.created_at,
+                description: result.description,
+                website: result.website,
+                location: result.location,
+                company: result.company
+             } });
     }
 
     private async account_public_user(req: Bun.BunRequest<"/public/:uuid">) {
@@ -521,6 +551,7 @@ export default class ApiController implements AbstractController {
         router.get("/services/list", this.services_list.bind(this));
         router.get("/public/:uuid", this.account_public_user.bind(this));
         router.post("/account/upload/pfp", this.account_upload_pfp.bind(this));
+        router.post("/account/update", this.account_update.bind(this));
         router.post("/account/register", this.account_register.bind(this));
         router.post("/account/check/token", this.account_check_token.bind(this));
         router.post("/account/check/permissions", this.account_check_permissions.bind(this));

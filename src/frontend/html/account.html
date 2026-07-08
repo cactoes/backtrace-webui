@@ -29,7 +29,10 @@
             <div class="content animated fade_in_up delay02">
                 <div class="panel">
                     <p class="label">UUID</p>
-                    <input type="text" name="uuid" id="ci#uuid" readonly>
+                    <div class="uuid-chip" id="ci#uuid">
+                        <span class="uuid-text"></span>
+                        <i class="fa-regular fa-copy"></i>
+                    </div>
                 </div>
 
                 <div class="panel">
@@ -43,6 +46,23 @@
                         <button id="btn">Upload</button>
                     </div>
                     <p id="file_stats">No file selected</p>
+                </div>
+
+                <div class="panel">
+                    <p class="label">Description</p>
+                    <textarea id="ci#description" placeholder="user description ..." maxlength="280"></textarea>
+                </div>
+                <div class="panel">
+                    <p class="label">Website</p>
+                    <input type="text" name="website" id="ci#website" placeholder="https://example.com">
+                </div>
+                <div class="panel">
+                    <p class="label">Location</p>
+                    <input type="text" name="location" id="ci#location" placeholder="country">
+                </div>
+                <div class="panel">
+                    <p class="label">Company</p>
+                    <input type="text" name="company" id="ci#company" placeholder="company name">
                 </div>
 
                 <div class="panel">
