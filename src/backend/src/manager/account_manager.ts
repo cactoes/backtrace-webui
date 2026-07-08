@@ -95,6 +95,12 @@ export async function get_user_from_token(token: string | null): Promise<user_t 
     return users.find(v => v.uuid == payload.uuid);
 }
 
+export async function get_user_from_uuid(uuid: number): Promise<user_t | undefined> {
+    const [users, release] = await get_file_with_lock<user_t[]>("users"); release();
+
+    return users.find(v => v.uuid == uuid);
+}
+
 export async function login_user(username: string, password: string): Promise<string | undefined> {
     const [ users, release ] = await get_file_with_lock<user_t[]>("users"); release();
 

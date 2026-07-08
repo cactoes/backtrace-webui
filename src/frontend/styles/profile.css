@@ -1,0 +1,278 @@
+@import url("/files/global.css");
+@import url("/files/component.topbar.css");
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--border);
+    background: rgba(15, 15, 15, 0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.panel > .label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    margin: 0;
+}
+
+/* layout */
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* identity panel (left) */
+
+.panel.identity {
+    gap: 6px;
+    padding: 24px 20px;
+}
+
+.identity-top {
+    display: flex;
+    flex-direction: column;
+}
+
+.identity-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.panel.identity > .identity-top > .pfp {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    overflow: hidden;
+    margin-bottom: 8px;
+    aspect-ratio: 1;
+    max-width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel.identity > .identity-top > .pfp > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.panel.identity > .identity-top > .pfp > .pfp-placeholder {
+    color: rgba(255,255,255,0.15);
+    font-size: 32px;
+}
+
+.panel.identity > .identity-top > .identity-text > h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.panel.identity > .identity-top > .identity-text > .joined {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.uuid-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.uuid-chip:hover {
+    background: var(--hover);
+    border-color: rgba(255,255,255,0.2);
+}
+
+.uuid-chip > .uuid-text {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uuid-chip > i {
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.uuid-chip.copied {
+    border-color: rgba(255,255,255,0.25);
+}
+
+.uuid-chip.copied > .uuid-text,
+.uuid-chip.copied > i {
+    color: var(--text);
+}
+
+/* meta, pinned to bottom of identity panel */
+
+.panel.identity > .meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.meta > .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: left;
+}
+
+.meta > .meta-item > i {
+    font-size: 12px;
+    width: 16px;
+    flex-shrink: 0;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+}
+
+.meta > .meta-item > span,
+.meta > .meta-item > a {
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.meta > .meta-item.empty > span {
+    color: var(--muted);
+}
+
+.meta > .meta-item > a:hover {
+    text-decoration: underline;
+}
+
+/* about */
+
+.bio {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* services, full style matching account page */
+
+.services {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.services > .perm {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+    background: rgba(15, 15, 15, 0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 10px;
+    padding: 12px 14px;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.services > .perm.granted {
+    opacity: 1;
+}
+
+.services > .perm > .perm-icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.02);
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.services > .perm.granted > .perm-icon {
+    color: var(--text);
+}
+
+.services > .perm > .perm-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.services > .perm > .perm-body > .perm-name {
+    font-size: 13px;
+    color: var(--text);
+    margin: 0;
+}
+
+.services > .perm > .perm-body > .perm-status {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .identity-top {
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .panel.identity > .identity-top > .pfp {
+        width: 64px;
+        max-width: 64px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+    }
+}

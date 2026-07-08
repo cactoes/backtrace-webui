@@ -1,4 +1,4 @@
-import { get_user_from_token, check_permissions, login_user, JWTManager, register_user, permissions_t } from "@backend/manager/account_manager";
+import { get_user_from_token, check_permissions, login_user, JWTManager, register_user, permissions_t, get_user_from_uuid } from "@backend/manager/account_manager";
 import { get_file_with_lock, save_pfp } from "@backend/manager/data_manager";
 import { get_all_server_details, probe_remote, make_remote_request, get_server_details, make_remote_request_raw } from "@backend/manager/proxy_manager";
 import { response_builder } from "@backend/response_builder";
@@ -84,6 +84,32 @@ export default class ApiController implements AbstractController {
 
         return new response_builder()
             .set_payload({ user: { username: result.username, uuid: result.uuid, permissions: result.permissions } });
+    }
+
+    private async account_public_user(req: Bun.BunRequest<"/public/:uuid">) {
+        const uuid = parseInt(req.params.uuid);
+        if (Number.isNaN(uuid)) {
+            return new response_builder(400)
+                .set_message("error: uuid was invalid");
+        }
+
+        const user = await get_user_from_uuid(uuid);
+        if (!user) {
+            return new response_builder(400)
+                .set_message("error: user not found");
+        }
+
+        return new response_builder()
+            .set_payload({ user: {
+                username: user.username,
+                uuid: user.uuid,
+                permissions: user.permissions,
+                created_at: user.created_at,
+                description: user.description,
+                website: user.website,
+                location: user.location,
+                company: user.company
+            } });
     }
 
     private async account_login(req: Bun.BunRequest<"/account/login">) {
@@ -493,6 +519,7 @@ export default class ApiController implements AbstractController {
         const router = new BunRouter();
         router.get("/*", this.fallback.bind(this));
         router.get("/services/list", this.services_list.bind(this));
+        router.get("/public/:uuid", this.account_public_user.bind(this));
         router.post("/account/upload/pfp", this.account_upload_pfp.bind(this));
         router.post("/account/register", this.account_register.bind(this));
         router.post("/account/check/token", this.account_check_token.bind(this));

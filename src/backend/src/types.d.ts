@@ -21,6 +21,11 @@ interface user_t {
     uuid: number;
     username: string;
     password: string;
+    description?: string;
+    website?: string;
+    location?: string;
+    company?: string;
+    created_at: number;
     servers: { server: string, id: string }[]
 };
 

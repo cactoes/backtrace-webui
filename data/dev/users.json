@@ -4,6 +4,11 @@
         "uuid": 0,
         "username": "cactoes",
         "password": "f288137fd3bae10c7203d99532437d2b972b16c2a679667aad72e9c696b96b1b",
+        "created_at": 1783551457487,
+        "website": "https://cactoes.xyz/",
+        "location": "toga's house",
+        "company": "Blackline Technologies Ltd.",
+        "description": "レインを好きになりましょう。",
         "servers": [
             {
                 "server": "yuno",

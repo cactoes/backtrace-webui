@@ -9,6 +9,7 @@ export default class WebController implements AbstractController {
         { name: "account", required_permissions: 0, },
         { name: "lists", required_permissions: permissions_t.ANIME_LISTS, },
         { name: "login", required_permissions: 0, },
+        { name: "profile", required_permissions: 0, },
         { name: "passwords", required_permissions: permissions_t.PASSWORD_MANAGER, },
         { name: "password-register", required_permissions: permissions_t.PASSWORD_MANAGER, },
         { name: "services", required_permissions: permissions_t.SERVICE_LIST, },
