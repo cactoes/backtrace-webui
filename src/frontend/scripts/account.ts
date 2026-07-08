@@ -135,7 +135,7 @@ async function main() {
             setTimeout(() => {
                 uuid_el.classList.remove("copied");
                 uuid_icon_el.className = "fa-regular fa-copy";
-            }, 1000);
+            }, 2000);
         });
     };
 

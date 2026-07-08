@@ -103,6 +103,11 @@ export default class ApiController implements AbstractController {
                 .set_message("error: token was invalid");
         }
 
+        if (result.description && result.description.length > 255) {
+            return new response_builder(400)
+                .set_message("error: description too long");
+        }
+
         return new response_builder()
             .set_payload({ user: {
                 username: result.username,
