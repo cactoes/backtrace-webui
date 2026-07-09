@@ -7,7 +7,6 @@ interface instance_object_t {
     name: string,
     current: string,
     state: state
-
 }
 
 async function main() {
@@ -45,6 +44,15 @@ async function main() {
         }
         element.get<HTMLHeadingElement>("il#episodes").innerText = `${episode_count}`;
     }
+
+    util.make_api_call<{ user: { uuid: number } }>("GET", "/account/public/me")
+        .then(result => {
+            if (result?.payload?.user.uuid != undefined) {
+                element.get<HTMLHeadingElement>("item#public").onclick = () => {
+                    window.open(`/profile/${result.payload!.user.uuid}`, "_self");
+                }
+            }
+        });
 }
 
 window.addEventListener("DOMContentLoaded", main);
