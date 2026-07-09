@@ -23,6 +23,8 @@ interface profile_t {
     location?: string;
     company?: string;
     permissions: number;
+    anime_counters: { [key: number]: number };
+    manga_counters: { [key: number]: number };
 }
 
 function format_joined(date_str: number) {
@@ -146,7 +148,7 @@ async function main() {
     });
 
     const uuid = window.location.pathname.slice("/profile/".length);
-    const res = await util.make_api_call<{ user: profile_t }>("GET", `/public/${uuid}`);
+    const res = await util.make_api_call<{ user: profile_t }>("GET", `/account/public/${uuid}`);
     if (res!.error)
         window.location.href = "/404";
 

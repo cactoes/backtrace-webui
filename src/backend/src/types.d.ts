@@ -46,3 +46,6 @@ interface video_meta_entry_t {
         hash: string
     }[]
 };
+
+type anime_state = 0 | 1 | 2 | 3
+type manga_state = 0 | 1 | 2 | 3

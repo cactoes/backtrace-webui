@@ -1,6 +1,6 @@
 {
     "yuno": {
-        "server": "http://localhost:8082"
+        "server": "http://192.168.178.200:8082"
     },
     "toga": {
         "server": "http://localhost:8083"

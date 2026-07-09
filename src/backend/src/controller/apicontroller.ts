@@ -121,7 +121,7 @@ export default class ApiController implements AbstractController {
              } });
     }
 
-    private async account_public_user(req: Bun.BunRequest<"/public/:uuid">) {
+    private async account_public_user(req: Bun.BunRequest<"/account/public/:uuid">) {
         const uuid = parseInt(req.params.uuid);
         if (Number.isNaN(uuid)) {
             return new response_builder(400)
@@ -134,6 +134,44 @@ export default class ApiController implements AbstractController {
                 .set_message("error: user not found");
         }
 
+    //         private async lists(req: Bun.BunRequest<"/lists">) {
+    //     const result = await get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
+    //     if (!result) {
+    //         return new response_builder(401)
+    //             .set_message("error: token was invalid");
+    //     }
+
+        const anime_counters = {
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+        };
+
+        const manga_counters = {
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+        };
+
+        if (check_permissions(user.permissions, permissions_t.ANIME_LISTS)) {
+            const server_instace = user.servers.find(server => server.server == "yuno");
+            if (server_instace) {
+                const data = await make_remote_request<{ message: string, success: boolean, data: { anime: { state: anime_state }[], manga: { state: manga_state }[] } }>(
+                    "POST", server_instace.server, "/instance/get", {
+                        instance: server_instace.id,
+                        keys: { anime: [ "state" ], manga: [ "state" ] }
+                    }
+                );
+
+                if (data && data.success && data.data) {
+                    data.data.anime.forEach(v => anime_counters[v.state]++);
+                    data.data.manga.forEach(v => manga_counters[v.state]++);
+                }
+            }
+        }
+
         return new response_builder()
             .set_payload({ user: {
                 username: user.username,
@@ -143,7 +181,8 @@ export default class ApiController implements AbstractController {
                 description: user.description,
                 website: user.website,
                 location: user.location,
-                company: user.company
+                company: user.company,
+                anime_counters, manga_counters
             } });
     }
 
@@ -554,7 +593,7 @@ export default class ApiController implements AbstractController {
         const router = new BunRouter();
         router.get("/*", this.fallback.bind(this));
         router.get("/services/list", this.services_list.bind(this));
-        router.get("/public/:uuid", this.account_public_user.bind(this));
+        router.get("/account/public/:uuid", this.account_public_user.bind(this));
         router.post("/account/upload/pfp", this.account_upload_pfp.bind(this));
         router.post("/account/update", this.account_update.bind(this));
         router.post("/account/register", this.account_register.bind(this));
