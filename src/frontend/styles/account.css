@@ -53,12 +53,6 @@
     color: var(--muted);
 }
 
-.panel > input.saved,
-.panel > textarea.saved {
-    border-color: hsla(128, 30%, 60%);
-    transition: border-color 0.2s ease;
-}
-
 .content > .panel {
     display: flex;
     flex-direction: column;
@@ -105,6 +99,12 @@
 
 .content > .panel > input[readonly].copied {
     border-color: rgba(255,255,255,0.3);
+}
+
+.panel > input.saved,
+.panel > textarea.saved {
+    border-color: hsla(128, 30%, 60%);
+    transition: border-color 0.2s ease;
 }
 
 .content > .panel > .fileuploader {
