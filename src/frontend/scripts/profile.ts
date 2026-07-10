@@ -27,6 +27,8 @@ interface profile_t {
     manga_counters: { [key: number]: number };
 }
 
+const status_labels  = ["finished", "watching", "planned", "dropped"];
+
 function format_joined(date_str: number) {
     const d = new Date(date_str);
     return d.toLocaleDateString("en-UK", { month: "long", year: "numeric" });
@@ -99,6 +101,34 @@ function render_services(mask: number) {
     }
 }
 
+function render_stats(container_id: string, total_id: string, counters: { [key: number]: number }) {
+    const container = element.get<HTMLDivElement>(container_id);
+    container.innerHTML = "";
+
+    let total = 0;
+    for (const key of [0, 1, 2, 3]) {
+        const count = counters[key] ?? 0;
+        total += count;
+
+        const div = document.createElement("div");
+        div.className = `stat ${status_labels [key]}`;
+
+        const value = document.createElement("p");
+        value.className = "stat-value";
+        value.innerText = `${count}`;
+
+        const label = document.createElement("p");
+        label.className = "stat-label";
+        label.innerText = status_labels [key];
+
+        div.appendChild(value);
+        div.appendChild(label);
+        container.appendChild(div);
+    }
+
+    element.get<HTMLSpanElement>(total_id).innerText = `· ${total} total`;
+}
+
 function populate_profile(profile: profile_t) {
     const pfp_img = element.get<HTMLImageElement>("p#pfp");
     const pfp_placeholder = element.get<HTMLElement>("p#pfp-placeholder");
@@ -136,6 +166,8 @@ function populate_profile(profile: profile_t) {
 
     render_meta(profile);
     render_services(profile.permissions);
+    render_stats("p#anime-stats", "p#anime-total", profile.anime_counters);
+    render_stats("p#manga-stats", "p#manga-total", profile.manga_counters);
 }
 
 async function main() {
