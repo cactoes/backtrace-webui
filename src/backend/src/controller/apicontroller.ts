@@ -134,13 +134,6 @@ export default class ApiController implements AbstractController {
                 .set_message("error: user not found");
         }
 
-    //         private async lists(req: Bun.BunRequest<"/lists">) {
-    //     const result = await get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || "");
-    //     if (!result) {
-    //         return new response_builder(401)
-    //             .set_message("error: token was invalid");
-    //     }
-
         const anime_counters = {
             0: 0,
             1: 0,
