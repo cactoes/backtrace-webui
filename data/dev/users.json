@@ -14,7 +14,13 @@
                 "server": "yuno",
                 "id": "_1000"
             }
-        ]
+        ],
+        "links": {
+            "egg_inc": {
+                "value": "",
+                "display": false
+            }
+        }
     },
     {
         "permissions": 3,

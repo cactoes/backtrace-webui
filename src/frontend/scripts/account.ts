@@ -8,6 +8,9 @@ interface account_update_t {
     website?: string;
     location?: string;
     company?: string;
+    links?: {
+        egg_inc?: link_t
+    }
 }
 
 enum permissions_t {
@@ -78,6 +81,64 @@ function bind_autosave_field(id: string, key: keyof account_update_t) {
     });
 }
 
+function bind_egg_inc_link(links: user_t["links"]) {
+    console.log(links);
+    
+    if (!links)
+        links = {};
+
+    const id_element = element.get<HTMLInputElement>("ci#egg-inc-id");
+    const button_element = element.get<HTMLInputElement>("ci#egg-inc-display");
+
+    id_element.value = links?.egg_inc?.value ?? "";
+    if (links?.egg_inc?.display) {
+        button_element.textContent = "Hide";
+        element.toggle_class(button_element, "invert", false)
+    } else {
+        element.toggle_class(button_element, "invert", true)
+    }
+
+    element.link("ci#egg-inc-display", {
+        click: async () => {
+            let is_public = button_element.textContent == "Hide";
+
+            element.toggle_class(button_element, "invert");
+            element.get<HTMLInputElement>("ci#egg-inc-display").textContent = is_public ? "Display" : "Hide";
+
+            is_public = !is_public;
+
+            links["egg_inc"] = {
+                value: links.egg_inc?.value ?? "",
+                display: is_public
+            };
+
+            await util.make_api_call<{}>("POST", "/account/update", { links });
+        }
+    })
+
+    let original = id_element.value;
+
+    id_element.addEventListener("blur", async () => {
+        const value = id_element.value.trim();
+        if (value === original) return;
+
+        links["egg_inc"] = {
+            value: value,
+            display: links.egg_inc?.display ?? false,
+        };
+
+        const res = await util.make_api_call<{}>("POST", "/account/update", { links });
+
+        if (!res?.error) {
+            original = value;
+            id_element.classList.add("saved");
+            setTimeout(() => id_element.classList.remove("saved"), 800);
+        } else {
+            id_element.value = original;
+        }
+    });
+}
+
 async function main() {
     util.check_logged_in().then(r => (!r && (window.location.href = "/login")));
     component.set_pfp();
@@ -118,7 +179,7 @@ async function main() {
         }
     })
 
-    const account_me = await util.make_api_call<{ user: { username: string, uuid: number, permissions: number, created_at: number, description: string, website: string, location: string, company: string } }>("GET", "/account/public/me");
+    const account_me = await util.make_api_call<{ user: user_t }>("GET", "/account/public/me");
     if (!account_me || !account_me.payload || account_me.error)
         return;
 
@@ -148,6 +209,8 @@ async function main() {
     bind_autosave_field("ci#website", "website");
     bind_autosave_field("ci#location", "location");
     bind_autosave_field("ci#company", "company");
+
+    bind_egg_inc_link(account_me.payload.user.links);
 
     render_permissions(account_me.payload.user.permissions);
 }

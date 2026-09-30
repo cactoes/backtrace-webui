@@ -28,6 +28,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 12px;
 }
 
 .panel > textarea {
@@ -70,6 +71,7 @@
     color: var(--muted);
 }
 
+.content > .panel >span > input,
 .content > .panel > input {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
@@ -82,6 +84,8 @@
     transition: border-color 0.2s ease;
 }
 
+.content > .panel > span > input:not([disabled]):hover,
+.content > .panel > span > input:not([disabled]):focus,
 .content > .panel > input:not([disabled]):hover,
 .content > .panel > input:not([disabled]):focus {
     border-color: rgba(255,255,255,0.2);
@@ -101,6 +105,7 @@
     border-color: rgba(255,255,255,0.3);
 }
 
+.panel > span > input.saved,
 .panel > input.saved,
 .panel > textarea.saved {
     border-color: hsla(128, 30%, 60%);
@@ -144,6 +149,35 @@
 
 .content > .panel > .fileuploader > label.error {
     border-color: hsl(0, 15%, 60%);
+}
+
+.panel > .input-button-combo {
+    display: flex;
+    flex-direction: row;
+}
+
+.panel > .input-button-combo > input {
+    margin-right: 16px;
+}
+
+.panel > .input-button-combo > button {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    background-color: var(--panel);
+}
+
+.panel > .input-button-combo > button.invert {
+    background-color: var(--text);
+    color: var(--panel);
+}
+
+.panel > .input-button-combo > button:hover {
+    transform: translateY(-2px);
 }
 
 .uuid-chip {

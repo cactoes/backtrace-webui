@@ -16,6 +16,11 @@ interface config_file_t {
 
 type ReleaseFunction = () => void;
 
+interface link_t {
+    value: string;
+    display: boolean;
+}
+
 interface user_t {
     permissions: number;
     uuid: number;
@@ -26,7 +31,10 @@ interface user_t {
     location?: string;
     company?: string;
     created_at: number;
-    servers: { server: string, id: string }[]
+    servers: { server: string, id: string }[];
+    links?: {
+        egg_inc?: link_t;
+    }
 };
 
 interface key_t {

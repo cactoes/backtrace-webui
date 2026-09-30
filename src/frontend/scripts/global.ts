@@ -10,7 +10,12 @@ export const element = {
     
         return target_element;
     },
-    toggle_class(target: HTMLElement, _class: string) {
+    toggle_class(target: HTMLElement, _class: string, force?: boolean) {
+        if (force) {
+            target.classList.toggle(_class, force);
+            return;
+        }
+
         target.classList.contains(_class)
         ? target.classList.remove(_class)
         : target.classList.add(_class)

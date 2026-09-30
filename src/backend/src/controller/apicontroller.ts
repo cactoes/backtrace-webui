@@ -61,11 +61,27 @@ export default class ApiController implements AbstractController {
                 .set_message("error: token was invalid");
         }
 
-        const body = await get_body<{ company: string, location: string, website: string, description: string }>(req);
-        user.company = body.company;
-        user.location = body.location;
-        user.website = body.website;
-        user.description = body.description;
+        const body = await get_body<{ company: string, location: string, website: string, description: string, links: { egg_inc: { value: string, display: boolean } } }>(req);
+        if (body.company)
+            user.company = body.company;
+        if (body.location)
+            user.location = body.location;
+        if (body.website)
+            user.website = body.website;
+        if (body.description)
+            user.description = body.description;
+
+        if (body.links) {
+            if (!user.links)
+                user.links = {};
+
+            if (body.links.egg_inc) {
+                user.links["egg_inc"] = {
+                    value: body.links.egg_inc.value,
+                    display: body.links.egg_inc.display
+                };
+            }
+        }
 
         if (!(await save_user(user))) {
             return new response_builder(500)
@@ -117,7 +133,8 @@ export default class ApiController implements AbstractController {
                 description: result.description,
                 website: result.website,
                 location: result.location,
-                company: result.company
+                company: result.company,
+                links: result.links
              } });
     }
 
@@ -165,6 +182,8 @@ export default class ApiController implements AbstractController {
             }
         }
 
+        const links = user.links ? Object.fromEntries(Object.entries(user.links).filter(([k, v]) => v.display)) : {};
+
         return new response_builder()
             .set_payload({ user: {
                 username: user.username,
@@ -175,7 +194,8 @@ export default class ApiController implements AbstractController {
                 website: user.website,
                 location: user.location,
                 company: user.company,
-                anime_counters, manga_counters
+                anime_counters, manga_counters,
+                links
             } });
     }
 

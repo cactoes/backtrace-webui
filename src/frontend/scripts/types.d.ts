@@ -24,3 +24,24 @@ interface instance_object_t {
     current: string,
     state: state
 };
+
+interface link_t {
+    value: string;
+    display: boolean;
+}
+
+interface user_t {
+    permissions: number;
+    uuid: number;
+    username: string;
+    password: string;
+    description?: string;
+    website?: string;
+    location?: string;
+    company?: string;
+    created_at: number;
+    servers: { server: string, id: string }[];
+    links?: {
+        egg_inc?: link_t;
+    }
+};

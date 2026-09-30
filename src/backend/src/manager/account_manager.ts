@@ -180,6 +180,9 @@ export async function save_user(user: user_t): Promise<boolean> {
     if (user.description)
         target_user.description = `${user.description}`;
 
+    if (user.links)
+        target_user.links = user.links;
+
     save_file_and_unlock("users", release_users, users);
 
     return true;

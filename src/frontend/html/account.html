@@ -24,17 +24,8 @@
                 </nav>
             </header>
 
-            <h2 class="section-title animated fade_in delay02">Account</h2>
-
+            <h2 class="section-title animated fade_in delay03">General</h2>
             <div class="content animated fade_in_up delay02">
-                <div class="panel">
-                    <p class="label">UUID</p>
-                    <div class="uuid-chip" id="ci#uuid">
-                        <span class="uuid-text"></span>
-                        <i class="fa-regular fa-copy"></i>
-                    </div>
-                </div>
-
                 <div class="panel">
                     <p class="label">Profile Picture</p>
                     <div class="fileuploader">
@@ -48,6 +39,17 @@
                     <p id="file_stats">No file selected</p>
                 </div>
 
+                <div class="panel">
+                    <p class="label">UUID</p>
+                    <div class="uuid-chip" id="ci#uuid">
+                        <span class="uuid-text"></span>
+                        <i class="fa-regular fa-copy"></i>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title animated fade_in delay05">Info</h2>
+            <div class="content animated fade_in_up delay03">
                 <div class="panel">
                     <p class="label">Description</p>
                     <textarea id="ci#description" placeholder="user description ..." maxlength="255"></textarea>
@@ -64,7 +66,21 @@
                     <p class="label">Company</p>
                     <input type="text" name="company" id="ci#company" placeholder="company name">
                 </div>
+            </div>
 
+            <h2 class="section-title animated fade_in delay07">Links</h2>
+            <div class="content animated fade_in_up delay05">
+                <div class="panel">
+                    <p class="label">Egg Inc.</p>
+                    <span class="input-button-combo">
+                        <input type="text" name="egg-inc-id" id="ci#egg-inc-id" placeholder="EIxxxxxxxx">
+                        <button class="invert" id="ci#egg-inc-display">Display</button>
+                    </span>
+                </div>
+            </div>
+
+            <h2 class="section-title animated fade_in delay07">Other</h2>
+            <div class="content animated fade_in_up delay05">
                 <div class="panel">
                     <p class="label">Permissions</p>
                     <div class="permissions" id="permissions"></div>
