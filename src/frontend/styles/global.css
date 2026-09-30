@@ -70,6 +70,7 @@ body {
 .animated.delay05 { -webkit-animation-delay: .5s;       animation-delay: .5s; }
 .animated.delay07 { -webkit-animation-delay: .7s;       animation-delay: .7s; }
 .animated.delay1 {  -webkit-animation-delay: 1s;        animation-delay: 1s; }
+.animated.delay12 { -webkit-animation-delay: 1.2s;      animation-delay: 1.2s; }
 .animated.delay15 { -webkit-animation-delay: 1.5s;      animation-delay: 1.5s; }
 .animated.delay2 {  -webkit-animation-delay: 2s;        animation-delay: 2s; }
 

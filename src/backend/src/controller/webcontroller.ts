@@ -14,13 +14,21 @@ export default class WebController implements AbstractController {
         { name: "password-register", required_permissions: permissions_t.PASSWORD_MANAGER, },
         { name: "services", required_permissions: permissions_t.SERVICE_LIST, },
         { name: "streaming", required_permissions: permissions_t.STREAMING, },
-        { name: "register", required_permissions: 0, }
+        { name: "register", required_permissions: 0, },
     ];
+
+    static product_pages = [
+        { name: "delirium" }
+    ]
 
     constructor() {}
 
     private check_valid_page(page_name: string): boolean {
         return WebController.pages.find(p => p.name == page_name) != undefined;
+    }
+
+    private is_valid_product(page: string) {
+        return WebController.product_pages.find(p => p.name == page) != undefined;
     }
 
     private check_page_permissions(page_name: string, user_permissions: number): boolean {
@@ -65,6 +73,14 @@ export default class WebController implements AbstractController {
         return new Response(file as BodyInit, { headers: { ...meta } });
     }
 
+    private async product(req: Bun.BunRequest<"/product/:page">): Promise<Response> {
+        if (!this.is_valid_product(req.params.page))
+            return Response.redirect("/404");
+
+        const [ file, meta ] = (await resolve_web_file(`product_${req.params.page}.html`))!;
+        return new Response(file as BodyInit, { headers: { ...meta } });
+    }
+
     private async page_backup(req: Bun.BunRequest<"/:page/*">): Promise<Response> {
         if (!this.check_valid_page(req.params.page))
             return Response.redirect("/404");
@@ -85,6 +101,7 @@ export default class WebController implements AbstractController {
         const router = new BunRouter();
         router.get("/", this.home.bind(this));
         router.get("/:page", this.page.bind(this));
+        router.get("/product/:page", this.product.bind(this));
         router.get("/:page/*", this.page_backup.bind(this));
         router.get("/404", this["404"].bind(this));
         router.get("/unauthorized", this.unauthorized.bind(this));

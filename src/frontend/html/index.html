@@ -18,8 +18,8 @@
                 position: fixed;
                 top: 0; 
                 left: 0; 
-                z-index: -1;  /* -1 is enough to be behind content */
-                pointer-events: none; /* Allows clicking through the canvas */
+                z-index: -1;
+                pointer-events: none;
                 filter: blur(3px);
             }
         </style>
@@ -117,7 +117,7 @@
             <section class="section animated fade_in_up delay05">
                 <span class="card" onclick="window.open('/lists', '_self')">
                     <h3>Anime / Manga list</h3>
-                    <p>Anime & manga tracker</p>
+                    <p>Anime & manga tracker.</p>
                     <div class="card-footer">
                         <div class="card-footer-icon">
                             <i class="fa-solid fa-angle-right"></i>
@@ -126,7 +126,20 @@
                 </span>
             </section>
 
-            <footer class="animated fade_in_up delay1">
+            <h2 class="section-title animated fade_in_up delay1">Products</h2>
+            <section class="section animated fade_in_up delay07">
+                <span class="card" onclick="window.open('/product/delirium', '_self')">
+                    <h3>Delirium</h3>
+                    <p>A windows only (local) music player in XMB style. Focused on being resource efficient.</p>
+                    <div class="card-footer">
+                        <div class="card-footer-icon">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </div>
+                    </div>
+                </span>
+            </section>
+
+            <footer class="animated fade_in_up delay12">
                 <p id="ver" class="version"></p>
                 <p id="time" class="time"></p>
             </footer>
