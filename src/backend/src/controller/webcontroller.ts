@@ -15,6 +15,7 @@ export default class WebController implements AbstractController {
         { name: "services", required_permissions: permissions_t.SERVICE_LIST, },
         { name: "streaming", required_permissions: permissions_t.STREAMING, },
         { name: "register", required_permissions: 0, },
+        { name: "egg_inc_tool", required_permissions: permissions_t.EGG_INC_TOOL }
     ];
 
     static product_pages = [

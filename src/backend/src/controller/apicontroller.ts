@@ -602,6 +602,34 @@ export default class ApiController implements AbstractController {
         });
     }
 
+    private async egg_inc_me(req: Bun.BunRequest<"/egg-inc/me">) {
+        const result = await get_user_from_token(req.headers.get("cookie")?.slice("token=".length) || null);
+        if (!result) {
+            return new response_builder(401)
+                .set_message("error: token was invalid");
+        }
+
+        if (!check_permissions(result.permissions, permissions_t.EGG_INC_TOOL)) {
+            return new response_builder(401)
+                .set_message("error: unauthorized");
+        }
+
+        if (!result.links || !result.links.egg_inc) {
+            return new response_builder(400)
+                .set_message("error: no account linked");
+        }
+
+        const data = await make_remote_request<{ message: string, error: boolean, payload: unknown }>("GET", "egg-inc-tool", `/user/${result.links.egg_inc.value}`);
+
+        if (!data || data.error) {
+            return new response_builder(400)
+                .set_message(`error: invalid account or server error: '${data?.message}'`);
+        }
+
+        return new response_builder()
+            .set_payload(data.payload!);
+    }
+
     public create_router(): BunRouter {
         const router = new BunRouter();
         router.get("/*", this.fallback.bind(this));
@@ -625,6 +653,7 @@ export default class ApiController implements AbstractController {
         router.get("/video/*", this.video.bind(this));
         router.get("/subs/*", this.subs.bind(this));
         router.get("/shows", this.all_shows.bind(this));
+        router.get("/egg-inc/me", this.egg_inc_me.bind(this))
         return router;
     }
 };
