@@ -10,5 +10,8 @@
     },
     "artoria": {
         "server": "http://localhost:8090"
+    },
+    "egg-inc-tool": {
+        "server": "http://localhost:8084"
     }
 }

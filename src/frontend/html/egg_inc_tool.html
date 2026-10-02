@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>backtrace | Egg Inc.</title>
+    <link rel="icon" type="image/x-icon" href="/files/icon.ico">
+    <link rel="stylesheet" href="/files/egg_inc.css">
+    <script type="module" src="/files/egg_inc.js" defer></script>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute">
+        <filter id="duotone-dreamy" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="
+            0.33 0.33 0.33 0 0
+            0.33 0.33 0.33 0 0
+            0.33 0.33 0.33 0 0
+            0    0    0    1 0" />
+        <feComponentTransfer>
+            <feFuncR type="table" tableValues="0.04 0.80 0.94"/>
+            <feFuncG type="table" tableValues="0.04 0.78 0.92"/>
+            <feFuncB type="table" tableValues="0.05 0.76 0.91"/>
+        </feComponentTransfer>
+        </filter>
+    </svg>
+
+    <main class="container">
+        <header class="top-bar animated fade_in">
+            <div class="logo" onclick="window.open('/', '_self')">
+                <svg width="32" height="32" viewBox="0 0 75.99 75.99" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path fill="#ffffff" d="M 41.1615,61.029C 28.0464,61.029 17.4145,50.3971 17.4145,37.2819C 17.4145,26.1675 25.0501,16.8364 35.3618,14.2482C 31.1173,18.5382 28.4964,24.4377 28.4964,30.9494C 28.4964,44.0645 39.1284,54.6964 52.2435,54.6964C 54.2442,54.449 56.1871,54.449 58.0432,53.9831C 53.739,58.3336 47.765,61.029 41.1615,61.029 Z" />
+                </svg>
+                BT Ltd.
+            </div>
+            <nav>
+                <a class="animated fade_in delay02" href="/home">home</a>
+                <a class="pfp" href="/account"><img id="i#pfp" alt="Profile"></a>
+            </nav>
+        </header>
+
+        <section class="front animated fade_in_up delay02">
+            <div class="front-copy">
+                <p class="eyebrow">Egg Inc. Stats</p>
+                <h1 id="current-egg">Loading player data…</h1>
+                <p id="farm-description">Fetching the current farm and artifact loadout.</p>
+            </div>
+            <div class="front-meta">
+                <div class="meta-row"><span>Permit</span><strong id="permit">-</strong></div>
+                <div class="meta-row"><span>Contract grade</span><strong id="contract-grade">-</strong></div>
+                <div class="meta-row"><span>Updated</span><strong id="updated-at">-</strong></div>
+            </div>
+        </section>
+
+        <h2 class="section-title animated fade_in delay03">Progress</h2>
+        <section class="stats-grid animated fade_in_up delay03">
+            <article class="stat-card"><p class="stat-label">Soul eggs</p><p class="stat-value" id="soul-eggs">-</p></article>
+            <article class="stat-card"><p class="stat-label">Eggs of prophecy</p><p class="stat-value" id="eggs-of-prophecy">-</p></article>
+            <article class="stat-card"><p class="stat-label">Eggs of virtue</p><p class="stat-value" id="eggs-of-virtue">-</p></article>
+            <article class="stat-card"><p class="stat-label">Prestiges</p><p class="stat-value" id="prestige-count">-</p></article>
+            <article class="stat-card"><p class="stat-label">Golden eggs earned</p><p class="stat-value" id="golden-eggs">-</p></article>
+            <article class="stat-card"><p class="stat-label">Earnings bonus</p><p class="stat-value" id="earnings-bonus">-</p></article>
+        </section>
+
+        <h2 class="section-title animated fade_in delay05">Artifacts</h2>
+        <section class="overview-grid animated fade_in_up delay05">
+            <article class="overview-card">
+                <p class="overview-label">Inventory</p>
+                <p class="overview-value" id="total-items">-</p>
+                <div class="breakdown">
+                    <span>Common <strong id="common-items">-</strong></span>
+                    <span>Rare <strong id="rare-items">-</strong></span>
+                    <span>Epic <strong id="epic-items">-</strong></span>
+                    <span>Legendary <strong id="legendary-items">-</strong></span>
+                </div>
+            </article>
+            <article class="overview-card">
+                <p class="overview-label">Equipped loadout</p>
+                <p class="overview-value" id="equipped-count">-</p>
+                <p class="overview-note">Artifacts assigned to the active set.</p>
+            </article>
+        </section>
+
+        <section id="artifacts" class="artifact-section animated fade_in_up delay07">
+            <p class="empty">Loading equipped artifacts…</p>
+        </section>
+
+        <h2 class="section-title animated fade_in delay07">Trophies</h2>
+        <section id="trophies" class="trophy-grid animated fade_in_up delay07">
+            <p class="empty">Loading trophy progress…</p>
+        </section>
+    </main>
+</body>
+</html>

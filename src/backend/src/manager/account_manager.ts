@@ -13,6 +13,7 @@ export enum permissions_t {
     PASSWORD_MANAGER = 1 << 1,
     STREAMING = 1 << 2,
     SERVICE_LIST = 1 << 3,
+    EGG_INC_TOOL = 1 << 4,
 };
 
 export class JWTManager {
