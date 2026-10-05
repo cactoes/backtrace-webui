@@ -18,6 +18,7 @@ enum permissions_t {
     PASSWORD_MANAGER = 1 << 1,
     STREAMING = 1 << 2,
     SERVICE_LIST = 1 << 3,
+    EGG_INC_TOOL = 1 << 4
 }
 
 const permission_meta: Record<permissions_t, { name: string; icon: string }> = {
@@ -25,6 +26,7 @@ const permission_meta: Record<permissions_t, { name: string; icon: string }> = {
     [permissions_t.PASSWORD_MANAGER]: { name: "Password Manager", icon: "fa-solid fa-shield-halved" },
     [permissions_t.STREAMING]: { name: "Streaming", icon: "fa-solid fa-clapperboard" },
     [permissions_t.SERVICE_LIST]: { name: "Service List", icon: "fa-solid fa-server" },
+    [permissions_t.EGG_INC_TOOL]: { name: "Egg Inc. Tool", icon: "fa-solid fa-egg" },
 };
 
 function render_permissions(mask: number) {
