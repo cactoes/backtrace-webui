@@ -111,7 +111,7 @@ export async function resolve_web_file(fullname: string): Promise<[Uint8Array, {
     const ext = parts.at(-1);
     const name = parts.slice(0, -1).join(".");
 
-    if (ext == ".zip") {
+    if (ext == "zip") {
         const file = Bun.file(path.join(get_data_path(), "downloads", `${name}.${ext}`));
         const file_data = await file.bytes();
         let file_meta = { "Content-Type": "application/zip" };
