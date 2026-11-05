@@ -19,7 +19,8 @@ export default class WebController implements AbstractController {
     ];
 
     static product_pages = [
-        { name: "delirium" }
+        { name: "delirium" },
+        { name: "yumemi" }
     ]
 
     constructor() {}
