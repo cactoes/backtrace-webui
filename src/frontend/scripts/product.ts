@@ -20,7 +20,7 @@ async function get_latest_release(project: string) {
 }
 
 function get_project_name() {
-    return document.querySelector(".front>h1")!.textContent.toLowerCase();
+    return (document.querySelector(".front>h1") as HTMLHeadingElement).textContent.toLowerCase();
 }
 
 async function load_github_data() {
