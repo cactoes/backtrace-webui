@@ -19,12 +19,16 @@ async function get_latest_release(project: string) {
     return res.json();
 }
 
+function get_project_name() {
+    return document.querySelector(".front>h1")!.textContent.toLowerCase();
+}
+
 async function load_github_data() {
     const target_element = document.querySelector(".container>section>footer>.updated");
     if (!target_element)
         return;
 
-    const data = await get_latest_release("delirium");
+    const data = await get_latest_release(get_project_name());
     if (!data) {
         target_element.textContent = "Latest release unknown";
         return;
