@@ -111,19 +111,26 @@ export async function resolve_web_file(fullname: string): Promise<[Uint8Array, {
     const ext = parts.at(-1);
     const name = parts.slice(0, -1).join(".");
 
-    let path: string | undefined;
+    if (ext == ".zip") {
+        const file = Bun.file(path.join(get_data_path(), "downloads", `${name}.${ext}`));
+        const file_data = await file.bytes();
+        let file_meta = { "Content-Type": "application/zip" };
+        return [ file_data, file_meta ];
+    }
+
+    let source_path: string | undefined;
 
     switch(ext) {
-        case "js":      path = "scripts/build"; break;
-        case "css":     path = "styles"; break;
+        case "js":      source_path = "scripts/build"; break;
+        case "css":     source_path = "styles"; break;
         case "png":
         case "ico":
-        case "jpg":     path = "media"; break;
-        case "html":    path = "html"; break;
+        case "jpg":     source_path = "media"; break;
+        case "html":    source_path = "html"; break;
         default:        return undefined;
     }
 
-    const file = Bun.file(`../frontend/${path}/${name}.${ext}`);
+    const file = Bun.file(`../frontend/${source_path}/${name}.${ext}`);
 
     if (!(await file.exists()))
         return undefined;
